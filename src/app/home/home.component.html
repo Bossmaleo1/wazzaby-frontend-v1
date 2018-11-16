@@ -1,0 +1,108 @@
+<mat-toolbar color="primary" class="block-toolbar1">
+  <div matRipple class="icon-block" (click)="OnProfil()"><img  id="icon" src="../../Icons/photo.jpg"/></div>
+  <button mat-button (click)="OnProfil()"><span>Sidney MALEO</span></button><br/>
+  <span class="example-spacer"></span>
+
+  <button mat-icon-button (click)="OnclickNotification()" >
+    <mat-icon matBadgeHidden="{{badgeshidden}}" matBadge="{{badgetaille}}" matBadgeColor="warn">notifications</mat-icon>
+  </button>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>account_circle</mat-icon>
+      <span>Profil</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      <span>Parametres</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>help</mat-icon>
+      <span>A propos</span>
+    </button>
+    <button mat-menu-item  (click)="OnDeconnect()">
+      <mat-icon>power_settings_new</mat-icon>
+      <span>Deconnexion</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<mat-toolbar color="primary" class="block-toolbar2">
+  <div><button mat-button (click)="OnclickProblematique()"><mat-icon>subject</mat-icon><span>Problematique</span></button></div>
+  <span class="example-spacer"></span>
+  <mat-slide-toggle></mat-slide-toggle>
+</mat-toolbar>
+
+<mat-tab-group (selectedTabChange)="onLinkClick($event)" class="block-tabs">
+
+  <mat-tab>
+    <ng-template mat-tab-label class="tabs-toolbar-1" >
+      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPublicConver)}"  class="example-tab-icon">sms</mat-icon>
+    </ng-template>
+
+    <div class="block-message-1">
+      <mat-card class="example-card">
+        <app-privaterecentconvert *ngFor="let recent of privaterecentConvertHome; let i = index"
+                           [indexOfConvert]="i"
+                           [name]="recent.name"
+                           [user_photo]="recent.user_photo"
+                           [id]="recent.id"
+        ></app-privaterecentconvert>
+      </mat-card>
+    </div>
+
+
+    <div class="block-message-2">
+      <mat-card class="card-block-column-2">Simple card</mat-card>
+    </div>
+
+    <div class="block-message-3">
+      <mat-card class="example-card">
+        <app-private-user-online *ngFor="let useronline of privateusersOnlineHome; let i = index"
+                                  [indexOfConvert]="i"
+                                  [name]="useronline.name"
+                                  [user_photo]="useronline.user_photo"
+                                  [id]="useronline.id"
+        ></app-private-user-online>
+
+
+      </mat-card>
+    </div>
+
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template  mat-tab-label >
+      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPrivateConver)}" class="example-tab-icon">forum</mat-icon>
+    </ng-template>
+
+    <!--Mise en place du content1 -->
+    <div class="block-content-1">
+
+      <app-publicconvert *ngFor="let convert of conversationsPublicsHome; let i = index"
+                    [indexOfConvert]="i"
+                    [name]="convert.name"
+                    [updated]="convert.updated"
+                    [user_photo]="convert.user_photo"
+                    [status_text_content]="convert.status_text_content"
+                    [etat_photo]="convert.etat_photo"
+                    [etat_photo_status]="convert.etat_photo_status"
+                    [status_photo]="convert.status_photo"
+                    [id]="convert.id"
+      ></app-publicconvert>
+
+
+
+
+      <!--Mon FAB -->
+      <button mat-fab class="myfloattingbutton" color="primary">
+        <mat-icon >edit</mat-icon>
+      </button>
+
+    </div>
+
+  </mat-tab>
+
+</mat-tab-group>

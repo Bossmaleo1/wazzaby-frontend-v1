@@ -1,0 +1,38 @@
+.block-toolbar {
+  position: fixed;
+  top:0%;
+  left:0%;
+  right:0%;
+  height:10%;
+  z-index: 100;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.example-full-width{
+  width: 100%;
+}
+
+.block-mat-list{
+  margin-top:6%;
+  background-color: white;
+}
+
+.title-size {
+  font-size:15px;
+}
+
+.mat-list-icon {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.myfloattingbutton {
+  position: fixed;
+  display: block;
+  right: 0;
+  bottom: 0;
+  margin-right: 40px;
+  margin-bottom: 100px;
+}

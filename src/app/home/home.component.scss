@@ -1,0 +1,96 @@
+.example-icon {
+  padding: 0 14px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.block-toolbar1 {
+  position: fixed;
+  top:0%;
+  left:0%;
+  right:0%;
+  height:10%;
+}
+
+.block-toolbar2 {
+  position: fixed;
+  top:10%;
+  left:0%;
+  right:0%;
+  height:5%;
+}
+
+.block-tabs {
+  position: absolute;
+  z-index: -5;
+  top:15%;
+  left:0%;
+  right:0%;
+}
+
+#icon {
+  width:50px;
+  height:50px;
+  border-radius:25px;
+}
+
+.icon-block {
+  width:50px;
+  height:50px;
+  border-radius:25px;
+}
+
+
+.example-card {
+  max-width: 500px;
+  margin-top: 2%;
+  margin-left: 25%;
+  margin-right: auto;
+}
+
+
+.example-header-image {
+  background-size: cover;
+}
+
+.block-content-1
+{
+  margin-top: 1%;
+  width: 100%;
+}
+
+.myfloattingbutton {
+  position: fixed;
+  display: block;
+  right: 0;
+  bottom: 0;
+  margin-right: 40px;
+  margin-bottom: 100px;
+}
+
+.block-message-1 {
+  width: 20%;
+  height: 80%;
+  float:left;
+}
+
+.block-message-2 {
+  width: 60%;
+  float: left;
+}
+
+.block-message-3 {
+  width: 19%;
+  float:left;
+}
+
+.title-size {
+  font-size:10px;
+}
+
+.card-block-column-2 {
+  width:100%;
+}
+

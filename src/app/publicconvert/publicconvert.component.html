@@ -1,0 +1,35 @@
+<mat-card class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar class="example-header-image" [ngStyle]="{'background-image': 'url('+user_photo+')'}" ></div>
+    <mat-card-title>{{name}}</mat-card-title>
+    <mat-card-subtitle>{{updated}}</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image  src="{{status_photo}}" alt="Photo of a Shiba Inu" [ngStyle]="{'display':''+etat_photo_status+''}">
+  <mat-card-content>
+    <p>{{status_text_content}}</p>
+  </mat-card-content>
+
+  <mat-divider></mat-divider>
+
+  <mat-card-actions>
+    <a [routerLink]="id"><button mat-button><mat-icon>forum</mat-icon><span> 0 Intervention</span></button></a>
+
+    <button mat-button><mat-icon>thumb_up</mat-icon><span> 0 </span></button>
+    <button mat-button><mat-icon>thumb_down</mat-icon><span> 0 </span></button>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>arrow_drop_down_circle</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>flag</mat-icon>
+        <span>Signaler un probleme</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>delete</mat-icon>
+        <span>Supprimer ce poste</span>
+      </button>
+    </mat-menu>
+  </mat-card-actions>
+
+</mat-card>
