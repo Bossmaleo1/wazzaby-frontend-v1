@@ -97,12 +97,54 @@
 
 
       <!--Mon FAB -->
-      <button mat-fab class="myfloattingbutton" color="primary">
+      <button mat-fab class="myfloattingbutton" color="primary" (click)="onDialogPublicConvert()">
         <mat-icon >edit</mat-icon>
       </button>
+
+
+
 
     </div>
 
   </mat-tab>
 
 </mat-tab-group>
+
+<!--Le block de la boite de dialogue -->
+<div class="dialgo-block" [ngStyle]="{'display':''+block_boite_de_dialogue+''}">
+      <mat-card class="example-card">
+
+        <button mat-icon-button>
+          <mat-icon aria-label="Example icon-button with a heart icon">add_a_photo</mat-icon>
+        </button>
+
+        <button mat-icon-button>
+          <mat-icon aria-label="Example icon-button with a heart icon">crop_original</mat-icon>
+        </button>
+
+        <button mat-icon-button class="close-user-button" (click)="onCloseDialog()" >
+          <mat-icon aria-label="Example icon-button with a heart icon">close</mat-icon>
+        </button>
+
+        <mat-card-content>
+          <div class="connexion-form">
+            <mat-divider></mat-divider>
+            <br/>
+            <form>
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Votre Problematique"/>
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+              </mat-form-field> <br/>
+              <button mat-raised-button color="primary" class="example-full-width"  >PUBLIER</button>
+            </form>
+            <br/>
+            <mat-divider></mat-divider>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <div class="connexion-form">
+          </div>
+        </mat-card-actions>
+      </mat-card>
+</div>

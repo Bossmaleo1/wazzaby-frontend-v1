@@ -25,16 +25,16 @@ export class HomeComponent implements OnInit {
     /*la variable qui hidden le badges*/
     badgeshidden = false;
     badgetaille = 6;
-
-    photo_test = '../../Icons/rivel.jpg';
     /*le tableau contenant les conversations des utilisateurs*/
-
     conversationsPublicsHome: any;
     privateusersOnlineHome: any;
     privaterecentConvertHome: any;
 
     animal: string;
     name: string;
+
+    /*le status du block de la boite de dialogue*/
+    block_boite_de_dialogue: string;
 
 
   constructor(private homedesign: HomeDesignService, private  router: Router, private authService: AuthService, private help1Services: Help1Services, private privateuseronlineservices: PrivateUseronlineServices, private privaterecentconvertservices: PrivateRecentconvertServices) { }
@@ -92,6 +92,16 @@ export class HomeComponent implements OnInit {
 
     OnProfil() {
         this.router.navigate(['profil']);
+    }
+
+    /*Pour afficher la boite de dialogue*/
+    onDialogPublicConvert() {
+        this.block_boite_de_dialogue = 'block';
+    }
+
+    /*Methode pour fermer la boite de dialogue*/
+    onCloseDialog() {
+        this.block_boite_de_dialogue = 'none';
     }
 
 }
