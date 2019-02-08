@@ -1,6 +1,7 @@
 
 export class AuthService {
     isAuth = false;
+    sessions: any;
 
     signIn() {
         this.isAuth = true;
@@ -8,6 +9,10 @@ export class AuthService {
 
     signOut() {
         this.isAuth = false;
+    }
+
+    getSessions() {
+        return this.sessions;
     }
 
 }

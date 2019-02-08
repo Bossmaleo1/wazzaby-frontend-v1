@@ -1,4 +1,7 @@
-  <div class="block-connexion">
+
+  <div id='block_spinner'><mat-spinner *ngIf="afficher_spinner"  class="progressbar"></mat-spinner></div>
+
+  <div class="block-connexion" *ngIf="!afficher_spinner">
 
     <mat-card class="example-card">
       <mat-card-header>
@@ -18,13 +21,13 @@
           <br/><br/>
           <mat-divider></mat-divider>
           <br/>
-          <form>
+          <form (ngSubmit)="onSubmit(f)" #f="ngForm">
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Email"/>
+              <input matInput placeholder="Email" name="email" autocomplete="off" ngModel/>
             </mat-form-field> <br/>
 
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Mot de passe" [type]="hide ? 'password' : 'text'"/>
+              <input matInput placeholder="Mot de passe" autocomplete="off" [type]="hide ? 'password' : 'text'" name="password" ngModel/>
               <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </mat-form-field> <br/>
 
@@ -32,7 +35,7 @@
               <mat-checkbox class="example-margin" [checked]="true">Connexion Automatique</mat-checkbox>
             </section> <br/>
 
-            <button mat-raised-button color="primary" class="example-full-width" (click)="onSignIn()" >CONNEXION</button>
+            <button mat-raised-button type='submit' color="primary" class="example-full-width" >CONNEXION</button>
           </form>
           <br/>
           <br/>
@@ -43,7 +46,7 @@
       </mat-card-content>
       <mat-card-actions>
         <div class="connexion-form">
-          <button mat-button color="primary" >S'Inscrire</button>
+          <button mat-button color="primary" (click)="switchinscript()"  >S'Inscrire</button>
           <button mat-button color="primary" >Mot de passe Oublie ?</button>
         </div>
       </mat-card-actions>

@@ -21,7 +21,7 @@ import {AuthService} from './Services/auth.service';
 import {HomeDesignService} from './Services/home.design.service';
 import {AuthGuardService} from './Services/auth.guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 import { PublicconvertDetailsComponent } from './publicconvert-details/publicconvert-details.component';
 import {PublicConvertServices} from './Services/public.convert.services';
@@ -33,6 +33,16 @@ import { PrivaterecentconvertComponent } from './privaterecentconvert/privaterec
 import { PrivateUserOnlineComponent } from './private-user-online/private-user-online.component';
 import {PrivateUseronlineServices} from './Services/private.useronline.services';
 import {PrivateRecentconvertServices} from './Services/private.recentconvert.services';
+import {ConstanceService} from './Services/Constance.service';
+import {HttpClientModule} from '@angular/common/http';
+import {FileSelectDirective} from 'ng2-file-upload';
+import {WebcamModule} from 'ngx-webcam';
+import {MessagepublicService} from './Services/messagepublic.service';
+import { InscriptForm1Component } from './inscript-form1/inscript-form1.component';
+import { InscriptForm2Component } from './inscript-form2/inscript-form2.component';
+import { InscriptForm3Component } from './inscript-form3/inscript-form3.component';
+import { InscriptForm4Component } from './inscript-form4/inscript-form4.component';
+import { InscriptForm5Component } from './inscript-form5/inscript-form5.component';
 
 
 
@@ -49,7 +59,11 @@ const appRoutes: Routes = [
     {path: 'download', component: DownloadAndroidComponent},
     {path: 'home', canActivate: [AuthGuardService], component: HomeComponent},
     {path: 'home/:id', canActivate: [AuthGuardService], component: PublicconvertDetailsComponent},
-    {path: 'connexion', component: ConnexionComponent},
+    {path: 'inscript1', component: InscriptForm1Component},
+    {path: 'inscript2', component: InscriptForm2Component},
+    {path: 'inscript3', component: InscriptForm3Component},
+    {path: 'inscript4', component: InscriptForm4Component},
+    {path: 'inscript5', component: InscriptForm5Component},
     {path: '', component: ConnexionComponent},
     {path: 'not-found', component: NotFoundComponent},
     {path: '**', redirectTo: '/not-found'}
@@ -58,6 +72,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
+    FileSelectDirective,
     ConnexionComponent,
     HomeComponent,
     NotificationComponent,
@@ -75,15 +90,23 @@ const appRoutes: Routes = [
     PublicconvertComponent,
     CommentsComponent,
     PrivaterecentconvertComponent,
-    PrivateUserOnlineComponent
+    PrivateUserOnlineComponent,
+    InscriptForm1Component,
+    InscriptForm2Component,
+    InscriptForm3Component,
+    InscriptForm4Component,
+    InscriptForm5Component
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
     RouterModule.forRoot(appRoutes),
-      FormsModule,
-      NgMatSearchBarModule
+    FormsModule,
+    NgMatSearchBarModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    WebcamModule
   ],
   providers: [
       AuthService,
@@ -93,7 +116,9 @@ const appRoutes: Routes = [
       Help1Services,
       PublicCommentsServices,
       PrivateUseronlineServices,
-      PrivateRecentconvertServices
+      PrivateRecentconvertServices,
+      ConstanceService,
+      MessagepublicService
   ],
   bootstrap: [AppComponent]
 })
