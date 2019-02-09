@@ -69,7 +69,7 @@ export class ConnexionComponent implements OnInit {
     }
 
     switchinscript() {
-      this.router.navigate(['inscript1']);
+      this.router.navigate(['inscript']);
     }
 
 }

@@ -18,19 +18,19 @@
 
   <mat-menu #menu="matMenu">
     <button mat-menu-item>
-      <mat-icon>account_circle</mat-icon>
+      <mat-icon id="icon-color">account_circle</mat-icon>
       <span>Profil</span>
     </button>
     <button mat-menu-item>
-      <mat-icon>settings</mat-icon>
+      <mat-icon id="icon-color">settings</mat-icon>
       <span>Parametres</span>
     </button>
     <button mat-menu-item>
-      <mat-icon>help</mat-icon>
+      <mat-icon id="icon-color">help</mat-icon>
       <span>A propos</span>
     </button>
     <button mat-menu-item  (click)="OnDeconnect()">
-      <mat-icon>power_settings_new</mat-icon>
+      <mat-icon id="icon-color">power_settings_new</mat-icon>
       <span>Deconnexion</span>
     </button>
   </mat-menu>
@@ -46,7 +46,7 @@
 
   <mat-tab>
     <ng-template mat-tab-label class="tabs-toolbar-1" >
-      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPublicConver)}"  class="example-tab-icon">sms</mat-icon>
+      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPublicConver)}"  class="example-tab-icon" id="icon-color">sms</mat-icon>
     </ng-template>
 
     <div class="block-message-1">
@@ -82,7 +82,7 @@
 
   <mat-tab>
     <ng-template  mat-tab-label >
-      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPrivateConver)}" class="example-tab-icon">forum</mat-icon>
+      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPrivateConver)}" class="example-tab-icon" id="icon-color">forum</mat-icon>
     </ng-template>
 
     <!--Mise en place du content1 -->
@@ -101,15 +101,26 @@
       ></app-publicconvert>
 
 
+      <div class="fab-container">
+        <button mat-fab class="fab-toggler"
+                (click)="onToggleFab()" color="primary">
+          <i class="material-icons" [@fabToggler]="{value: fabTogglerState}">add</i>
+        </button>
+        <div>
+          <button *ngFor="let btn of buttons"
+                  mat-mini-fab
+                  class="fab-secondary"
+                  color="secondary"
+                  (click)="onDialogPublicConvert($event)" [id]="btn.icon">
+            <i class="material-icons" >{{btn.icon}}</i>
+          </button>
+        </div>
+      </div>
 
-
-      <!--Mon FAB -->
-      <button mat-fab class="myfloattingbutton" color="primary" (click)="onDialogPublicConvert()">
-        <mat-icon >edit</mat-icon>
-      </button>
-
-
-
+      <div id="fab-dismiss"
+           *ngIf="fabTogglerState==='active'"
+           (click)="onToggleFab()">
+      </div>
 
     </div>
 
@@ -144,7 +155,7 @@
             <form [formGroup]="messagepublicform" (ngSubmit)="onSubmitForm()">
               <input type="file"  (change)="onChangeFile($event)" id="tenantPhotoId" formControlName="tenantPhotoId" [ngStyle]="{'display':'none'}" #fileInput/>
               <mat-form-field class="example-full-width">
-                <input matInput placeholder="Votre Problematique" formControlName="problematique" id="problematique" />
+                <input matInput placeholder="Votre Problematique" formControlName="problematique" id="problematique" autocomplete="off" />
                 <!--mat-icon matSuffix>sentiment_very_satisfied</mat-icon-->
               </mat-form-field> <br/>
               <button mat-raised-button type='submit' color="primary"  class="example-full-width">PUBLIER</button>
@@ -164,3 +175,5 @@
       </mat-card>
 
 </div>
+
+

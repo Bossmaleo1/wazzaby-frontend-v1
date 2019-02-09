@@ -12,6 +12,9 @@ import {ConstanceService} from '../Services/Constance.service';
 import {MessagePublic} from '../models/MessagePublic.model';
 import {Subscription} from 'rxjs';
 import {MessagepublicService} from '../Services/messagepublic.service';
+import {DOCUMENT} from '@angular/common';
+import { speedDialFabAnimations } from './speed-dial-fab.animations';
+
 
 
 
@@ -19,10 +22,22 @@ import {MessagepublicService} from '../Services/messagepublic.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  animations: speedDialFabAnimations
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
+    //gestion du bouton flottant multiple
+    fabButtons = [
+        {
+            icon: 'edit'
+        },
+        {
+            icon: 'keyboard_arrow_up'
+        }
+    ];
+    buttons = [];
+    fabTogglerState = 'inactive';
 
     messagepublic: MessagePublic;
     messagepublicsubscription: Subscription;
@@ -61,7 +76,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     filevalue: any;
 
 
-
   constructor(private homedesign: HomeDesignService
               , private  router: Router
               , private authService: AuthService
@@ -72,7 +86,10 @@ export class HomeComponent implements OnInit, OnDestroy {
               , public snackBar: MatSnackBar
               , private constance: ConstanceService
               , private messagepublicservice: MessagepublicService
-              , private formBuilder: FormBuilder) {}
+              , private formBuilder: FormBuilder) {
+
+
+  }
 
   ngOnInit() {
       this.conversationsPublicsHome = this.help1Services.conversationsPublics;
@@ -94,6 +111,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       );
       this.messagepublicservice.emitMessage();
       this.initForm();
+      window.addEventListener('scroll', this.scroll, true);
   }
 
   initForm() {
@@ -151,8 +169,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     /*Pour afficher la boite de dialogue*/
-    onDialogPublicConvert() {
-        this.block_boite_de_dialogue = 'block';
+    onDialogPublicConvert(event) {
+        if (event.srcElement.innerHTML === 'edit') {
+            this.block_boite_de_dialogue = 'block';
+        } else {
+            window.scroll(0,0);
+        }
     }
 
     /*Methode pour fermer la boite de dialogue*/
@@ -212,6 +234,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
+        window.removeEventListener('scroll', this.scroll, true);
         this.messagepublicsubscription.unsubscribe();
     }
 
@@ -237,6 +260,25 @@ export class HomeComponent implements OnInit, OnDestroy {
                 }
             );*/
     }
+
+    scroll = (): void => {
+        this.block_boite_de_dialogue = 'none';
+    }
+
+    showItems() {
+        this.fabTogglerState = 'active';
+        this.buttons = this.fabButtons;
+    }
+
+    hideItems() {
+        this.fabTogglerState = 'inactive';
+        this.buttons = [];
+    }
+
+    onToggleFab() {
+        this.buttons.length ? this.hideItems() : this.showItems();
+    }
+
 }
 
 

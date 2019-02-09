@@ -12,9 +12,6 @@ import { SettingsComponent } from './settings/settings.component';
 import { AboutComponent } from './about/about.component';
 import { ProblematiqueGeneraleComponent } from './problematique-generale/problematique-generale.component';
 import { ProblematiqueDetailsComponent } from './problematique-details/problematique-details.component';
-import { Inscription1Component } from './inscription1/inscription1.component';
-import { Inscription2Component } from './inscription2/inscription2.component';
-import { Inscription3Component } from './inscription3/inscription3.component';
 import { DownloadAndroidComponent } from './download-android/download-android.component';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthService} from './Services/auth.service';
@@ -38,11 +35,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {FileSelectDirective} from 'ng2-file-upload';
 import {WebcamModule} from 'ngx-webcam';
 import {MessagepublicService} from './Services/messagepublic.service';
-import { InscriptForm1Component } from './inscript-form1/inscript-form1.component';
-import { InscriptForm2Component } from './inscript-form2/inscript-form2.component';
-import { InscriptForm3Component } from './inscript-form3/inscript-form3.component';
-import { InscriptForm4Component } from './inscript-form4/inscript-form4.component';
-import { InscriptForm5Component } from './inscript-form5/inscript-form5.component';
+import { InscriptFormComponent } from './inscript-form/inscript-form.component';
 
 
 
@@ -50,20 +43,14 @@ const appRoutes: Routes = [
     {path: 'about', component: AboutComponent},
     {path: 'settings', canActivate: [AuthGuardService], component: SettingsComponent},
     {path: 'profil', canActivate: [AuthGuardService], component: ProfilComponent},
-    {path: 'inscription3', component: Inscription3Component},
-    {path: 'inscription2', component: Inscription2Component},
-    {path: 'inscription1', component: Inscription1Component},
     {path: 'problematique', canActivate: [AuthGuardService], component: ProblematiqueGeneraleComponent},
     {path: 'details', canActivate: [AuthGuardService], component: ProblematiqueDetailsComponent},
     {path: 'notification', canActivate: [AuthGuardService], component: NotificationComponent},
     {path: 'download', component: DownloadAndroidComponent},
     {path: 'home', canActivate: [AuthGuardService], component: HomeComponent},
     {path: 'home/:id', canActivate: [AuthGuardService], component: PublicconvertDetailsComponent},
-    {path: 'inscript1', component: InscriptForm1Component},
-    {path: 'inscript2', component: InscriptForm2Component},
-    {path: 'inscript3', component: InscriptForm3Component},
-    {path: 'inscript4', component: InscriptForm4Component},
-    {path: 'inscript5', component: InscriptForm5Component},
+    {path: 'inscript', component: InscriptFormComponent},
+    {path: 'connexion', component: ConnexionComponent},
     {path: '', component: ConnexionComponent},
     {path: 'not-found', component: NotFoundComponent},
     {path: '**', redirectTo: '/not-found'}
@@ -81,9 +68,6 @@ const appRoutes: Routes = [
     AboutComponent,
     ProblematiqueGeneraleComponent,
     ProblematiqueDetailsComponent,
-    Inscription1Component,
-    Inscription2Component,
-    Inscription3Component,
     DownloadAndroidComponent,
     NotFoundComponent,
     PublicconvertDetailsComponent,
@@ -91,11 +75,7 @@ const appRoutes: Routes = [
     CommentsComponent,
     PrivaterecentconvertComponent,
     PrivateUserOnlineComponent,
-    InscriptForm1Component,
-    InscriptForm2Component,
-    InscriptForm3Component,
-    InscriptForm4Component,
-    InscriptForm5Component
+    InscriptFormComponent
   ],
   imports: [
     BrowserModule,

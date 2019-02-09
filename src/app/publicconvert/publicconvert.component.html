@@ -12,22 +12,27 @@
   <mat-divider></mat-divider>
 
   <mat-card-actions>
-    <a [routerLink]="id"><button mat-button><mat-icon>forum</mat-icon><span> 0 Intervention</span></button></a>
+    <button mat-button><mat-icon id="icon-color">forum</mat-icon><span> 0 Intervention</span></button>
 
-    <button mat-button><mat-icon>thumb_up</mat-icon><span> 0 </span></button>
-    <button mat-button><mat-icon>thumb_down</mat-icon><span> 0 </span></button>
+    <button mat-button><mat-icon id="icon-color">thumb_up</mat-icon><span> 0 </span></button>
+    <button mat-button><mat-icon id="icon-color">thumb_down</mat-icon><span> 0 </span></button>
 
     <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>arrow_drop_down_circle</mat-icon>
+      <mat-icon id="icon-color">arrow_drop_down_circle</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+
       <button mat-menu-item>
-        <mat-icon>flag</mat-icon>
-        <span>Signaler un probleme</span>
+        <mat-icon id="icon-color">delete</mat-icon>
+        <span>Supprimer ce poste</span>
       </button>
       <button mat-menu-item>
-        <mat-icon>delete</mat-icon>
-        <span>Supprimer ce poste</span>
+        <mat-icon id="icon-color">edit</mat-icon>
+        <span>Modifier ce poste</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon id="icon-color">flag</mat-icon>
+        <span>Signaler un probleme</span>
       </button>
     </mat-menu>
   </mat-card-actions>

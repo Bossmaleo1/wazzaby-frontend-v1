@@ -1,0 +1,36 @@
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step>
+    <form>
+      <ng-template matStepLabel>Etape 1</ng-template>
+
+      <div>
+
+
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <form>
+      <ng-template matStepLabel>Etape 2</ng-template>
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Etape 3</ng-template>
+
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Etape 4</ng-template>
+
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Etape Finale</ng-template>
+
+  </mat-step>
+</mat-horizontal-stepper>
