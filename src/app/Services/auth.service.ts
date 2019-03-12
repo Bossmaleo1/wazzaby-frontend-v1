@@ -2,6 +2,7 @@
 export class AuthService {
     isAuth = false;
     sessions: any;
+    inscript_user: any;
 
     signIn() {
         this.isAuth = true;

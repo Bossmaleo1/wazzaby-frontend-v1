@@ -1,0 +1,35 @@
+<mat-toolbar color="primary" class="block-toolbar">
+
+  <span>Bienvenue dans Wazzaby !</span>
+
+</mat-toolbar>
+
+
+<section>
+
+
+  <mat-card class="example-card">
+
+
+    <app-add-profil-picture
+    >
+    </app-add-profil-picture>
+
+    <mat-card-actions>
+      <mat-divider></mat-divider><br/>
+
+      <mat-form-field class="search-form">
+        <input matInput placeholder="Rechercher" type="text"/>
+        <mat-icon matSuffix color="primary">search</mat-icon>
+      </mat-form-field> <br/> <br/>
+
+      <app-problematique-item *ngFor="let prob of this.problematiqueitemservice.problematiques; let i = index"
+                              [name] = "prob.name"
+                              [id] = "prob.id"
+      >
+      </app-problematique-item>
+    </mat-card-actions>
+    <button mat-raised-button type='submit' color="primary" class="example-full-width" >SUIVANT</button>
+  </mat-card> <br/>
+
+</section>

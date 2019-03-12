@@ -15,11 +15,11 @@ import {
     MatRippleModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    MatStepperModule
+    MatStepperModule, MatDatepickerModule, MatNativeDateModule, MatRadioModule,MatProgressBarModule
 } from '@angular/material';
 
 @NgModule({
-  imports: [MatButtonModule,MatCardModule,MatInputModule,MatToolbarModule,MatDividerModule,MatToolbarModule,MatIconModule,MatMenuModule,MatTabsModule,MatBadgeModule,MatCheckboxModule,MatSlideToggleModule,MatListModule,MatRippleModule,MatSnackBarModule,MatProgressSpinnerModule,MatStepperModule],
-  exports: [MatButtonModule,MatCardModule,MatInputModule,MatToolbarModule,MatDividerModule,MatToolbarModule,MatIconModule,MatMenuModule,MatTabsModule,MatBadgeModule,MatCheckboxModule,MatSlideToggleModule,MatListModule,MatRippleModule,MatSnackBarModule,MatProgressSpinnerModule,MatStepperModule],
+  imports: [MatButtonModule,MatCardModule,MatInputModule,MatToolbarModule,MatDividerModule,MatToolbarModule,MatIconModule,MatMenuModule,MatTabsModule,MatBadgeModule,MatCheckboxModule,MatSlideToggleModule,MatListModule,MatRippleModule,MatSnackBarModule,MatProgressSpinnerModule,MatStepperModule,MatDatepickerModule,MatNativeDateModule,MatRadioModule,MatProgressBarModule],
+  exports: [MatButtonModule,MatCardModule,MatInputModule,MatToolbarModule,MatDividerModule,MatToolbarModule,MatIconModule,MatMenuModule,MatTabsModule,MatBadgeModule,MatCheckboxModule,MatSlideToggleModule,MatListModule,MatRippleModule,MatSnackBarModule,MatProgressSpinnerModule,MatStepperModule,MatDatepickerModule,MatNativeDateModule,MatRadioModule,MatProgressBarModule],
 })
 export class MaterialModule { }

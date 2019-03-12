@@ -88,7 +88,7 @@
     <!--Mise en place du content1 -->
     <div class="block-content-1">
 
-      <app-publicconvert *ngFor="let convert of conversationsPublicsHome; let i = index"
+      <app-publicconvert *ngFor="let convert of this.publicconvertservice.conversationsPublics; let i = index"
                     [indexOfConvert]="i"
                     [name]="convert.name"
                     [updated]="convert.updated"
@@ -150,15 +150,20 @@
           <div class="connexion-form">
             <mat-divider></mat-divider>
             <br/>
+
+            <button mat-icon-button style="color: red;" [ngStyle]="{'display':''+disparaitreimage+''}" (click)="OnSupprimerPhoto()">
+                <mat-icon >cancel</mat-icon>
+            </button>
             <img [src]="imageSrc" alt="photo illustrative de ta problematique" id="borderimage" [ngStyle]="{'display':''+disparaitreimage+''}" />
+
+            <mat-progress-bar mode="indeterminate" [ngStyle]="{'display':''+disparaitreprogressbar+''}"></mat-progress-bar>
 
             <form [formGroup]="messagepublicform" (ngSubmit)="onSubmitForm()">
               <input type="file"  (change)="onChangeFile($event)" id="tenantPhotoId" formControlName="tenantPhotoId" [ngStyle]="{'display':'none'}" #fileInput/>
-              <mat-form-field class="example-full-width">
+              <mat-form-field class="example-full-width" [ngStyle]="{'display':''+disparaitrechamp+''}">
                 <input matInput placeholder="Votre Problematique" formControlName="problematique" id="problematique" autocomplete="off" />
-                <!--mat-icon matSuffix>sentiment_very_satisfied</mat-icon-->
               </mat-form-field> <br/>
-              <button mat-raised-button type='submit' color="primary"  class="example-full-width">PUBLIER</button>
+              <button mat-raised-button type='submit' color="primary" [ngStyle]="{'display':''+disparaitrechamp+''}"  class="example-full-width">PUBLIER</button>
             </form>
 
             <br/>

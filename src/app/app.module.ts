@@ -36,6 +36,10 @@ import {FileSelectDirective} from 'ng2-file-upload';
 import {WebcamModule} from 'ngx-webcam';
 import {MessagepublicService} from './Services/messagepublic.service';
 import { InscriptFormComponent } from './inscript-form/inscript-form.component';
+import { AddProfilPictureComponent } from './add-profil-picture/add-profil-picture.component';
+import { WelcomeToWazzabyComponent } from './welcome-to-wazzaby/welcome-to-wazzaby.component';
+import { ProblematiqueItemComponent } from './problematique-item/problematique-item.component';
+import {ProblematiqueItemService} from './Services/problematique.item.service';
 
 
 
@@ -51,6 +55,7 @@ const appRoutes: Routes = [
     {path: 'home/:id', canActivate: [AuthGuardService], component: PublicconvertDetailsComponent},
     {path: 'inscript', component: InscriptFormComponent},
     {path: 'connexion', component: ConnexionComponent},
+    {path: 'welcome', component: WelcomeToWazzabyComponent},
     {path: '', component: ConnexionComponent},
     {path: 'not-found', component: NotFoundComponent},
     {path: '**', redirectTo: '/not-found'}
@@ -75,7 +80,10 @@ const appRoutes: Routes = [
     CommentsComponent,
     PrivaterecentconvertComponent,
     PrivateUserOnlineComponent,
-    InscriptFormComponent
+    InscriptFormComponent,
+    AddProfilPictureComponent,
+    WelcomeToWazzabyComponent,
+    ProblematiqueItemComponent
   ],
   imports: [
     BrowserModule,
@@ -98,7 +106,8 @@ const appRoutes: Routes = [
       PrivateUseronlineServices,
       PrivateRecentconvertServices,
       ConstanceService,
-      MessagepublicService
+      MessagepublicService,
+      ProblematiqueItemService
   ],
   bootstrap: [AppComponent]
 })

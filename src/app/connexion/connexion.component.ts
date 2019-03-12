@@ -50,7 +50,6 @@ export class ConnexionComponent implements OnInit {
             .subscribe(
                 (response) => {
                     this.authService.sessions = response;
-                    console.log(response);
                     if (this.authService.sessions.succes === 1) {
                         this.authService.isAuth = true;
                         this.router.navigate(['home']);

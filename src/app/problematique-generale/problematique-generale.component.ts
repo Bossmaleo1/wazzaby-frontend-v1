@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../Services/auth.service';
+import {ProblematiqueItemService} from '../Services/problematique.item.service';
 
 export interface Section {
     name: string;
@@ -14,7 +15,9 @@ export interface Section {
 })
 export class ProblematiqueGeneraleComponent implements OnInit {
 
-  constructor(private  router: Router, private authService: AuthService) { }
+  constructor(private  router: Router
+              , private authService: AuthService
+              , private problematiqueitemservice: ProblematiqueItemService) { }
 
     problematiques: Section[] = [
         {

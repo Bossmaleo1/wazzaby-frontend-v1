@@ -43,14 +43,13 @@
   <mat-card class="example-card">
     <mat-divider></mat-divider>
     <br/>
-    <div *ngFor="let prob of problematiques">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"><mat-icon mat-list-icon>subject</mat-icon></div>
-        <mat-card-title class="title-size">{{prob.name}}</mat-card-title>
-      </mat-card-header>
-      <mat-divider></mat-divider>
-      <br/>
-    </div>
+
+    <app-problematique-item *ngFor="let prob of this.problematiqueitemservice.problematiques; let i = index"
+            [name] = "prob.name"
+            [id] = "prob.id"
+    >
+    </app-problematique-item>
+
   </mat-card>
 
 </div>

@@ -14,6 +14,8 @@ import {Subscription} from 'rxjs';
 import {MessagepublicService} from '../Services/messagepublic.service';
 import {DOCUMENT} from '@angular/common';
 import { speedDialFabAnimations } from './speed-dial-fab.animations';
+import {RequestOptions} from '@angular/http';
+import {PublicConvertServices} from '../Services/public.convert.services';
 
 
 
@@ -72,31 +74,39 @@ export class HomeComponent implements OnInit, OnDestroy {
     // attributs pour la gestion du uploading des fichiers
     someUrlFile: any;
     imageSrc: any;
+
     disparaitreimage = 'none';
+    disparaitreprogressbar = 'none';
+
+    disparaitrechamp = 'block';
     filevalue: any;
+    imagenamefordelete: any;
+    id_messagepublic: any;
+    id_photo: any;
+    etat: any;
 
 
   constructor(private homedesign: HomeDesignService
               , private  router: Router
               , private authService: AuthService
-              , private help1Services: Help1Services
               , private privateuseronlineservices: PrivateUseronlineServices
               , private privaterecentconvertservices: PrivateRecentconvertServices
               , private httpClient: HttpClient
               , public snackBar: MatSnackBar
               , private constance: ConstanceService
               , private messagepublicservice: MessagepublicService
+              , private publicconvertservice: PublicConvertServices
               , private formBuilder: FormBuilder) {
 
 
   }
 
   ngOnInit() {
-      this.conversationsPublicsHome = this.help1Services.conversationsPublics;
       this.privateusersOnlineHome = this.privateuseronlineservices.userOnlines;
       this.privaterecentConvertHome = this.privaterecentconvertservices.RecentConverts;
       this.nom = this.authService.getSessions().nom;
       this.prenom = this.authService.getSessions().prenom;
+      this.etat = 1;
       if (this.authService.getSessions().photo === '') {
             this.photo_user = 'ic_profile.png';
       } else {
@@ -112,6 +122,19 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.messagepublicservice.emitMessage();
       this.initForm();
       window.addEventListener('scroll', this.scroll, true);
+
+      const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=').concat(this.authService.getSessions().id_prob);
+      this.httpClient
+          .get(url)
+          .subscribe(
+              (response1) => {
+                  this.publicconvertservice.conversationsPublics = response1;
+                  return response1;
+              },
+              (error) => {
+                  this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+              }
+          );
   }
 
   initForm() {
@@ -180,6 +203,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     /*Methode pour fermer la boite de dialogue*/
     onCloseDialog() {
         this.block_boite_de_dialogue = 'none';
+        this.filevalue = null;
+        this.imageSrc = "";
     }
 
     openSnackBar(message: string, action: string) {
@@ -189,9 +214,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
 	onChangeFile(event) {
+        this.disparaitreprogressbar = 'block';
         //afficher_spinner
         const taille = event.target.files[0].name.split('.').length;
         const extension = event.target.files[0].name.split('.')[taille - 1].toLowerCase();
+        this.imagenamefordelete = extension;
 
         if (extension === 'png' || extension === 'jpg' || extension === 'jpeg' || extension === 'gif') {
 
@@ -202,22 +229,44 @@ export class HomeComponent implements OnInit, OnDestroy {
                 reader.onload = e => this.imageSrc = reader.result;
 
                 reader.readAsDataURL(file);
-                this.disparaitreimage = 'block';
                 this.filevalue = file;
-
-                const url1 = this.constance.dns.concat('/uploads/uploadScript.php');
-                let formData: FormData = new FormData();
-                formData.append('photostatus', this.filevalue);
+                /*formData.append('id_user', );
+                formData.append('id_problematique', );*/
+                const urlrecuperefile = this.constance.dns.concat('/WazzabyApi/public/api/photomessagepublic?file_extension=').concat(extension).concat('&id_user=').concat(this.authService.sessions.id).concat('&id_problematique=').concat(this.authService.sessions.id_prob);
                 this.httpClient
-                    .post(url1, formData)
+                    .get(urlrecuperefile)
                     .subscribe(
                         (response) => {
+                            this.constance.name_file = response;
+                            const url1 = this.constance.dns.concat('/uploads/uploadScript.php');
+                            let formData: FormData = new FormData();
+                            formData.append('photostatus', this.filevalue);
+                            formData.append('name_file', this.constance.name_file.name_file);
+                            this.imagenamefordelete = this.constance.name_file.name_file.concat('.').concat(extension);
+                            this.id_messagepublic = this.constance.name_file.id_messagepublic;
+                            this.id_photo = this.constance.name_file.ID_photo;
+                            this.httpClient
+                                .post(url1, formData)
+                                .subscribe(
+                                    (response) => {
+                                        this.disparaitreprogressbar = 'none';
+                                        this.disparaitreimage = 'block';
+                                        this.etat = 0;
+                                    },
+                                    (error) => {
+                                        this.disparaitreprogressbar = 'none';
+                                        this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                                    }
+                                );
 
+                            return response;
                         },
                         (error) => {
-                            console.log('Erreur ! : ' + error);
+                            this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                            this.disparaitreprogressbar = 'none';
                         }
                     );
+
             }
 
         } else {
@@ -239,26 +288,56 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     onSubmitForm() {
+        this.disparaitrechamp = 'none';
+        this.disparaitreimage = 'none';
+        this.disparaitreprogressbar = 'block';
         const formvalue = this.messagepublicform.value;
-        const problematique = formvalue['problematique'];
+        const libellemessagepublic = formvalue['problematique'];
 
-        let formData: FormData = new FormData();
-        formData.append('photostatus', this.filevalue);
-        /*let formData1: FormData = new FormData();
-        formData1.append('ID',);
-        formData1.append('libelle',);
-        formData1.append('libelle',);*/
+        if (libellemessagepublic.length > 0 ) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/SaveMessagePublic?etat=').concat(this.etat).concat('&libelle=').concat(libellemessagepublic).concat('&id_problematique=').concat(this.authService.getSessions().id_prob).concat('&ID=').concat(this.authService.getSessions().id).concat('&id_message_public=').concat(this.id_messagepublic);
+            this.httpClient
+                .get(url)
+                .subscribe(
+                    (response1) => {
+                        this.disparaitrechamp = 'block';
+                        this.disparaitreimage = 'block';
+                        this.disparaitreprogressbar = 'none';
+                        this.block_boite_de_dialogue = 'none';
+                        this.openSnackBar('Insertion effectuee avec succes !', 'succes');
 
-        /*this.httpClient
-            .post(url1, formData)
-            .subscribe(
-                (response) => {
+                        /*if (this.etat === 0) {
+                            this.publicconvertservice.itemobject.status_photo = this.imageSrc;
+                            this.publicconvertservice.itemobject.etat_photo_status = 'block';
+                        } else {
+                            this.publicconvertservice.itemobject.etat_photo_status = 'none';
+                            this.publicconvertservice.itemobject.status_photo = '';
+                        }
 
-                },
-                (error) => {
-                    console.log('Erreur ! : ' + error);
-                }
-            );*/
+
+                        if (this.authService.sessions.photo.length > 0 ) {
+                            this.publicconvertservice.itemobject.user_photo = '';
+                        } else {
+                            this.publicconvertservice.itemobject.user_photo = '../../Icons/ic_profile_colorier.png';
+                        }
+
+                        this.publicconvertservice.itemobject.status_text_content = libellemessagepublic;
+                        this.publicconvertservice.itemobject.updated = "A l'instant";
+                        this.publicconvertservice.conversationsPublics.push(this.publicconvertservice.itemobject);*/
+
+                        return response1;
+                    },
+                    (error) => {
+                        this.disparaitrechamp = 'block';
+                        this.disparaitreimage = 'block';
+                        this.disparaitreprogressbar = 'none';
+                        this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                    }
+                );
+        } else {
+            this.openSnackBar('Veuillez inserer un message public', 'erreur');
+        }
+
     }
 
     scroll = (): void => {
@@ -277,6 +356,38 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     onToggleFab() {
         this.buttons.length ? this.hideItems() : this.showItems();
+    }
+
+    //methode pour supprimer la photo d'un status
+    OnSupprimerPhoto() {
+        this.disparaitreimage = 'none';
+        this.disparaitreprogressbar = 'block';
+        const urltemp = this.constance.dns.concat('/uploads/removeuploadScript.php?nomdufichier=').concat(this.imagenamefordelete);
+        this.httpClient
+            .get(urltemp)
+            .subscribe(
+                (response) => {
+                    this.disparaitreprogressbar = 'none';
+                   const urldelete = this.constance.dns.concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=').concat(this.id_messagepublic).concat('&ID_photo=').concat(this.id_photo);
+                   this.httpClient
+                        .get(urldelete)
+                        .subscribe(
+                            (response1) => {
+                                this.disparaitreprogressbar = 'none';
+                                this.etat = 1;
+                                return response1;
+                            },
+                            (error) => {
+                            }
+                        );
+                    return response;
+                },
+                (error) => {
+                    this.disparaitreprogressbar = 'none';
+                    this.disparaitreimage = 'block';
+                    this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                }
+            );
     }
 
 }
