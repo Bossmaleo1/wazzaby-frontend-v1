@@ -2,7 +2,7 @@
 
 <mat-toolbar color="primary" class="block-toolbar1" *ngIf="!afficher_spinner">
 
-  <div matRipple class="icon-block" (click)="OnProfil()"><img  id="icon" src="../../Icons/{{photo_user}}"/></div>
+  <div matRipple class="icon-block" (click)="OnProfil()"><img  id="icon" src="{{photo_user}}"/></div>
 
   <button mat-button (click)="OnProfil()"><span>{{prenom}} {{nom}}</span></button><br/>
 
@@ -17,7 +17,7 @@
   </button>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="OnProfil()">
       <mat-icon id="icon-color">account_circle</mat-icon>
       <span>Profil</span>
     </button>
@@ -45,60 +45,25 @@
 <mat-tab-group (selectedTabChange)="onLinkClick($event)" class="block-tabs" *ngIf="!afficher_spinner">
 
   <mat-tab>
-    <ng-template mat-tab-label class="tabs-toolbar-1" >
-      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPublicConver)}"  class="example-tab-icon" id="icon-color">sms</mat-icon>
-    </ng-template>
-
-    <div class="block-message-1">
-      <mat-card class="example-card">
-        <app-privaterecentconvert *ngFor="let recent of privaterecentConvertHome; let i = index"
-                           [indexOfConvert]="i"
-                           [name]="recent.name"
-                           [user_photo]="recent.user_photo"
-                           [id]="recent.id"
-        ></app-privaterecentconvert>
-      </mat-card>
-    </div>
-
-
-    <div class="block-message-2">
-      <mat-card class="card-block-column-2">Simple card</mat-card>
-    </div>
-
-    <div class="block-message-3">
-      <mat-card class="example-card">
-        <app-private-user-online *ngFor="let useronline of privateusersOnlineHome; let i = index"
-                                  [indexOfConvert]="i"
-                                  [name]="useronline.name"
-                                  [user_photo]="useronline.user_photo"
-                                  [id]="useronline.id"
-        ></app-private-user-online>
-
-
-      </mat-card>
-    </div>
-
-  </mat-tab>
-
-  <mat-tab>
     <ng-template  mat-tab-label >
-      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPrivateConver)}" class="example-tab-icon" id="icon-color">forum</mat-icon>
+      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPublicConver)}" class="example-tab-icon" id="icon-color">forum</mat-icon>
     </ng-template>
 
     <!--Mise en place du content1 -->
     <div class="block-content-1">
+      <div id='block_spinner1'><mat-spinner *ngIf="afficher_spinner_messagepublic"  class="progressbar"></mat-spinner></div>
 
-      <app-publicconvert *ngFor="let convert of this.publicconvertservice.conversationsPublics; let i = index"
-                    [indexOfConvert]="i"
-                    [name]="convert.name"
-                    [updated]="convert.updated"
-                    [user_photo]="convert.user_photo"
-                    [status_text_content]="convert.status_text_content"
-                    [etat_photo]="convert.etat_photo"
-                    [etat_photo_status]="convert.etat_photo_status"
-                    [status_photo]="convert.status_photo"
-                    [id]="convert.id"
-      ></app-publicconvert>
+        <app-publicconvert  *ngFor="let convert of this.publicconvertservice.conversationsPublics; let i = index"
+                         [indexOfConvert]="i"
+                         [name]="convert.name"
+                         [updated]="convert.updated"
+                         [user_photo]="convert.user_photo"
+                         [status_text_content]="convert.status_text_content"
+                         [etat_photo]="convert.etat_photo"
+                         [etat_photo_status]="convert.etat_photo_status"
+                         [status_photo]="convert.status_photo"
+                         [id]="convert.id"
+        ></app-publicconvert>
 
 
       <div class="fab-container">
@@ -122,6 +87,45 @@
            (click)="onToggleFab()">
       </div>
 
+    </div>
+
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label class="tabs-toolbar-1" >
+      <mat-icon [ngStyle]="{color:getColor(IconEtatColorPrivateConver)}"   class="example-tab-icon" id="icon-color">sms</mat-icon>
+    </ng-template>
+
+    <div class="block-message-1">
+      <mat-card class="example-card">
+        <app-privaterecentconvert *ngFor="let recent of privaterecentConvertHome; let i = index"
+                           [indexOfConvert]="i"
+                           [name]="recent.name"
+                           [user_photo]="recent.user_photo"
+                           [id]="recent.id"
+        ></app-privaterecentconvert>
+      </mat-card>
+    </div>
+
+
+    <div class="block-message-2">
+      <mat-card class="card-block-column-2">Simple card</mat-card>
+    </div>
+
+    <div class="block-message-3">
+
+
+
+      <mat-card class="example-card">
+        <app-private-user-online *ngFor="let useronline of privateusersOnlineHome; let i = index"
+                                  [indexOfConvert]="i"
+                                  [name]="useronline.name"
+                                  [user_photo]="useronline.user_photo"
+                                  [id]="useronline.id"
+        ></app-private-user-online>
+
+
+      </mat-card>
     </div>
 
   </mat-tab>

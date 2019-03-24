@@ -1,11 +1,16 @@
-<div matRipple class="icon-block">
+<mat-progress-bar mode="indeterminate" [ngStyle]="{'display':''+disparaitreprogressbar+''}"></mat-progress-bar>
+<div  class="icon-block" [ngStyle]="{'display':''+disparaitreblock+''}">
+    <div  class="icon-base">
+        <img matRipple id="icon" [src]="imageSrc" />
+    </div>
 
-    <img  id="icon" src="../../Icons/ic_profile_colorier.png"/>
-
-    <button mat-icon-button >
+    <button mat-icon-button  (click)="onpenFileBrowser($event)">
         <mat-icon aria-label="Example icon-button with a heart icon">add_a_photo</mat-icon>
     </button>
 
+    <form [formGroup]="addphotoform">
+        <input type="file"  (change)="onChangeFile($event)" id="tenantPhotoId" formControlName="tenantPhotoId" [ngStyle]="{'display':'none'}" #fileInput/>
+    </form>
 </div>
 
 

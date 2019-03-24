@@ -8,26 +8,15 @@
   <span class="example-spacer"></span>
 
 
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item>
-      <mat-icon>account_circle</mat-icon>
-      <span>Profil</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon>settings</mat-icon>
-      <span>Parametres</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon>help</mat-icon>
-      <span>A propos</span>
-    </button>
-    <button mat-menu-item (click)="OnDeconnect()">
-      <mat-icon>power_settings_new</mat-icon>
-      <span>Deconnexion</span>
-    </button>
-  </mat-menu>
-
 </mat-toolbar>
+
+<section>
+  <br/><br/>
+  <mat-card class="example-card">
+
+    <app-add-profil-picture
+    >
+    </app-add-profil-picture>
+
+  </mat-card>
+</section>

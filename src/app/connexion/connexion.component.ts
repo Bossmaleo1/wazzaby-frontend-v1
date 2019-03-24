@@ -50,9 +50,18 @@ export class ConnexionComponent implements OnInit {
             .subscribe(
                 (response) => {
                     this.authService.sessions = response;
+                    console.log(this.authService.sessions);
                     if (this.authService.sessions.succes === 1) {
-                        this.authService.isAuth = true;
-                        this.router.navigate(['home']);
+                        const libelle_boss = this.authService.sessions.libelle_prob;
+                        this.constance.test_updatecachephoto = 1;
+                        if (libelle_boss.length > 0) {
+                            this.authService.isAuth = true;
+                            this.router.navigate(['home']);
+                        } else {
+                            this.authService.isAuth = true;
+                            this.authService.etat_problematique = false;
+                            this.router.navigate(['problematique']);
+                        }
                     } else {
                         this.authService.isAuth = false;
                         this.afficher_spinner = false;

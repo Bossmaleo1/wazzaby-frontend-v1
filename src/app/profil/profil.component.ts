@@ -9,6 +9,8 @@ import {AuthService} from '../Services/auth.service';
 })
 export class ProfilComponent implements OnInit {
 
+  hide = true;
+
   constructor(private  router: Router, private authService: AuthService) { }
 
   ngOnInit() {

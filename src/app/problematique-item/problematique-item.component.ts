@@ -1,4 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {ProblematiqueItemService} from '../Services/problematique.item.service';
+import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {ConstanceService} from '../Services/Constance.service';
+import {AuthService} from '../Services/auth.service';
+import {Location} from '@angular/common';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-problematique-item',
@@ -7,12 +14,54 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class ProblematiqueItemComponent implements OnInit {
 
+    @Input() index: number;
     @Input() id: number;
     @Input() name: string;
 
-  constructor() { }
+  constructor(public problematiqueitemservice: ProblematiqueItemService
+      , private httpClient: HttpClient
+      , private authService: AuthService
+      , public snackBar: MatSnackBar
+      , private constance: ConstanceService
+                , public  router: Router) { }
 
   ngOnInit() {
   }
+
+  OnDetailsProb() {
+      if (this.problematiqueitemservice.testprobcomponent === 1) {
+          this.problematiqueitemservice.switchOnOne(this.index, this.id, this.name);
+          this.router.navigate(['details']);
+      } else if (this.problematiqueitemservice.testprobcomponent === 2) {
+            //this.problematiqueitemservice.afficher_spinner = true;
+            this.problematiqueitemservice.afficher_spinner_probgen = true;
+            const  url = this.constance.dns.concat('/WazzabyApi/public/api/changeproblematique?ID=').concat(this.authService.sessions.id).concat('&ID_prob=').concat(String(this.id));
+            this.connexionToServer(url);
+      }
+  }
+
+    connexionToServer(url: string) {
+        this.httpClient
+            .get(url)
+            .subscribe(
+                (response) => {
+                    this.authService.sessions.id_prob = this.id;
+                    this.authService.sessions.libelle_prob = this.name;
+                    this.problematiqueitemservice.afficher_spinner_probgen = false;
+                    this.openSnackBar("Votre problematique vient d'etre avec succes", 'succes');
+                    this.router.navigate(['home']);
+                },
+                (error) => {
+                    this.problematiqueitemservice.afficher_spinner_probgen = false;
+                    this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                }
+            );
+    }
+
+    openSnackBar(message: string, action: string) {
+        this.snackBar.open(message, action, {
+            duration: 2000,
+        });
+    }
 
 }

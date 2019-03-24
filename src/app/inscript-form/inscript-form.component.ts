@@ -6,6 +6,7 @@ import {HttpClient} from '@angular/common/http';
 import {ConstanceService} from '../Services/Constance.service';
 import {AuthService} from '../Services/auth.service';
 import { MatStepper } from '@angular/material/stepper';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-inscript-form',
@@ -28,6 +29,8 @@ export class InscriptFormComponent implements OnInit {
     datedenaissance: any;
     sexe: any;
     password: any;
+    hide1 = true;
+    hide2 = true;
 
     disparaitreprogressbar = 'none';
     disparaitreallblock = 'block';
@@ -36,6 +39,7 @@ export class InscriptFormComponent implements OnInit {
         , public snackBar: MatSnackBar
         , private authService: AuthService
         , private httpClient: HttpClient
+        , private  router: Router
         , private constance: ConstanceService) {}
 
     ngOnInit() {
@@ -68,18 +72,24 @@ export class InscriptFormComponent implements OnInit {
     onSubmitfirstForm(stepper: MatStepper) {
         const formValue = this.firstFormGroup.value;
         if (this.afficher_code === false) {
-        const url1 = this.constance.dns.concat('/WazzabyApiOthers/send_mail.php?email=').concat(formValue['email']);
-       this.httpClient
-            .get(url1)
-            .subscribe(
-                (response) => {
-                    this.afficher_code = !this.afficher_code;
-                    this.firstform1 = response;
-                    console.log(this.firstform1.succes);
-                },
+            this.disparaitreprogressbar = 'block';
+            this.disparaitreallblock = 'none';
+            const url1 = this.constance.dns.concat('/WazzabyApiOthers/send_mail.php?email=').concat(formValue['email']);
+            this.httpClient
+                .get(url1)
+                .subscribe(
+                    (response) => {
+                            console.log(response);
+                            this.afficher_code = !this.afficher_code;
+                            this.firstform1 = response;
+                            this.disparaitreprogressbar = 'none';
+                            this.disparaitreallblock = 'block';
+                        },
                 (error) => {
-                }
-            );
+                            this.disparaitreprogressbar = 'none';
+                            this.disparaitreallblock = 'block';
+                    }
+             );
         } else {
 
 
@@ -87,7 +97,7 @@ export class InscriptFormComponent implements OnInit {
                 //this.openSnackBar('Vous avez inserer le bon mot de passe !!!', 'succes');
                 stepper.next();
             } else {
-                this.openSnackBar(' Vous avez inserer le mauvais mot de passe !!! ', 'erreur');
+                this.openSnackBar(' Vous avez inserer le mauvais code de validation !!! ', 'erreur');
             }
         }
     }
@@ -119,9 +129,11 @@ export class InscriptFormComponent implements OnInit {
             .get(url)
             .subscribe(
                 (response) => {
-                    this.disparaitreprogressbar = 'none';
-                    this.disparaitreallblock = 'block';
                     this.authService.sessions = response;
+                    this.authService.sessions.email = this.firstform1.email;
+                    console.log(this.password);
+                    this.authService.sessions.password = this.password;
+                    this.constance.test_updatecachephoto = 3;
                     this.openSnackBar(" Votre Inscription s'est effectuee avec succes ! ", 'succes');
                     const url1 = this.constance.dns.concat('/WazzabyApiOthers/send_welcome_mail.php?email=').concat(this.firstform1.email).concat('&password=').concat(this.password).concat('&nom=').concat(this.nom).concat('&prenom=').concat(this.prenom).concat('&sexe=').concat(this.sexe);
                     this.httpClient
@@ -129,10 +141,19 @@ export class InscriptFormComponent implements OnInit {
                         .subscribe(
                             (response1) => {
                                 this.afficher_code = !this.afficher_code;
-                                this.firstform1 = response1;
+                                this.authService.isAuth = true;
+                                this.authService.isAuth = true;
+                                this.constance.test_updatecachephoto = 3;
+                                //this.constance.test_updatecachephoto = 3;
+                                this.router.navigate(['welcome']);
+
                             },
                             (error) => {
+                                this.openSnackBar(" Une erreur serveur vient de se produire ! ", 'erreur');
+                                this.disparaitreprogressbar = 'none';
+                                this.disparaitreallblock = 'block';
                             }
+
                         );
 
 

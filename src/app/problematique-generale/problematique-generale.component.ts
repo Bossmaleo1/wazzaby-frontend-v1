@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../Services/auth.service';
 import {ProblematiqueItemService} from '../Services/problematique.item.service';
+import {MatSnackBar} from '@angular/material';
+import {HttpClient} from '@angular/common/http';
+import {ConstanceService} from '../Services/Constance.service';
+import {Location} from '@angular/common';
 
-export interface Section {
-    name: string;
-    updated: Date;
-}
 
 @Component({
   selector: 'app-problematique-generale',
@@ -15,60 +15,58 @@ export interface Section {
 })
 export class ProblematiqueGeneraleComponent implements OnInit {
 
+    afficher_spinner = false;
+    libelle_catprob = "";
+
   constructor(private  router: Router
               , private authService: AuthService
-              , private problematiqueitemservice: ProblematiqueItemService) { }
-
-    problematiques: Section[] = [
-        {
-            name: 'Meloncolique',
-            updated: new Date('1/1/16'),
-        },
-        {
-            name: 'Sport',
-            updated: new Date('1/17/16'),
-        },
-        {
-            name: 'Politique',
-            updated: new Date('1/28/16'),
-        },
-        {
-            name: 'Business',
-            updated: new Date('1/28/16'),
-        },
-        {
-            name: 'Religion',
-            updated: new Date('1/28/16'),
-        },
-        {
-            name: 'Famille',
-            updated: new Date('1/28/16'),
-        },
-        {
-            name: 'Musique',
-            updated: new Date('1/28/16'),
-        },
-        {
-            name: 'Fete/Ceremonie/Evenement',
-            updated: new Date('1/28/16'),
-        },
-        {
-            name: 'Arts',
-            updated: new Date('1/28/16'),
-        }
-    ];
-
+              , public snackBar: MatSnackBar
+              , private httpClient: HttpClient
+                , private _location: Location
+                , private constance: ConstanceService
+              , public problematiqueitemservice: ProblematiqueItemService) { }
 
   ngOnInit() {
+      const url = this.constance.dns.concat('/WazzabyApi/public/api/displayAllcatprob');
+      this.problematiqueitemservice.afficher_spinner_probgen = true;
+      this.connexionToServer(url);
+      this.problematiqueitemservice.testprobcomponent = 1;
   }
 
   OnBack() {
-    this.router.navigate(['home']);
+        this._location.back();
   }
 
   OnDeconnect() {
     this.authService.signOut();
     this.router.navigate(['connexion']);
   }
+
+    connexionToServer(url: string) {
+        this.httpClient
+            .get(url)
+            .subscribe(
+                (response) => {
+                    this.problematiqueitemservice.problematiquescat  = response;
+                    this.problematiqueitemservice.afficher_spinner_probgen = false;
+                },
+                (error) => {
+                    this.afficher_spinner = false;
+                    this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                    this.problematiqueitemservice.afficher_spinner_probgen = false;
+                }
+            );
+    }
+
+    openSnackBar(message: string, action: string) {
+        this.snackBar.open(message, action, {
+            duration: 2000,
+        });
+    }
+
+    onSearchProb(event) {
+      const url = this.constance.dns.concat('/WazzabyApi/public/api/ProbElasticSearchService?libelle_catprob=').concat(this.libelle_catprob);
+        this.connexionToServer(url);
+    }
 
 }

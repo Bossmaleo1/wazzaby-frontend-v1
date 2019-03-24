@@ -1,35 +1,22 @@
-<mat-toolbar color="primary" class="block-toolbar">
+<div id='block_spinner'><mat-spinner *ngIf="afficher_spinner"  class="progressbar"></mat-spinner></div>
 
-  <span>Bienvenue dans Wazzaby !</span>
+<mat-toolbar color="primary" class="block-toolbar" *ngIf="!afficher_spinner">
+
+  <span>Photo de Profil</span>
+
+  <span class="example-spacer"></span>
+
+  <button mat-button (click)="onNext()">Suivant</button>
 
 </mat-toolbar>
 
 
-<section>
-
-
-  <mat-card class="example-card">
-
+<br/><br/>
+<mat-card class="example-card" *ngIf="!afficher_spinner">
 
     <app-add-profil-picture
     >
     </app-add-profil-picture>
 
-    <mat-card-actions>
-      <mat-divider></mat-divider><br/>
+</mat-card> <br/>
 
-      <mat-form-field class="search-form">
-        <input matInput placeholder="Rechercher" type="text"/>
-        <mat-icon matSuffix color="primary">search</mat-icon>
-      </mat-form-field> <br/> <br/>
-
-      <app-problematique-item *ngFor="let prob of this.problematiqueitemservice.problematiques; let i = index"
-                              [name] = "prob.name"
-                              [id] = "prob.id"
-      >
-      </app-problematique-item>
-    </mat-card-actions>
-    <button mat-raised-button type='submit' color="primary" class="example-full-width" >SUIVANT</button>
-  </mat-card> <br/>
-
-</section>

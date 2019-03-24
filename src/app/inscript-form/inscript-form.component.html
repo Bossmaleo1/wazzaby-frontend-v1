@@ -13,8 +13,8 @@
 
 </mat-toolbar>
 
-
-
+<br/><br/><br/><br/>
+<div class="block-globale">
 <div class="block" [ngStyle]="{'display':''+disparaitreallblock+''}">
   <mat-horizontal-stepper [linear]="isLinear" #stepper>
     <mat-step [stepControl]="firstFormGroup">
@@ -64,16 +64,18 @@
         </div><br/>
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Mot de Passe" autocomplete="off" type="password" formControlName="password1" required>
+          <input matInput placeholder="Mot de Passe" autocomplete="off" [type]="hide1 ? 'password' : 'text'" formControlName="password1" required/>
+          <mat-icon matSuffix (click)="hide1 = !hide1">{{hide1 ? 'visibility_off' : 'visibility'}}</mat-icon>
         </mat-form-field> <br/>
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Mot de Passe (Confirmation)" autocomplete="off" type="password" formControlName="password2" required>
+          <input matInput placeholder="Mot de Passe (Confirmation)" autocomplete="off" [type]="hide2 ? 'password' : 'text'" formControlName="password2" required/>
+          <mat-icon matSuffix (click)="hide2 = !hide2">{{hide2 ? 'visibility_off' : 'visibility'}}</mat-icon>
         </mat-form-field> <br/>
 
         <button mat-raised-button type='submit' color="primary" class="example-full-width" >TERMINER</button>
       </form>
     </mat-step>
   </mat-horizontal-stepper>
-
+</div>
 </div>

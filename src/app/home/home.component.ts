@@ -3,18 +3,15 @@ import {HomeDesignService} from '../Services/home.design.service';
 import {MatSnackBar, MatTabChangeEvent} from '@angular/material';
 import {Router} from '@angular/router';
 import {AuthService} from '../Services/auth.service';
-import {Help1Services} from '../Services/help1.services';
 import {PrivateUseronlineServices} from '../Services/private.useronline.services';
 import {PrivateRecentconvertServices} from '../Services/private.recentconvert.services';
 import {HttpClient} from '@angular/common/http';
-import {FormBuilder, FormGroup, NgForm, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConstanceService} from '../Services/Constance.service';
 import {MessagePublic} from '../models/MessagePublic.model';
 import {Subscription} from 'rxjs';
 import {MessagepublicService} from '../Services/messagepublic.service';
-import {DOCUMENT} from '@angular/common';
 import { speedDialFabAnimations } from './speed-dial-fab.animations';
-import {RequestOptions} from '@angular/http';
 import {PublicConvertServices} from '../Services/public.convert.services';
 
 
@@ -84,6 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     id_messagepublic: any;
     id_photo: any;
     etat: any;
+    afficher_spinner_messagepublic = false;
 
 
   constructor(private homedesign: HomeDesignService
@@ -107,10 +105,20 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.nom = this.authService.getSessions().nom;
       this.prenom = this.authService.getSessions().prenom;
       this.etat = 1;
-      if (this.authService.getSessions().photo === '') {
-            this.photo_user = 'ic_profile.png';
-      } else {
+      if (this.constance.test_updatecachephoto === 1) {
+        if (this.authService.getSessions().photo === '') {
+            this.photo_user = this.constance.dns.concat('/uploads/photo_de_profil/').concat('ic_profile.png');
+        } else {
+          this.photo_user = this.constance.dns.concat('/uploads/photo_de_profil/').concat(this.authService.getSessions().photo);
+        }
+      } else if (this.constance.test_updatecachephoto === 2) {
           this.photo_user = this.authService.getSessions().photo;
+      } else if (this.constance.test_updatecachephoto === 3) {
+          if (this.authService.getSessions().photo === '') {
+              this.photo_user = this.constance.dns.concat('/uploads/photo_de_profil/').concat('ic_profile.png');
+          } else {
+              this.photo_user = this.constance.dns.concat('/uploads/photo_de_profil/').concat(this.authService.getSessions().photo);
+          }
       }
       this.problematique_libelle = this.authService.getSessions().libelle_prob;
 
@@ -122,19 +130,22 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.messagepublicservice.emitMessage();
       this.initForm();
       window.addEventListener('scroll', this.scroll, true);
-
-      const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=').concat(this.authService.getSessions().id_prob);
-      this.httpClient
+      if (typeof this.publicconvertservice.conversationsPublics === 'undefined') {
+        this.afficher_spinner_messagepublic = true;
+        const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=').concat(this.authService.getSessions().id_prob);
+        this.httpClient
           .get(url)
           .subscribe(
               (response1) => {
                   this.publicconvertservice.conversationsPublics = response1;
+                  this.afficher_spinner_messagepublic = false;
                   return response1;
               },
               (error) => {
+                  this.afficher_spinner_messagepublic = false;
                   this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
-              }
-          );
+              });
+      }
   }
 
   initForm() {
@@ -193,10 +204,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     /*Pour afficher la boite de dialogue*/
     onDialogPublicConvert(event) {
-        if (event.srcElement.innerHTML === 'edit') {
-            this.block_boite_de_dialogue = 'block';
-        } else {
+
+        if (event.srcElement.innerHTML.length === 4) {
             window.scroll(0,0);
+            this.block_boite_de_dialogue = 'block';
+        } else if (event.srcElement.innerHTML.length === 17) {
+           window.scroll(0,0);
         }
     }
 
@@ -305,25 +318,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                         this.disparaitreprogressbar = 'none';
                         this.block_boite_de_dialogue = 'none';
                         this.openSnackBar('Insertion effectuee avec succes !', 'succes');
-
-                        /*if (this.etat === 0) {
-                            this.publicconvertservice.itemobject.status_photo = this.imageSrc;
-                            this.publicconvertservice.itemobject.etat_photo_status = 'block';
-                        } else {
-                            this.publicconvertservice.itemobject.etat_photo_status = 'none';
-                            this.publicconvertservice.itemobject.status_photo = '';
-                        }
-
-
-                        if (this.authService.sessions.photo.length > 0 ) {
-                            this.publicconvertservice.itemobject.user_photo = '';
-                        } else {
-                            this.publicconvertservice.itemobject.user_photo = '../../Icons/ic_profile_colorier.png';
-                        }
-
-                        this.publicconvertservice.itemobject.status_text_content = libellemessagepublic;
-                        this.publicconvertservice.itemobject.updated = "A l'instant";
-                        this.publicconvertservice.conversationsPublics.push(this.publicconvertservice.itemobject);*/
 
                         return response1;
                     },

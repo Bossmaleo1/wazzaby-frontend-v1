@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { ConnexionComponent } from './connexion/connexion.component';
@@ -40,6 +41,8 @@ import { AddProfilPictureComponent } from './add-profil-picture/add-profil-pictu
 import { WelcomeToWazzabyComponent } from './welcome-to-wazzaby/welcome-to-wazzaby.component';
 import { ProblematiqueItemComponent } from './problematique-item/problematique-item.component';
 import {ProblematiqueItemService} from './Services/problematique.item.service';
+import {AddProfilPictureService} from './Services/add.profil.picture.service';
+import { NotifierModule } from 'angular-notifier';
 
 
 
@@ -55,7 +58,7 @@ const appRoutes: Routes = [
     {path: 'home/:id', canActivate: [AuthGuardService], component: PublicconvertDetailsComponent},
     {path: 'inscript', component: InscriptFormComponent},
     {path: 'connexion', component: ConnexionComponent},
-    {path: 'welcome', component: WelcomeToWazzabyComponent},
+    {path: 'welcome', canActivate: [AuthGuardService], component: WelcomeToWazzabyComponent},
     {path: '', component: ConnexionComponent},
     {path: 'not-found', component: NotFoundComponent},
     {path: '**', redirectTo: '/not-found'}
@@ -94,7 +97,8 @@ const appRoutes: Routes = [
     NgMatSearchBarModule,
     HttpClientModule,
     ReactiveFormsModule,
-    WebcamModule
+    WebcamModule,
+      NotifierModule
   ],
   providers: [
       AuthService,
@@ -107,7 +111,9 @@ const appRoutes: Routes = [
       PrivateRecentconvertServices,
       ConstanceService,
       MessagepublicService,
-      ProblematiqueItemService
+      ProblematiqueItemService,
+      AddProfilPictureService,
+      {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]
 })

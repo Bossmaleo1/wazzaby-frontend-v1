@@ -1,6 +1,26 @@
+.block-toolbar {
+  position: fixed;
+  top:0%;
+  left:0%;
+  right:0%;
+  height:10%;
+  z-index: 100;
+}
+
 .block {
   text-align: center;
+  max-width: 900px;
+  margin: auto;
+  padding: 2px;
 }
+
+.block-globale {
+  text-align: center;
+  max-width: 805px;
+  margin: auto;
+  background-color: white;
+}
+
 .example-card {
   max-width: 400px;
   margin: auto;
