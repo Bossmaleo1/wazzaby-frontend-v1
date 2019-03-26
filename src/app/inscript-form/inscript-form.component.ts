@@ -7,6 +7,7 @@ import {ConstanceService} from '../Services/Constance.service';
 import {AuthService} from '../Services/auth.service';
 import { MatStepper } from '@angular/material/stepper';
 import {Router} from '@angular/router';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-inscript-form',
@@ -39,6 +40,7 @@ export class InscriptFormComponent implements OnInit {
         , public snackBar: MatSnackBar
         , private authService: AuthService
         , private httpClient: HttpClient
+        , private _location: Location
         , private  router: Router
         , private constance: ConstanceService) {}
 
@@ -47,7 +49,7 @@ export class InscriptFormComponent implements OnInit {
     }
 
     OnBack() {
-
+        this._location.back();
     }
 
     initForm() {

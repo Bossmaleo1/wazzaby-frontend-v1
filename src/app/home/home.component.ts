@@ -131,9 +131,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.initForm();
       window.addEventListener('scroll', this.scroll, true);
       if (typeof this.publicconvertservice.conversationsPublics === 'undefined') {
-        this.afficher_spinner_messagepublic = true;
-        const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=').concat(this.authService.getSessions().id_prob);
-        this.httpClient
+          this.afficher_spinner_messagepublic = true;
+      }
+      const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=').concat(this.authService.getSessions().id_prob);
+      this.httpClient
           .get(url)
           .subscribe(
               (response1) => {
@@ -144,8 +145,8 @@ export class HomeComponent implements OnInit, OnDestroy {
               (error) => {
                   this.afficher_spinner_messagepublic = false;
                   this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
-              });
-      }
+      });
+
   }
 
   initForm() {
@@ -157,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getColor(etat: boolean) {
     if (etat) {
-      return '#0D47A1';
+      return '#64B5F6';
     } else {
       return 'black';
     }
@@ -226,9 +227,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
     }
 
-	onChangeFile(event) {
+	/*onChangeFile(event) {
         this.disparaitreprogressbar = 'block';
-        //afficher_spinner
         const taille = event.target.files[0].name.split('.').length;
         const extension = event.target.files[0].name.split('.')[taille - 1].toLowerCase();
         this.imagenamefordelete = extension;
@@ -243,8 +243,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
                 reader.readAsDataURL(file);
                 this.filevalue = file;
-                /*formData.append('id_user', );
-                formData.append('id_problematique', );*/
                 const urlrecuperefile = this.constance.dns.concat('/WazzabyApi/public/api/photomessagepublic?file_extension=').concat(extension).concat('&id_user=').concat(this.authService.sessions.id).concat('&id_problematique=').concat(this.authService.sessions.id_prob);
                 this.httpClient
                     .get(urlrecuperefile)
@@ -285,7 +283,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         } else {
             this.openSnackBar('Veuillez choisir une image', 'erreur');
         }
-	}
+	}*/
 
     onpenFileBrowser(event: any) {
         event.preventDefault();

@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,7 +20,6 @@ import {HomeDesignService} from './Services/home.design.service';
 import {AuthGuardService} from './Services/auth.guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import { NgMatSearchBarModule } from 'ng-mat-search-bar';
 import { PublicconvertDetailsComponent } from './publicconvert-details/publicconvert-details.component';
 import {PublicConvertServices} from './Services/public.convert.services';
 import { PublicconvertComponent } from './publicconvert/publicconvert.component';
@@ -33,8 +32,6 @@ import {PrivateUseronlineServices} from './Services/private.useronline.services'
 import {PrivateRecentconvertServices} from './Services/private.recentconvert.services';
 import {ConstanceService} from './Services/Constance.service';
 import {HttpClientModule} from '@angular/common/http';
-import {FileSelectDirective} from 'ng2-file-upload';
-import {WebcamModule} from 'ngx-webcam';
 import {MessagepublicService} from './Services/messagepublic.service';
 import { InscriptFormComponent } from './inscript-form/inscript-form.component';
 import { AddProfilPictureComponent } from './add-profil-picture/add-profil-picture.component';
@@ -42,7 +39,21 @@ import { WelcomeToWazzabyComponent } from './welcome-to-wazzaby/welcome-to-wazza
 import { ProblematiqueItemComponent } from './problematique-item/problematique-item.component';
 import {ProblematiqueItemService} from './Services/problematique.item.service';
 import {AddProfilPictureService} from './Services/add.profil.picture.service';
-import { NotifierModule } from 'angular-notifier';
+
+import {
+    LyThemeModule,
+    LY_THEME
+} from '@alyle/ui';
+
+import { LyResizingCroppingImageModule } from '@alyle/ui/resizing-cropping-images';
+import { LyButtonModule } from '@alyle/ui/button';
+import { LyIconModule } from '@alyle/ui/icon';
+import { LyTypographyModule } from '@alyle/ui/typography';
+
+/** Import theme */
+import { MinimaLight, MinimaDark } from '@alyle/ui/themes/minima';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 
 
@@ -67,7 +78,6 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    FileSelectDirective,
     ConnexionComponent,
     HomeComponent,
     NotificationComponent,
@@ -94,11 +104,14 @@ const appRoutes: Routes = [
     MaterialModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    NgMatSearchBarModule,
     HttpClientModule,
     ReactiveFormsModule,
-    WebcamModule,
-      NotifierModule
+    LyThemeModule.setTheme('minima-dark'),
+    LyResizingCroppingImageModule,
+    LyButtonModule,
+    LyIconModule,
+    LyTypographyModule,
+    FlexLayoutModule
   ],
   providers: [
       AuthService,
@@ -113,7 +126,9 @@ const appRoutes: Routes = [
       MessagepublicService,
       ProblematiqueItemService,
       AddProfilPictureService,
-      {provide: LocationStrategy, useClass: HashLocationStrategy}
+      {provide: LocationStrategy, useClass: HashLocationStrategy},
+      { provide: LY_THEME, useClass: MinimaLight, multi: true },
+      { provide: LY_THEME, useClass: MinimaDark, multi: true }
   ],
   bootstrap: [AppComponent]
 })

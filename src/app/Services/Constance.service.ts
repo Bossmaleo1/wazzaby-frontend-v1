@@ -1,7 +1,7 @@
 
 export class ConstanceService {
 
-    dns = 'http://localhost';
+    dns = 'http://wazzaby.com';
     name_file: any;
     test_updatecachephoto = 1;
 

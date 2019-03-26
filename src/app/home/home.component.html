@@ -50,47 +50,59 @@
     </ng-template>
 
     <!--Mise en place du content1 -->
-    <div class="block-content-1">
-      <div id='block_spinner1'><mat-spinner *ngIf="afficher_spinner_messagepublic"  class="progressbar"></mat-spinner></div>
+    <div class="container"
+         fxLayout
+         fxLayout.xs="column"
+         fxLayoutAlign="center"
+         fxLayoutGap="10px"
+         fxLayoutGap.xs="0">
+      <div class="item item-1" fxFlex="20%"></div>
+      <div class="item item-2" fxFlex="20%" fxFlexOrder="3">
+
+        <div class="fab-container">
+          <button mat-fab class="fab-toggler"
+                  (click)="onToggleFab()" color="primary">
+            <i class="material-icons" [@fabToggler]="{value: fabTogglerState}">add</i>
+          </button>
+          <div>
+            <button *ngFor="let btn of buttons"
+                    mat-mini-fab
+                    class="fab-secondary"
+                    color="secondary"
+                    (click)="onDialogPublicConvert($event)" [id]="btn.icon">
+              <i class="material-icons" >{{btn.icon}}</i>
+            </button>
+          </div>
+        </div>
+
+        <div id="fab-dismiss"
+             *ngIf="fabTogglerState==='active'"
+             (click)="onToggleFab()">
+        </div>
+
+
+      </div>
+      <div class="item item-3" fxFlex="60%">
+
+        <div id='block_spinner1'><mat-spinner *ngIf="afficher_spinner_messagepublic"  class="progressbar"></mat-spinner></div>
 
         <app-publicconvert  *ngFor="let convert of this.publicconvertservice.conversationsPublics; let i = index"
-                         [indexOfConvert]="i"
-                         [name]="convert.name"
-                         [updated]="convert.updated"
-                         [user_photo]="convert.user_photo"
-                         [status_text_content]="convert.status_text_content"
-                         [etat_photo]="convert.etat_photo"
-                         [etat_photo_status]="convert.etat_photo_status"
-                         [status_photo]="convert.status_photo"
-                         [id]="convert.id"
+                            [indexOfConvert]="i"
+                            [name]="convert.name"
+                            [updated]="convert.updated"
+                            [user_photo]="convert.user_photo"
+                            [status_text_content]="convert.status_text_content"
+                            [etat_photo]="convert.etat_photo"
+                            [etat_photo_status]="convert.etat_photo_status"
+                            [status_photo]="convert.status_photo"
+                            [id]="convert.id"
         ></app-publicconvert>
 
-
-      <div class="fab-container">
-        <button mat-fab class="fab-toggler"
-                (click)="onToggleFab()" color="primary">
-          <i class="material-icons" [@fabToggler]="{value: fabTogglerState}">add</i>
-        </button>
-        <div>
-          <button *ngFor="let btn of buttons"
-                  mat-mini-fab
-                  class="fab-secondary"
-                  color="secondary"
-                  (click)="onDialogPublicConvert($event)" [id]="btn.icon">
-            <i class="material-icons" >{{btn.icon}}</i>
-          </button>
-        </div>
+      </div>
       </div>
 
-      <div id="fab-dismiss"
-           *ngIf="fabTogglerState==='active'"
-           (click)="onToggleFab()">
-      </div>
-
-    </div>
-
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
   </mat-tab>
-
   <mat-tab>
     <ng-template mat-tab-label class="tabs-toolbar-1" >
       <mat-icon [ngStyle]="{color:getColor(IconEtatColorPrivateConver)}"   class="example-tab-icon" id="icon-color">sms</mat-icon>
@@ -126,6 +138,8 @@
 
 
       </mat-card>
+
+
     </div>
 
   </mat-tab>

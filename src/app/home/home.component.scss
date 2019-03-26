@@ -23,11 +23,12 @@
 }
 
 .block-tabs {
-  position: absolute;
+  position: fixed;
   z-index: -5;
   top:15%;
   left:0%;
   right:0%;
+  height: 100%;
 }
 
 #icon {
@@ -133,10 +134,10 @@
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 25px;
 
     button {
-      margin-bottom: 17px;
+      margin-bottom: 27px;
     }
   }
 }
