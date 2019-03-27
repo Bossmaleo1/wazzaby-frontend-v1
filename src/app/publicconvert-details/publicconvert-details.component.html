@@ -11,36 +11,61 @@
 
 </mat-toolbar>
 
-<section>
-<mat-card class="example-card">
-  <mat-card-header>
-    <div mat-card-avatar class="example-header-image" [ngStyle]="{'background-image': 'url('+user_photo+')'}" ></div>
-    <mat-card-title>{{name}}</mat-card-title>
-    <mat-card-subtitle>{{updated}}</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image  src="{{status_photo}}" alt="Photo of a Shiba Inu" [ngStyle]="{'display':''+etat_photo_status+''}">
-  <mat-card-content>
-    <p>{{status_text_content}}</p>
-  </mat-card-content>
 
-  <mat-divider></mat-divider>
+<br/><br/><br/>
+<section class="section">
 
-  <mat-form-field class="example-full-width">
-    <input matInput placeholder="Votre commentaire" type="text"/>
-    <mat-icon matSuffix >send</mat-icon>
-  </mat-form-field>
+  <div class="container"
+       fxLayout
+       fxLayout.xs="column"
+       fxLayoutAlign="center"
+       fxLayoutGap="10px"
+       fxLayoutGap.xs="0">
+    <div class="item item-1" fxFlex="20%"></div>
+    <div class="item item-2" fxFlex="20%" fxFlexOrder="3">
+    </div>
+    <div class="item item-3" fxFlex="60%">
 
-</mat-card>
 
-  <app-comments *ngFor="let comment of comments; let i = index"
-                     [indexOfConvert]="i"
-                     [name]="comment.name"
-                     [updated]="comment.updated"
-                     [user_photo]="comment.user_photo"
-                     [status_text_content]="comment.status_text_content"
-                     [id]="comments.id"
-  ></app-comments>
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image" [ngStyle]="{'background-image': 'url('+user_photo+')'}" ></div>
+          <mat-card-title>{{name}}</mat-card-title>
+          <mat-card-subtitle>{{updated}}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image  src="{{status_photo}}" alt="Photo of a Shiba Inu" [ngStyle]="{'display':''+etat_photo_status+''}">
+        <mat-card-content>
+          <p>{{status_text_content}}</p>
+        </mat-card-content>
+
+        <mat-divider></mat-divider>
+
+
+        <mat-form-field class="example-full-width">
+                <input matInput placeholder="Votre commentaire" type="text" [(ngModel)]="libelle_comment"  autocomplete="off" />
+                <button mat-icon-button matSuffix (click)="onSendComment()">
+                  <mat-icon>send</mat-icon>
+                </button>
+        </mat-form-field>
+
+
+
+      </mat-card>
+
+      <app-comments *ngFor="let comment of comments; let i = index"
+                    [indexOfConvert]="i"
+                    [name]="comment.name"
+                    [updated]="comment.updated"
+                    [user_photo]="comment.user_photo"
+                    [status_text_content]="comment.status_text_content"
+                    [id]="comments.id"
+      ></app-comments>
+
+
+    </div>
+  </div>
 
 
 
 </section>
+<br/><br/><br/>

@@ -66,7 +66,7 @@ const appRoutes: Routes = [
     {path: 'notification', canActivate: [AuthGuardService], component: NotificationComponent},
     {path: 'download', component: DownloadAndroidComponent},
     {path: 'home', canActivate: [AuthGuardService], component: HomeComponent},
-    {path: 'home/:id', canActivate: [AuthGuardService], component: PublicconvertDetailsComponent},
+    {path: 'public-convert-details', canActivate: [AuthGuardService], component: PublicconvertDetailsComponent},
     {path: 'inscript', component: InscriptFormComponent},
     {path: 'connexion', component: ConnexionComponent},
     {path: 'welcome', canActivate: [AuthGuardService], component: WelcomeToWazzabyComponent},

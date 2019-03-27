@@ -4,6 +4,7 @@
   left:0%;
   right:0%;
   height:10%;
+  z-index: 100;
 }
 
 .example-spacer {
@@ -12,9 +13,7 @@
 
 .example-card {
   max-width: 500px;
-  margin-top: 8%;
-  margin-left: 25%;
-  margin-right: auto;
+  margin: auto;
 }
 
 
@@ -24,5 +23,9 @@
 
 .example-full-width {
   width: 100%;
+}
+
+.section {
+  margin-top:3%;
 }
 

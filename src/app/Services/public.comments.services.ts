@@ -40,4 +40,17 @@ export class PublicCommentsServices {
         }
     ];
 
+    /*Entete de la publication */
+    id:any;
+    name: any;
+    updated: any;
+    user_photo: any;
+    status_photo: any;
+    status_text_content: any;
+    etat_photo_status: any;
+
+
+
+
+
 }
