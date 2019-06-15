@@ -1,22 +1,7 @@
 
-  <div id='block_spinner'>
+  <br/>
+  <mat-spinner *ngIf="afficher_spinner"  class="progressbar"></mat-spinner>
 
-
-    <div class="container"
-         fxLayout
-         fxLayout.xs="column"
-         fxLayoutAlign="center"
-         fxLayoutGap="10px"
-         fxLayoutGap.xs="0">
-      <div class="item item-1" fxFlex="20%"></div>
-      <div class="item item-2" fxFlex="20%" fxFlexOrder="3"></div>
-      <div class="item item-3" fxFlex="60%">
-
-        <mat-spinner *ngIf="afficher_spinner"  class="progressbar"></mat-spinner>
-
-      </div>
-    </div>
-  </div>
 
   <div class="block-connexion" *ngIf="!afficher_spinner">
 
@@ -34,10 +19,6 @@
         <div class="connexion-form">
           <mat-divider></mat-divider>
           <br/>
-          <button mat-raised-button color="primary" class="example-full-width">CONNEXION AVEC FACEBOOK</button>
-          <br/><br/>
-          <mat-divider></mat-divider>
-          <br/>
           <form (ngSubmit)="onSubmit(f)" #f="ngForm">
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Email" name="email" autocomplete="off" ngModel/>
@@ -48,9 +29,9 @@
               <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </mat-form-field> <br/>
 
-            <section class="example-section">
-              <mat-checkbox class="example-margin" [checked]="true">Connexion Automatique</mat-checkbox>
-            </section> <br/>
+            <!--section class="example-section">
+              <mat-checkbox class="example-margin" [checked]="true"   name="checked" ngModel>Connexion Automatique</mat-checkbox>
+            </section> <br/-->
 
             <button mat-raised-button type='submit' color="primary" class="example-full-width" >CONNEXION</button>
           </form>

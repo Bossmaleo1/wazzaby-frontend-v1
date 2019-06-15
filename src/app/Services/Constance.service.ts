@@ -1,10 +1,11 @@
 
 export class ConstanceService {
 
-    dns = 'http://wazzaby.com';
+    dns = 'http://localhost';
     name_file: any;
     test_updatecachephoto = 1;
     commentobject: any;
+    messagepublicobject: any;
 
     getDNS() {return this.dns;
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../Services/auth.service';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-profil',
@@ -11,13 +12,15 @@ export class ProfilComponent implements OnInit {
 
   hide = true;
 
-  constructor(private  router: Router, private authService: AuthService) { }
+  constructor(private  router: Router
+              , private authService: AuthService
+              , private _location: Location) { }
 
   ngOnInit() {
   }
 
   OnBack() {
-    this.router.navigate(['home']);
+      this._location.back();
   }
 
   OnDeconnect() {

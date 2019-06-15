@@ -25,17 +25,6 @@ import {PublicConvertServices} from '../Services/public.convert.services';
   animations: speedDialFabAnimations
 })
 export class HomeComponent implements OnInit, OnDestroy {
-
-    //gestion du bouton flottant multiple
-    fabButtons = [
-        {
-            icon: 'edit'
-        },
-        {
-            icon: 'keyboard_arrow_up'
-        }
-    ];
-    buttons = [];
     fabTogglerState = 'inactive';
 
     messagepublic: MessagePublic;
@@ -82,6 +71,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     id_photo: any;
     etat: any;
     afficher_spinner_messagepublic = false;
+    empty_message = false;
+    error_message: string;
 
 
   constructor(private homedesign: HomeDesignService
@@ -129,7 +120,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       );
       this.messagepublicservice.emitMessage();
       this.initForm();
-      window.addEventListener('scroll', this.scroll, true);
       if (typeof this.publicconvertservice.conversationsPublics === 'undefined') {
           this.afficher_spinner_messagepublic = true;
       }
@@ -140,11 +130,17 @@ export class HomeComponent implements OnInit, OnDestroy {
               (response1) => {
                   this.publicconvertservice.conversationsPublics = response1;
                   this.afficher_spinner_messagepublic = false;
+                  if ((this.publicconvertservice.conversationsPublics).length === 0) {
+                      this.empty_message = true;
+                      this.error_message = 'Il y a aucune publication pour cette problematique';
+                  }
                   return response1;
               },
               (error) => {
                   this.afficher_spinner_messagepublic = false;
                   this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                  this.empty_message = true;
+                  this.error_message = 'Une erreur serveur vient de se produire';
       });
 
   }
@@ -164,30 +160,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  ChangeIconOne() {
+    ChangeIconOne() {
       this.IconEtatColorPublicConver = true;
       this.IconEtatColorPrivateConver = false;
-  }
+    }
 
-  ChangeIconTwo() {
+    ChangeIconTwo() {
       this.IconEtatColorPublicConver = false;
       this.IconEtatColorPrivateConver = true;
-  }
+    }
 
-  /*La methode qui change la couleur de l'icone suivant l'onglet cliquer*/
-  onLinkClick(event: MatTabChangeEvent) {
+    /*La methode qui change la couleur de l'icone suivant l'onglet cliquer*/
+    onLinkClick(event: MatTabChangeEvent) {
 
         if (event.index === 0) {
             this.ChangeIconOne();
         } else if (event.index === 1) {
             this.ChangeIconTwo();
         }
-  }
+    }
 
     OnclickNotification() {
-        this.badgeshidden = true;
-
-        this.router.navigate(['notification']);
+      this.badgeshidden = true;
+      this.router.navigate(['notification']);
     }
 
     OnclickProblematique() {
@@ -195,24 +190,19 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     OnDeconnect() {
-        this.authService.signOut();
-        this.router.navigate(['connexion']);
+      this.authService.signOut();
+      this.router.navigate(['connexion']);
     }
 
     OnProfil() {
-        this.router.navigate(['profil']);
+      this.router.navigate(['profil']);
     }
 
     /*Pour afficher la boite de dialogue*/
-    onDialogPublicConvert(event) {
-
-        if (event.srcElement.innerHTML.length === 4) {
-            window.scroll(0,0);
-            this.block_boite_de_dialogue = 'block';
-        } else if (event.srcElement.innerHTML.length === 17) {
-           window.scroll(0,0);
-        }
+    onDialogPublicConvert() {
+       this.block_boite_de_dialogue = 'block';
     }
+
 
     /*Methode pour fermer la boite de dialogue*/
     onCloseDialog() {
@@ -227,7 +217,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
     }
 
-	/*onChangeFile(event) {
+	onChangeFile(event) {
         this.disparaitreprogressbar = 'block';
         const taille = event.target.files[0].name.split('.').length;
         const extension = event.target.files[0].name.split('.')[taille - 1].toLowerCase();
@@ -283,7 +273,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         } else {
             this.openSnackBar('Veuillez choisir une image', 'erreur');
         }
-	}*/
+	}
 
     onpenFileBrowser(event: any) {
         event.preventDefault();
@@ -294,7 +284,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
-        window.removeEventListener('scroll', this.scroll, true);
         this.messagepublicsubscription.unsubscribe();
     }
 
@@ -311,10 +300,23 @@ export class HomeComponent implements OnInit, OnDestroy {
                 .get(url)
                 .subscribe(
                     (response1) => {
+                        this.constance.messagepublicobject = response1;
                         this.disparaitrechamp = 'block';
                         this.disparaitreimage = 'block';
                         this.disparaitreprogressbar = 'none';
                         this.block_boite_de_dialogue = 'none';
+                        const nom_du_user = ''.concat(this.authService.sessions.prenom).concat(' ').concat(this.authService.sessions.nom);
+                        let maleosama = new Object();
+                        maleosama['user_photo'] = this.authService.sessions.photo;
+                        maleosama['countcomment'] = '0';
+                        maleosama['name'] = nom_du_user;
+                        maleosama['id'] = this.constance.messagepublicobject.id;
+                        maleosama['updated'] = "A l'instant";
+                        maleosama['status_text_content'] = libellemessagepublic;
+                        maleosama['etat_photo_status'] = this.constance.messagepublicobject.etat_photo_status;
+                        maleosama['status_photo'] =  this.constance.messagepublicobject.status_photo;
+                        this.publicconvertservice.conversationsPublics.unshift(maleosama);
+
                         this.openSnackBar('Insertion effectuee avec succes !', 'succes');
 
                         return response1;
@@ -330,24 +332,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.openSnackBar('Veuillez inserer un message public', 'erreur');
         }
 
-    }
-
-    scroll = (): void => {
-        this.block_boite_de_dialogue = 'none';
-    }
-
-    showItems() {
-        this.fabTogglerState = 'active';
-        this.buttons = this.fabButtons;
-    }
-
-    hideItems() {
-        this.fabTogglerState = 'inactive';
-        this.buttons = [];
-    }
-
-    onToggleFab() {
-        this.buttons.length ? this.hideItems() : this.showItems();
     }
 
     //methode pour supprimer la photo d'un status

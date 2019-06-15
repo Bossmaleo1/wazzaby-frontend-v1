@@ -7,26 +7,47 @@ import {ConstanceService} from '../Services/Constance.service';
 import {NgForm} from '@angular/forms';
 
 @Component({
-  selector: 'app-connexion',
-  templateUrl: './connexion.component.html',
-  styleUrls: ['./connexion.component.scss']
+    selector: 'app-connexion',
+    templateUrl: './connexion.component.html',
+    styleUrls: ['./connexion.component.scss']
 })
 export class ConnexionComponent implements OnInit {
 
-  authStatus: boolean;
-  hide = true;
-  //ngIf qui affiche le Spinner
-  afficher_spinner = false;
+    authStatus: boolean;
+    hide = true;
+    //ngIf qui affiche le Spinner
+    afficher_spinner = false;
 
-  constructor(private authService: AuthService
-              , private  router: Router
-              , private httpClient: HttpClient
-              , public snackBar: MatSnackBar
-              , private constance: ConstanceService) { }
+    constructor(private authService: AuthService
+        , private  router: Router
+        , private httpClient: HttpClient
+        , public snackBar: MatSnackBar
+        , private constance: ConstanceService) { }
 
-  ngOnInit() {
-      this.authStatus = this.authService.isAuth;
-  }
+    ngOnInit() {
+        this.authStatus = this.authService.isAuth;
+        //this.afficher_spinner = true;
+        if (String(this.authService.getCookie('nom1')) != 'null') {
+            const maleosama = new Object();
+            maleosama['libelle_prob'] = this.authService.getCookie('libelle_prob1');
+            maleosama['nom'] = this.authService.getCookie('nom1');
+            maleosama['prenom'] = this.authService.getCookie('prenom1');
+            maleosama['email'] = this.authService.getCookie('email1');
+            maleosama['id'] = this.authService.getCookie('id1');
+            maleosama['id_prob'] = this.authService.getCookie('id_prob1');
+            maleosama['keypush'] = this.authService.getCookie('keypush1');
+            maleosama['langue'] =  this.authService.getCookie('langue1');
+            maleosama['datenaissance'] = this.authService.getCookie('datenaissance1');
+            maleosama['sexe'] = this.authService.getCookie('sexe1');
+            maleosama['ville'] = this.authService.getCookie('ville1');
+            maleosama['photo'] = this.authService.getCookie('photo1');
+            maleosama['online'] = this.authService.getCookie('online1');
+            this.authService.sessions = maleosama;
+            console.log(this.authService.sessions);
+            this.authService.isAuth = true;
+            this.router.navigate(['home']);
+        }
+    }
 
 
     onSubmit(form: NgForm) {
@@ -50,7 +71,9 @@ export class ConnexionComponent implements OnInit {
             .subscribe(
                 (response) => {
                     this.authService.sessions = response;
-                    console.log(this.authService.sessions);
+                    let dtExpire = new Date();
+                    dtExpire.setTime(dtExpire.getTime() + ( 2 * 365 * 24 * 60 * 60));
+                    console.log(response);
                     if (this.authService.sessions.succes === 1) {
                         const libelle_boss = this.authService.sessions.libelle_prob;
                         this.constance.test_updatecachephoto = 1;
@@ -62,6 +85,21 @@ export class ConnexionComponent implements OnInit {
                             this.authService.etat_problematique = false;
                             this.router.navigate(['problematique']);
                         }
+
+                        this.authService.setCookie('libelle_prob1', this.authService.sessions.libelle_prob, dtExpire, '/', null, null );
+                        this.authService.setCookie('nom1', this.authService.sessions.nom, dtExpire, '/', null, null );
+                        this.authService.setCookie('prenom1', this.authService.sessions.prenom, dtExpire, '/', null, null );
+                        this.authService.setCookie('email1', this.authService.sessions.email, dtExpire, '/', null, null );
+                        this.authService.setCookie('id1', this.authService.sessions.id, dtExpire, '/', null, null );
+                        this.authService.setCookie('id_prob1', this.authService.sessions.id_prob, dtExpire, '/', null, null );
+                        this.authService.setCookie('keypush1', this.authService.sessions.keypush, dtExpire, '/', null, null );
+                        this.authService.setCookie('langue1', this.authService.sessions.langue, dtExpire, '/', null, null );
+                        this.authService.setCookie('pays1', this.authService.sessions.pays, dtExpire, '/', null, null );
+                        this.authService.setCookie('datenaissance1', (this.authService.sessions.datenaissance).date, dtExpire, '/', null, null );
+                        this.authService.setCookie('sexe1', this.authService.sessions.sexe, dtExpire, '/', null, null );
+                        this.authService.setCookie('ville1', this.authService.sessions.ville, dtExpire, '/', null, null );
+                        this.authService.setCookie('photo1', this.authService.sessions.photo, dtExpire, '/', null, null );
+                        this.authService.setCookie('online1', this.authService.sessions.online, dtExpire, '/', null, null );
                     } else {
                         this.authService.isAuth = false;
                         this.afficher_spinner = false;
@@ -77,7 +115,7 @@ export class ConnexionComponent implements OnInit {
     }
 
     switchinscript() {
-      this.router.navigate(['inscript']);
+        this.router.navigate(['inscript']);
     }
 
 }

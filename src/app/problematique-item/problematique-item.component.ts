@@ -47,6 +47,10 @@ export class ProblematiqueItemComponent implements OnInit {
                 (response) => {
                     this.authService.sessions.id_prob = this.id;
                     this.authService.sessions.libelle_prob = this.name;
+                    let dtExpire = new Date();
+                    dtExpire.setTime(dtExpire.getTime() + ( 2 * 365 * 24 * 60 * 60));
+                    this.authService.setCookie('id_prob1', this.id, dtExpire, '/', null, null );
+                    this.authService.setCookie('libelle_prob1', this.name, dtExpire, '/', null, null );
                     this.problematiqueitemservice.afficher_spinner_probgen = false;
                     this.openSnackBar("Votre problematique vient d'etre avec succes", 'succes');
                     this.router.navigate(['home']);

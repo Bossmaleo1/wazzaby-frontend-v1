@@ -19,8 +19,11 @@ export class PublicconvertComponent implements OnInit {
     @Input() etat_photo: string;
     @Input() etat_photo_status: string;
     @Input() status_photo: string;
+    @Input() countcomment: string;
     @Input() indexOfConvert: number;
     photo : string;
+    jaime : number;
+    jaimepas : number;
 
   constructor(private publicconvert: PublicConvertServices
               , private constance: ConstanceService
@@ -30,6 +33,8 @@ export class PublicconvertComponent implements OnInit {
   }
 
   ngOnInit() {
+      this.jaime = 0;
+      this.jaimepas = 0;
       this.photo = this.constance.dns.concat('/uploads/photo_de_profil/').concat(this.user_photo);
   }
 
@@ -38,7 +43,7 @@ export class PublicconvertComponent implements OnInit {
       /*console.log('id est : '+id);*/
   }
 
-    OnLaunchIntervention() {
+  OnLaunchIntervention() {
         this.publiccommentsservice.id = this.id;
         this.publiccommentsservice.name = this.name;
         this.publiccommentsservice.updated = this.updated;
@@ -48,8 +53,14 @@ export class PublicconvertComponent implements OnInit {
         this.publiccommentsservice.etat_photo_status = this.etat_photo_status;
         /*this.constance.id_commentaire = this.indexOfConvert;*/
         this.router.navigate(['public-convert-details']);
-    }
+  }
 
+  Onjaime() {
+      console.log(" J'aime !!");
+  }
 
+  Onjaimepas() {
+      console.log(" J'aime pas !!");
+  }
 
 }

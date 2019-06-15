@@ -95,14 +95,13 @@ export class PublicconvertDetailsComponent implements OnInit {
 
     addComment() {
         const nom_du_user = ''.concat(this.authService.sessions.prenom).concat(' ').concat(this.authService.sessions.nom);
-        const maleo = {
-            id: 1,
-            name: nom_du_user,
-            updated: "A l'instant",
-            user_photo: this.constance.dns.concat('/uploads/photo_de_profil/').concat(this.authService.sessions.photo),
-            status_text_content: this.libelle_comment
-        };
-        this.publiccomments.Comments.unshift(maleo);
+        let maleosama = new Object();
+        maleosama['id'] = 1;
+        maleosama['name'] = nom_du_user;
+        maleosama['updated'] = "A l'instant";
+        maleosama['user_photo'] = this.constance.dns.concat('/uploads/photo_de_profil/').concat(this.authService.sessions.photo);
+        maleosama['status_text_content'] = this.libelle_comment;
+        this.publiccomments.Comments.unshift(maleosama);
 
         this.comments = this.publiccomments.Comments;
 

@@ -1,90 +1,276 @@
-<div id='block_spinner'><mat-spinner *ngIf="afficher_spinner"  class="progressbar"></mat-spinner></div>
+    <div id='block_spinner'>
+        <mat-spinner *ngIf="afficher_spinner"  class="progressbar"></mat-spinner>
+    </div>
 
-<mat-toolbar color="primary" class="block-toolbar1" *ngIf="!afficher_spinner">
-
-  <div matRipple class="icon-block" (click)="OnProfil()"><img  id="icon" src="{{photo_user}}"/></div>
-
-  <button mat-button (click)="OnProfil()"><span>{{prenom}} {{nom}}</span></button><br/>
-
-  <span class="example-spacer"></span>
-
-  <button mat-icon-button (click)="OnclickNotification()" >
-    <mat-icon matBadgeHidden="{{badgeshidden}}" matBadge="{{badgetaille}}" matBadgeColor="warn">notifications</mat-icon>
-  </button>
-
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="OnProfil()">
-      <mat-icon id="icon-color">account_circle</mat-icon>
-      <span>Profil</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon id="icon-color">settings</mat-icon>
-      <span>Parametres</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon id="icon-color">help</mat-icon>
-      <span>A propos</span>
-    </button>
-    <button mat-menu-item  (click)="OnDeconnect()">
-      <mat-icon id="icon-color">power_settings_new</mat-icon>
-      <span>Deconnexion</span>
-    </button>
-  </mat-menu>
-</mat-toolbar>
-
-<mat-toolbar color="primary" class="block-toolbar2" *ngIf="!afficher_spinner">
-  <div><button mat-button (click)="OnclickProblematique()"><mat-icon>subject</mat-icon><span>{{problematique_libelle}}</span></button></div>
-  <span class="example-spacer"></span>
-  <mat-slide-toggle></mat-slide-toggle>
-</mat-toolbar>
-
-<mat-tab-group (selectedTabChange)="onLinkClick($event)" class="block-tabs" *ngIf="!afficher_spinner">
-
-  <mat-tab>
-    <ng-template  mat-tab-label >
-      <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPublicConver)}" class="example-tab-icon" id="icon-color">forum</mat-icon>
-    </ng-template>
-
-    <!--Mise en place du content1 -->
-    <div class="container"
-         fxLayout
-         fxLayout.xs="column"
-         fxLayoutAlign="center"
-         fxLayoutGap="10px"
-         fxLayoutGap.xs="0">
-      <div class="item item-1" fxFlex="20%"></div>
-      <div class="item item-2" fxFlex="20%" fxFlexOrder="3">
-
-        <div class="fab-container">
-          <button mat-fab class="fab-toggler"
-                  (click)="onToggleFab()" color="primary">
-            <i class="material-icons" [@fabToggler]="{value: fabTogglerState}">add</i>
-          </button>
-          <div>
-            <button *ngFor="let btn of buttons"
-                    mat-mini-fab
-                    class="fab-secondary"
-                    color="secondary"
-                    (click)="onDialogPublicConvert($event)" [id]="btn.icon">
-              <i class="material-icons" >{{btn.icon}}</i>
+    <mat-toolbar color="primary" class="block-toolbar1" *ngIf="!afficher_spinner">
+            <div matRipple class="icon-block" (click)="OnProfil()">
+                <img  id="icon" src="{{photo_user}}"/>
+            </div>
+            <button mat-button (click)="OnProfil()">
+                <span>{{prenom}} {{nom}}</span>
             </button>
-          </div>
+            <br/>
+            <span class="example-spacer"></span>
+            <button mat-icon-button (click)="OnclickNotification()" >
+                <mat-icon matBadgeHidden="{{badgeshidden}}" matBadge="{{badgetaille}}" matBadgeColor="warn">notifications</mat-icon>
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="OnProfil()">
+                 <mat-icon id="icon-color">account_circle</mat-icon>
+                 <span>Profil</span>
+            </button>
+            <button mat-menu-item>
+                  <mat-icon id="icon-color">settings</mat-icon>
+                  <span>Parametres</span>
+            </button>
+            <button mat-menu-item>
+                  <mat-icon id="icon-color">help</mat-icon>
+                  <span>A propos</span>
+            </button>
+            <button mat-menu-item  (click)="OnDeconnect()">
+                  <mat-icon id="icon-color">power_settings_new</mat-icon>
+                  <span>Deconnexion</span>
+            </button>
+            </mat-menu>
+    </mat-toolbar>
+
+    <mat-toolbar color="primary" class="block-toolbar2" *ngIf="!afficher_spinner">
+            <div>
+                <button mat-button (click)="OnclickProblematique()">
+                    <mat-icon>subject</mat-icon>
+                    <span>{{problematique_libelle}}</span>
+                </button>
+            </div>
+            <span class="example-spacer"></span>
+            <mat-slide-toggle></mat-slide-toggle>
+    </mat-toolbar>
+
+    <mat-tab-group (selectedTabChange)="onLinkClick($event)" class="block-tabs" *ngIf="!afficher_spinner">
+        <mat-tab>
+            <ng-template  mat-tab-label >
+                <mat-icon  [ngStyle]="{color:getColor(IconEtatColorPublicConver)}" class="example-tab-icon" id="icon-color">forum</mat-icon>
+            </ng-template>
+            <!--Mise en place du content1 -->
+        <div class="container"
+             fxLayout
+            fxLayout.xs="column"
+            fxLayoutAlign="center"
+            fxLayoutGap="10px"
+            fxLayoutGap.xs="0">
+            <div class="item item-1" fxFlex="20%"></div>
+            <div class="item item-2" fxFlex="20%" fxFlexOrder="3">
+                <button mat-fab color="primary" class="fab" (click)="onDialogPublicConvert()"><i class="material-icons">edit</i></button>
+            </div>
+            <div class="item item-3" fxFlex="60%">
+            <!--div id='block_spinner1'><mat-spinner *ngIf="afficher_spinner_messagepublic"  class="progressbar"></mat-spinner></div-->
+            <div class="empty-message" *ngIf="empty_message">
+                <br/>
+                <span>{{error_message}}</span>
+            </div>
+            <div class="timeline-wrapper" *ngIf="afficher_spinner_messagepublic">
+                <br/>
+                <div class="timeline-item">
+                  <div class="animated-background">
+                      <div class="background-masker header-top"></div>
+                      <div class="background-masker header-left"></div>
+                      <div class="background-masker header-right"></div>
+                      <div class="background-masker header-bottom"></div>
+                      <div class="background-masker subheader-left"></div>
+                      <div class="background-masker subheader-right"></div>
+                      <div class="background-masker subheader-bottom"></div>
+                      <div class="background-masker content-top"></div>
+                      <div class="background-masker content-first-end"></div>
+                      <div class="background-masker content-second-line"></div>
+                      <div class="background-masker content-second-end"></div>
+                      <div class="background-masker content-third-line"></div>
+                      <div class="background-masker content-third-end"></div>
+                  </div>
+
+                  <div class="animated-background2">
+                      <div class="background-masker header-top"></div>
+                      <div class="background-masker header-left"></div>
+                      <div class="background-masker header-right"></div>
+                      <div class="background-masker header-bottom"></div>
+                      <div class="background-masker subheader-left"></div>
+                      <div class="background-masker subheader-right"></div>
+                      <div class="background-masker subheader-bottom"></div>
+                      <div class="background-masker content-top"></div>
+                      <div class="background-masker content-first-end"></div>
+                      <div class="background-masker content-second-line"></div>
+                      <div class="background-masker content-second-end"></div>
+                      <div class="background-masker content-third-line"></div>
+                      <div class="background-masker content-third-end"></div>
+                  </div>
+                  <br/>
+                  <div class="animated-background1">
+                      <div class="background-masker header-top"></div>
+                      <div class="background-masker header-left"></div>
+                      <div class="background-masker header-right"></div>
+                      <div class="background-masker header-bottom"></div>
+                      <div class="background-masker subheader-left"></div>
+                      <div class="background-masker subheader-right"></div>
+                      <div class="background-masker subheader-bottom"></div>
+                      <div class="background-masker content-top"></div>
+                      <div class="background-masker content-first-end"></div>
+                      <div class="background-masker content-second-line"></div>
+                      <div class="background-masker content-second-end"></div>
+                      <div class="background-masker content-third-line"></div>
+                      <div class="background-masker content-third-end"></div>
+                  </div>
+                  <br/>
+                  <div class="animated-background1">
+                      <div class="background-masker header-top"></div>
+                      <div class="background-masker header-left"></div>
+                      <div class="background-masker header-right"></div>
+                      <div class="background-masker header-bottom"></div>
+                      <div class="background-masker subheader-left"></div>
+                      <div class="background-masker subheader-right"></div>
+                      <div class="background-masker subheader-bottom"></div>
+                      <div class="background-masker content-top"></div>
+                      <div class="background-masker content-first-end"></div>
+                      <div class="background-masker content-second-line"></div>
+                      <div class="background-masker content-second-end"></div>
+                      <div class="background-masker content-third-line"></div>
+                      <div class="background-masker content-third-end"></div>
+                  </div>
+                  <br/>
+                  <div class="animated-background1">
+                      <div class="background-masker header-top"></div>
+                      <div class="background-masker header-left"></div>
+                      <div class="background-masker header-right"></div>
+                      <div class="background-masker header-bottom"></div>
+                      <div class="background-masker subheader-left"></div>
+                      <div class="background-masker subheader-right"></div>
+                      <div class="background-masker subheader-bottom"></div>
+                      <div class="background-masker content-top"></div>
+                      <div class="background-masker content-first-end"></div>
+                      <div class="background-masker content-second-line"></div>
+                      <div class="background-masker content-second-end"></div>
+                      <div class="background-masker content-third-line"></div>
+                      <div class="background-masker content-third-end"></div>
+                  </div>
+                  <br/>
+                  <div class="animated-background2">
+                      <div class="background-masker header-top"></div>
+                      <div class="background-masker header-left"></div>
+                      <div class="background-masker header-right"></div>
+                      <div class="background-masker header-bottom"></div>
+                      <div class="background-masker subheader-left"></div>
+                      <div class="background-masker subheader-right"></div>
+                      <div class="background-masker subheader-bottom"></div>
+                      <div class="background-masker content-top"></div>
+                      <div class="background-masker content-first-end"></div>
+                      <div class="background-masker content-second-line"></div>
+                      <div class="background-masker content-second-end"></div>
+                      <div class="background-masker content-third-line"></div>
+                      <div class="background-masker content-third-end"></div>
+                  </div>
+                </div>
         </div>
 
-        <div id="fab-dismiss"
-             *ngIf="fabTogglerState==='active'"
-             (click)="onToggleFab()">
-        </div>
+                <div class="timeline-wrapper" *ngIf="afficher_spinner_messagepublic">
+                    <br/>
+                    <div class="timeline-item">
+                        <div class="animated-background">
+                            <div class="background-masker header-top"></div>
+                            <div class="background-masker header-left"></div>
+                            <div class="background-masker header-right"></div>
+                            <div class="background-masker header-bottom"></div>
+                            <div class="background-masker subheader-left"></div>
+                            <div class="background-masker subheader-right"></div>
+                            <div class="background-masker subheader-bottom"></div>
+                            <div class="background-masker content-top"></div>
+                            <div class="background-masker content-first-end"></div>
+                            <div class="background-masker content-second-line"></div>
+                            <div class="background-masker content-second-end"></div>
+                            <div class="background-masker content-third-line"></div>
+                            <div class="background-masker content-third-end"></div>
+                        </div>
 
-
-      </div>
-      <div class="item item-3" fxFlex="60%">
-
-        <div id='block_spinner1'><mat-spinner *ngIf="afficher_spinner_messagepublic"  class="progressbar"></mat-spinner></div>
+                        <div class="animated-background2">
+                            <div class="background-masker header-top"></div>
+                            <div class="background-masker header-left"></div>
+                            <div class="background-masker header-right"></div>
+                            <div class="background-masker header-bottom"></div>
+                            <div class="background-masker subheader-left"></div>
+                            <div class="background-masker subheader-right"></div>
+                            <div class="background-masker subheader-bottom"></div>
+                            <div class="background-masker content-top"></div>
+                            <div class="background-masker content-first-end"></div>
+                            <div class="background-masker content-second-line"></div>
+                            <div class="background-masker content-second-end"></div>
+                            <div class="background-masker content-third-line"></div>
+                            <div class="background-masker content-third-end"></div>
+                        </div>
+                        <br/>
+                        <div class="animated-background1">
+                            <div class="background-masker header-top"></div>
+                            <div class="background-masker header-left"></div>
+                            <div class="background-masker header-right"></div>
+                            <div class="background-masker header-bottom"></div>
+                            <div class="background-masker subheader-left"></div>
+                            <div class="background-masker subheader-right"></div>
+                            <div class="background-masker subheader-bottom"></div>
+                            <div class="background-masker content-top"></div>
+                            <div class="background-masker content-first-end"></div>
+                            <div class="background-masker content-second-line"></div>
+                            <div class="background-masker content-second-end"></div>
+                            <div class="background-masker content-third-line"></div>
+                            <div class="background-masker content-third-end"></div>
+                        </div>
+                        <br/>
+                        <div class="animated-background1">
+                            <div class="background-masker header-top"></div>
+                            <div class="background-masker header-left"></div>
+                            <div class="background-masker header-right"></div>
+                            <div class="background-masker header-bottom"></div>
+                            <div class="background-masker subheader-left"></div>
+                            <div class="background-masker subheader-right"></div>
+                            <div class="background-masker subheader-bottom"></div>
+                            <div class="background-masker content-top"></div>
+                            <div class="background-masker content-first-end"></div>
+                            <div class="background-masker content-second-line"></div>
+                            <div class="background-masker content-second-end"></div>
+                            <div class="background-masker content-third-line"></div>
+                            <div class="background-masker content-third-end"></div>
+                        </div>
+                        <br/>
+                        <div class="animated-background1">
+                            <div class="background-masker header-top"></div>
+                            <div class="background-masker header-left"></div>
+                            <div class="background-masker header-right"></div>
+                            <div class="background-masker header-bottom"></div>
+                            <div class="background-masker subheader-left"></div>
+                            <div class="background-masker subheader-right"></div>
+                            <div class="background-masker subheader-bottom"></div>
+                            <div class="background-masker content-top"></div>
+                            <div class="background-masker content-first-end"></div>
+                            <div class="background-masker content-second-line"></div>
+                            <div class="background-masker content-second-end"></div>
+                            <div class="background-masker content-third-line"></div>
+                            <div class="background-masker content-third-end"></div>
+                        </div>
+                        <br/>
+                        <div class="animated-background2">
+                            <div class="background-masker header-top"></div>
+                            <div class="background-masker header-left"></div>
+                            <div class="background-masker header-right"></div>
+                            <div class="background-masker header-bottom"></div>
+                            <div class="background-masker subheader-left"></div>
+                            <div class="background-masker subheader-right"></div>
+                            <div class="background-masker subheader-bottom"></div>
+                            <div class="background-masker content-top"></div>
+                            <div class="background-masker content-first-end"></div>
+                            <div class="background-masker content-second-line"></div>
+                            <div class="background-masker content-second-end"></div>
+                            <div class="background-masker content-third-line"></div>
+                            <div class="background-masker content-third-end"></div>
+                        </div>
+                    </div>
+                </div>
 
         <app-publicconvert  *ngFor="let convert of this.publicconvertservice.conversationsPublics; let i = index"
                             [indexOfConvert]="i"
@@ -95,52 +281,43 @@
                             [etat_photo]="convert.etat_photo"
                             [etat_photo_status]="convert.etat_photo_status"
                             [status_photo]="convert.status_photo"
+                            [countcomment] = "convert.countcomment"
                             [id]="convert.id"
         ></app-publicconvert>
 
       </div>
       </div>
-
-    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
-  </mat-tab>
-  <mat-tab>
-    <ng-template mat-tab-label class="tabs-toolbar-1" >
-      <mat-icon [ngStyle]="{color:getColor(IconEtatColorPrivateConver)}"   class="example-tab-icon" id="icon-color">sms</mat-icon>
-    </ng-template>
-
-    <div class="block-message-1">
-      <mat-card class="example-card">
-        <app-privaterecentconvert *ngFor="let recent of privaterecentConvertHome; let i = index"
+      </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label class="tabs-toolbar-1" >
+                <mat-icon [ngStyle]="{color:getColor(IconEtatColorPrivateConver)}"   class="example-tab-icon" id="icon-color">sms</mat-icon>
+            </ng-template>
+            <div class="block-message-1">
+                <mat-card class="example-card">
+                    <app-privaterecentconvert *ngFor="let recent of privaterecentConvertHome; let i = index"
                            [indexOfConvert]="i"
                            [name]="recent.name"
                            [user_photo]="recent.user_photo"
                            [id]="recent.id"
-        ></app-privaterecentconvert>
-      </mat-card>
-    </div>
-
-
-    <div class="block-message-2">
-      <mat-card class="card-block-column-2">Simple card</mat-card>
-    </div>
-
-    <div class="block-message-3">
-
-
-
-      <mat-card class="example-card">
-        <app-private-user-online *ngFor="let useronline of privateusersOnlineHome; let i = index"
+                    ></app-privaterecentconvert>
+                </mat-card>
+            </div>
+            <div class="block-message-2">
+                <mat-card class="card-block-column-2">Simple card</mat-card>
+            </div>
+            <div class="block-message-3">
+                <mat-card class="example-card">
+                    <app-private-user-online *ngFor="let useronline of privateusersOnlineHome; let i = index"
                                   [indexOfConvert]="i"
                                   [name]="useronline.name"
                                   [user_photo]="useronline.user_photo"
                                   [id]="useronline.id"
-        ></app-private-user-online>
+                    ></app-private-user-online>
 
 
-      </mat-card>
+                </mat-card>
 
-
-    </div>
+            </div>
 
   </mat-tab>
 
@@ -148,17 +325,24 @@
 
 <!--Le block de la boite de dialogue -->
 <div class="dialgo-block" [ngStyle]="{'display':''+block_boite_de_dialogue+''}">
+
+
+  <div class="container"
+       fxLayout
+       fxLayout.xs="column"
+       fxLayoutAlign="center"
+       fxLayoutGap="10px"
+       fxLayoutGap.xs="0">
+    <div class="item item-1" fxFlex="20%"></div>
+    <div class="item item-2" fxFlex="20%" fxFlexOrder="3">
+    </div>
+    <div class="item item-3" fxFlex="60%">
+      <br/><br/><br/>
       <mat-card class="example-card">
 
         <button mat-icon-button  (click)="onpenFileBrowser($event)">
           <mat-icon aria-label="Example icon-button with a heart icon">add_a_photo</mat-icon>
         </button>
-
-        <!--button mat-icon-button>
-          <mat-icon aria-label="Example icon-button with a heart icon">crop_original</mat-icon>
-        </button-->
-
-
 
         <button mat-icon-button class="close-user-button" (click)="onCloseDialog()" >
           <mat-icon aria-label="Example icon-button with a heart icon">close</mat-icon>
@@ -168,14 +352,11 @@
           <div class="connexion-form">
             <mat-divider></mat-divider>
             <br/>
-
             <button mat-icon-button style="color: red;" [ngStyle]="{'display':''+disparaitreimage+''}" (click)="OnSupprimerPhoto()">
-                <mat-icon >cancel</mat-icon>
+              <mat-icon >cancel</mat-icon>
             </button>
             <img [src]="imageSrc" alt="photo illustrative de ta problematique" id="borderimage" [ngStyle]="{'display':''+disparaitreimage+''}" />
-
             <mat-progress-bar mode="indeterminate" [ngStyle]="{'display':''+disparaitreprogressbar+''}"></mat-progress-bar>
-
             <form [formGroup]="messagepublicform" (ngSubmit)="onSubmitForm()">
               <input type="file"  (change)="onChangeFile($event)" id="tenantPhotoId" formControlName="tenantPhotoId" [ngStyle]="{'display':'none'}" #fileInput/>
               <mat-form-field class="example-full-width" [ngStyle]="{'display':''+disparaitrechamp+''}">
@@ -183,7 +364,6 @@
               </mat-form-field> <br/>
               <button mat-raised-button type='submit' color="primary" [ngStyle]="{'display':''+disparaitrechamp+''}"  class="example-full-width">PUBLIER</button>
             </form>
-
             <br/>
             <mat-divider></mat-divider>
           </div>
@@ -196,6 +376,9 @@
 
 
       </mat-card>
+
+    </div>
+  </div>
 
 </div>
 
