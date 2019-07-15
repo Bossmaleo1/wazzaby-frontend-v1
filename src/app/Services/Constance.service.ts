@@ -3,8 +3,9 @@ export class ConstanceService {
 
     dns = 'http://localhost';
     name_file: any;
+    //pour tester la photo
     test_updatecachephoto = 1;
-    commentobject: any;
+    //pour stocker la liste des messages public
     messagepublicobject: any;
 
     getDNS() {return this.dns;

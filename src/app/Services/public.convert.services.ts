@@ -7,14 +7,12 @@ export class PublicConvertServices {
 
 
     getPublicConversById(id: number) {
-
-        const convert = this.conversationsPublics.find(
+        /*const convert = this.conversationsPublics.find(
             (convertObject) => {
                 return convertObject.id === id;
             }
-        );
-
-        return convert;
+        );*/
+        return this.conversationsPublics[id];
     }
 
  }

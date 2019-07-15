@@ -43,7 +43,6 @@ export class ConnexionComponent implements OnInit {
             maleosama['photo'] = this.authService.getCookie('photo1');
             maleosama['online'] = this.authService.getCookie('online1');
             this.authService.sessions = maleosama;
-            console.log(this.authService.sessions);
             this.authService.isAuth = true;
             this.router.navigate(['home']);
         }
@@ -72,8 +71,7 @@ export class ConnexionComponent implements OnInit {
                 (response) => {
                     this.authService.sessions = response;
                     let dtExpire = new Date();
-                    dtExpire.setTime(dtExpire.getTime() + ( 2 * 365 * 24 * 60 * 60));
-                    console.log(response);
+                    dtExpire.setTime(dtExpire.getTime() + ( 1000 * 2 * 365 * 24 * 60 * 60));
                     if (this.authService.sessions.succes === 1) {
                         const libelle_boss = this.authService.sessions.libelle_prob;
                         this.constance.test_updatecachephoto = 1;

@@ -1,6 +1,6 @@
 import {Component, ElementRef, Inject, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {HomeDesignService} from '../Services/home.design.service';
-import {MatSnackBar, MatTabChangeEvent} from '@angular/material';
+import {MatSlideToggleChange, MatSnackBar, MatTabChangeEvent} from '@angular/material';
 import {Router} from '@angular/router';
 import {AuthService} from '../Services/auth.service';
 import {PrivateUseronlineServices} from '../Services/private.useronline.services';
@@ -73,6 +73,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     afficher_spinner_messagepublic = false;
     empty_message = false;
     error_message: string;
+    //variable permettant de dynamiser l'affichage de l'info bull sur
+    //le mode aanonymous
+    info_bulle: string;
 
 
   constructor(private homedesign: HomeDesignService
@@ -96,6 +99,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.nom = this.authService.getSessions().nom;
       this.prenom = this.authService.getSessions().prenom;
       this.etat = 1;
+      this.info_bulle = 'Cliquez ici pour activer le mode anonymous';
       if (this.constance.test_updatecachephoto === 1) {
         if (this.authService.getSessions().photo === '') {
             this.photo_user = this.constance.dns.concat('/uploads/photo_de_profil/').concat('ic_profile.png');
@@ -123,7 +127,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (typeof this.publicconvertservice.conversationsPublics === 'undefined') {
           this.afficher_spinner_messagepublic = true;
       }
-      const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=').concat(this.authService.getSessions().id_prob);
+      const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=')
+          .concat(this.authService.getSessions().id_prob)
+          .concat('&id_user=').concat(this.authService.getSessions().id);
       this.httpClient
           .get(url)
           .subscribe(
@@ -364,6 +370,17 @@ export class HomeComponent implements OnInit, OnDestroy {
                     this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
                 }
             );
+    }
+
+    ModeAnonymous(event: MatSlideToggleChange) {
+        event.source.color = "warn";
+        if (event.checked) {
+            //console.log("Le machin vient d'etre checker !!");
+            this.info_bulle = 'Cliquez ici pour désactiver le mode anonymous';
+        } else {
+            this.info_bulle = 'Cliquez ici pour activer le mode anonymous';
+            //console.log("Le machin vient d'etre dechecker !!");
+        }
     }
 
 }
