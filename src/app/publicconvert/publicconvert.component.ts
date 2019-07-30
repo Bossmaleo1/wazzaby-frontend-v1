@@ -31,8 +31,10 @@ export class PublicconvertComponent implements OnInit {
     photo: string;
     booljaime: boolean;
     booljaimepas: boolean;
+    temp_id_checkmention: number;
+    response_object: {};
 
-
+    //this.publicconvertservice.conversationsPublics
   constructor(private publicconvert: PublicConvertServices
               , private constance: ConstanceService
               , private publiccommentsservice: PublicCommentsServices
@@ -75,61 +77,84 @@ export class PublicconvertComponent implements OnInit {
   }
 
   Onjaime() {
+
       if (this.checkmention === 1 ) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
-              .concat('&id_mention=').concat(this.id_checkmention);
+              .concat('&id_mention=')
+              .concat(String(this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention));
           this.connexionToServer(url);
           this.booljaime = false;
           this.jaime--;
-          console.log)
-      } else if (this.checkmention === 0) {
-          //on test si l'utilisateur a deja reagit a cette publication
-          if (this.id_checkmention === 0) {
+          this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 0;
+      } else if (this.checkmention === 0 && this.id_checkmention != 0) {
               const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=1')
-                  .concat('&id_mention=').concat(this.id_checkmention);
+                  .concat('&id_mention=').concat(String(this.id_checkmention));
               this.connexionToServer(url);
-          } else {
-              const url = this.constance.dns.concat('/WazzabyApi/public/api/Mentions?id_user=').concat(this.authService.sessions.id)
-                  .concat('&id_libelle=').concat(this.publicconvert.getPublicConversById(this.indexOfConvert).id).concat('&id_etat=1')
-                  .concat('&mention=1');
-              this.connexionToServer(url);
-          }
-          this.booljaime = true;
-          this.booljaimepas = false;
+              this.booljaime = true;
+              this.booljaimepas = false;
+              this.jaime++;
+              this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 1;
+      } else if (this.id_checkmention === 0 && this.checkmention === 0) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/Mentions?id_user=')
+                .concat(this.authService.sessions.id).concat('&id_libelle=').concat(String(this.id))
+                .concat('&id_etat=1').concat('&mention=1');
+            this.connexionToServer(url);
+            this.booljaime = true;
+            this.booljaimepas = false;
+            this.jaime++;
+            this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 1;
+            this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention = this.temp_id_checkmention;
       } else if (this.checkmention === 2) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=1')
-              .concat('&id_mention=').concat(String(this.id_checkmention));
+              .concat('&id_mention=')
+              .concat(String(this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention));
           this.connexionToServer(url);
-          this.booljaime = true;
           this.booljaimepas = false;
+          this.booljaime = true;
+          this.jaime++;
+          this.jaimepas--;
+          this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 1;
+          this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention = this.temp_id_checkmention;
       }
   }
 
   Onjaimepas() {
       if (this.checkmention === 2) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
-              .concat('&id_mention=').concat(String(this.id_checkmention));
+              .concat('&id_mention=').concat(String(this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention));
           this.connexionToServer(url);
           this.booljaimepas = false;
-      } else if (this.checkmention === 0) {
-          if (this.id_checkmention === 0) {
-              const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=2')
-                  .concat('&id_mention=').concat(String(this.id_checkmention));
-              this.connexionToServer(url);
-          } else {
-              const url = this.constance.dns.concat('/WazzabyApi/public/api/Mentions?id_user=').concat(this.authService.sessions.id)
-                  .concat('&id_libelle=').concat(this.publicconvert.getPublicConversById(this.indexOfConvert).id).concat('&id_etat=2')
-                  .concat('&mention=2');
-              this.connexionToServer(url);
-          }
-          this.booljaimepas = true;
-          this.booljaime = false;
-      } else if (this.id_checkmention === 1) {
+          this.jaimepas--;
+          this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 0;
+      } else if (this.checkmention === 0 && this.id_checkmention != 0) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=2')
               .concat('&id_mention=').concat(String(this.id_checkmention));
           this.connexionToServer(url);
-          this.booljaimepas = true;
           this.booljaime = false;
+          this.booljaimepas = true;
+          this.jaimepas++;
+          this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 2;
+      } else if (this.id_checkmention === 0 && this.checkmention === 0) {
+          const url = this.constance.dns.concat('/WazzabyApi/public/api/Mentions?id_user=')
+              .concat(this.authService.sessions.id).concat('&id_libelle=').concat(String(this.id))
+              .concat('&id_etat=2').concat('&mention=2');
+          this.connexionToServer(url);
+          this.booljaime = false;
+          this.booljaimepas = true;
+          this.jaimepas++;
+          this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 2;
+          this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention = this.temp_id_checkmention;
+      } else if (this.checkmention === 1) {
+          const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=2')
+              .concat('&id_mention=')
+              .concat(String(this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention));
+          this.connexionToServer(url);
+          this.booljaime = false;
+          this.booljaimepas = true;
+          this.jaime--;
+          this.jaimepas++;
+          this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 2;
+          this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention = this.temp_id_checkmention;
       }
   }
 
@@ -146,7 +171,8 @@ export class PublicconvertComponent implements OnInit {
             .get(url)
             .subscribe(
                 (response) => {
-                    //this.openSnackBar("Votre mention vient d'etre prise en compte !!", "succes");
+                    this.publicconvert.public_response = response;
+                    this.temp_id_checkmention = this.publicconvert.public_response.id_mention;
                     return response;
                 },
                 (error) => {

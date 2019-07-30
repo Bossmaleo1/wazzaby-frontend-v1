@@ -4,6 +4,7 @@ export class PublicConvertServices {
 
      conversationsPublics: any;
      itemobject: any;
+     public_response: any;
 
 
     getPublicConversById(id: number) {
