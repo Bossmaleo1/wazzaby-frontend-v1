@@ -27,6 +27,7 @@ export class ProblematiqueDetailsComponent implements OnInit {
   ngOnInit() {
       const url = this.constance.dns.concat('/WazzabyApi/public/api/displayproblematique?ID=').concat(this.problematiqueitemservice.Id);
       this.problematiqueitemservice.afficher_spinner_probgen = true;
+      this.problematiqueitemservice.afficher_block_problematique = false;
       this.connexionToServer(url);
       this.problematiqueitemservice.testprobcomponent = 2;
   }
@@ -44,6 +45,7 @@ export class ProblematiqueDetailsComponent implements OnInit {
                 (response) => {
                     this.problematiqueitemservice.problematiques  = response;
                     this.problematiqueitemservice.afficher_spinner_probgen = false;
+                    this.problematiqueitemservice.afficher_block_problematique = true;
                 },
                 (error) => {
                     this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');

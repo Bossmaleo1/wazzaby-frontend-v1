@@ -4,21 +4,23 @@
           <mat-icon>arrow_back</mat-icon>
       </button>
 
-      <span class="example-spacer"></span>
+      <span>Problematiques</span>
 
-      <mat-form-field class="example-full-width">
+      <!--span class="example-spacer"></span-->
+
+      <!--mat-form-field class="example-full-width">
             <input (keyup)="onSearchProb($event)"  [(ngModel)]="libelle_catprob" matInput placeholder="Rechercher" type="text"/>
       </mat-form-field>
 
       <button mat-icon-button>
           <mat-icon>search</mat-icon>
-      </button>
+      </button-->
 
   </mat-toolbar>
 
 
   <br/><br/><br/><br/>
-  <div id='block_spinner1'><mat-spinner *ngIf="this.problematiqueitemservice.afficher_spinner_probgen"  class="progressbar"></mat-spinner></div>
+  <!--div id='block_spinner1'><mat-spinner *ngIf="this.problematiqueitemservice.afficher_spinner_probgen"  class="progressbar"></mat-spinner></div-->
 
   <div class="container"
        fxLayout
@@ -31,70 +33,127 @@
        <div class="item item-3" fxFlex="60%">
 
 
-         <div class="timeline-wrapper">
-           <br/>
-           <div class="timeline-item">
 
-
-             <div class="animated-background2">
-               <div class="background-masker header-top"></div>
-               <div class="background-masker header-left"></div>
-               <div class="background-masker header-right"></div>
-               <div class="background-masker header-bottom"></div>
-               <div class="background-masker subheader-left"></div>
-               <div class="background-masker subheader-right"></div>
-               <div class="background-masker subheader-bottom"></div>
-               <div class="background-masker content-top"></div>
-               <div class="background-masker content-first-end"></div>
-               <div class="background-masker content-second-line"></div>
-               <div class="background-masker content-second-end"></div>
-               <div class="background-masker content-third-line"></div>
-               <div class="background-masker content-third-end"></div>
-             </div>
+           <div class="timeline-wrapper" *ngIf="this.problematiqueitemservice.afficher_spinner_probgen">
+             <!--mat-form-field >
+                <input  matInput placeholder="Rechercher" type="text"/>
+                <mat-icon matSuffix>search</mat-icon>
+             </mat-form-field-->
              <br/>
-             <div class="animated-background1">
-               <div class="background-masker header-top"></div>
-               <div class="background-masker header-left"></div>
-               <div class="background-masker header-right"></div>
-               <div class="background-masker header-bottom"></div>
-               <div class="background-masker subheader-left"></div>
-               <div class="background-masker subheader-right"></div>
-               <div class="background-masker subheader-bottom"></div>
-               <div class="background-masker content-top"></div>
-               <div class="background-masker content-first-end"></div>
-               <div class="background-masker content-second-line"></div>
-               <div class="background-masker content-second-end"></div>
-               <div class="background-masker content-third-line"></div>
-               <div class="background-masker content-third-end"></div>
-             </div>
-             <br/>
-             <div class="animated-background1">
-               <div class="background-masker header-top"></div>
-               <div class="background-masker header-left"></div>
-               <div class="background-masker header-right"></div>
-               <div class="background-masker header-bottom"></div>
-               <div class="background-masker subheader-left"></div>
-               <div class="background-masker subheader-right"></div>
-               <div class="background-masker subheader-bottom"></div>
-               <div class="background-masker content-top"></div>
-               <div class="background-masker content-first-end"></div>
-               <div class="background-masker content-second-line"></div>
-               <div class="background-masker content-second-end"></div>
-               <div class="background-masker content-third-line"></div>
-               <div class="background-masker content-third-end"></div>
+             <div class="timeline-item">
+               <div class="animated-background2">
+                 <div class="background-masker header-top"></div>
+                 <div class="background-masker header-left"></div>
+                 <div class="background-masker header-right"></div>
+                 <div class="background-masker header-bottom"></div>
+                 <div class="background-masker subheader-left"></div>
+                 <div class="background-masker subheader-right"></div>
+                 <div class="background-masker subheader-bottom"></div>
+                 <div class="background-masker content-top"></div>
+                 <div class="background-masker content-first-end"></div>
+                 <div class="background-masker content-second-line"></div>
+                 <div class="background-masker content-second-end"></div>
+                 <div class="background-masker content-third-line"></div>
+                 <div class="background-masker content-third-end"></div>
+               </div>
+               <br/>
+               <div class="animated-background1">
+                 <div class="background-masker header-top"></div>
+                 <div class="background-masker header-left"></div>
+                 <div class="background-masker header-right"></div>
+                 <div class="background-masker header-bottom"></div>
+                 <div class="background-masker subheader-left"></div>
+                 <div class="background-masker subheader-right"></div>
+                 <div class="background-masker subheader-bottom"></div>
+                 <div class="background-masker content-top"></div>
+                 <div class="background-masker content-first-end"></div>
+                 <div class="background-masker content-second-line"></div>
+                 <div class="background-masker content-second-end"></div>
+                 <div class="background-masker content-third-line"></div>
+                 <div class="background-masker content-third-end"></div>
+               </div>
+               <br/><br/>
+               <div class="animated-background1">
+                 <div class="background-masker header-top"></div>
+                 <div class="background-masker header-left"></div>
+                 <div class="background-masker header-right"></div>
+                 <div class="background-masker header-bottom"></div>
+                 <div class="background-masker subheader-left"></div>
+                 <div class="background-masker subheader-right"></div>
+                 <div class="background-masker subheader-bottom"></div>
+                 <div class="background-masker content-top"></div>
+                 <div class="background-masker content-first-end"></div>
+                 <div class="background-masker content-second-line"></div>
+                 <div class="background-masker content-second-end"></div>
+                 <div class="background-masker content-third-line"></div>
+                 <div class="background-masker content-third-end"></div>
+               </div>
+               <br/><br/>
+               <div class="animated-background1">
+                     <div class="background-masker header-top"></div>
+                     <div class="background-masker header-left"></div>
+                     <div class="background-masker header-right"></div>
+                     <div class="background-masker header-bottom"></div>
+                     <div class="background-masker subheader-left"></div>
+                     <div class="background-masker subheader-right"></div>
+                     <div class="background-masker subheader-bottom"></div>
+                     <div class="background-masker content-top"></div>
+                     <div class="background-masker content-first-end"></div>
+                     <div class="background-masker content-second-line"></div>
+                     <div class="background-masker content-second-end"></div>
+                     <div class="background-masker content-third-line"></div>
+                     <div class="background-masker content-third-end"></div>
+               </div>
+               <br/><br/>
+               <div class="animated-background1">
+                     <div class="background-masker header-top"></div>
+                     <div class="background-masker header-left"></div>
+                     <div class="background-masker header-right"></div>
+                     <div class="background-masker header-bottom"></div>
+                     <div class="background-masker subheader-left"></div>
+                     <div class="background-masker subheader-right"></div>
+                     <div class="background-masker subheader-bottom"></div>
+                     <div class="background-masker content-top"></div>
+                     <div class="background-masker content-first-end"></div>
+                     <div class="background-masker content-second-line"></div>
+                     <div class="background-masker content-second-end"></div>
+                     <div class="background-masker content-third-line"></div>
+                     <div class="background-masker content-third-end"></div>
+               </div>
+               <br/><br/>
+               <div class="animated-background1">
+                     <div class="background-masker header-top"></div>
+                     <div class="background-masker header-left"></div>
+                     <div class="background-masker header-right"></div>
+                     <div class="background-masker header-bottom"></div>
+                     <div class="background-masker subheader-left"></div>
+                     <div class="background-masker subheader-right"></div>
+                     <div class="background-masker subheader-bottom"></div>
+                     <div class="background-masker content-top"></div>
+                     <div class="background-masker content-first-end"></div>
+                     <div class="background-masker content-second-line"></div>
+                     <div class="background-masker content-second-end"></div>
+                     <div class="background-masker content-third-line"></div>
+                     <div class="background-masker content-third-end"></div>
+               </div>
              </div>
            </div>
+
+           <br/><br/>
+           <mat-card class="example-card" *ngIf="!this.problematiqueitemservice.afficher_spinner_probgen">
+
+                  <mat-form-field class="example-full-width-search-form">
+                        <input (keyup)="onSearchProb($event)"  [(ngModel)]="libelle_catprob" matInput placeholder="Rechercher" type="text"/>
+                        <mat-icon matSuffix>search</mat-icon>
+                  </mat-form-field>
+
+                  <app-problematique-item *ngFor="let prob of this.problematiqueitemservice.problematiquescat; let i = index"
+                            [index]="i"
+                            [name] = "prob.Libelle"
+                            [id] = "prob.ID"
+                  >
+                  </app-problematique-item>
+
+           </mat-card>
          </div>
-
-
-
-          <mat-card class="example-card" *ngIf="!this.problematiqueitemservice.afficher_spinner_probgen">
-                <app-problematique-item *ngFor="let prob of this.problematiqueitemservice.problematiquescat; let i = index"
-                          [index]="i"
-                          [name] = "prob.Libelle"
-                          [id] = "prob.ID"
-                >
-                </app-problematique-item>
-          </mat-card>
-       </div>
-  </div>
+    </div>

@@ -77,7 +77,17 @@ export class PublicconvertComponent implements OnInit {
   }
 
   Onjaime() {
-
+      let message = "Votre message public vient d'etre aimer par "
+          .concat(this.authService.getSessions().prenom)
+          .concat(' ')
+          .concat(this.authService.getSessions().nom);
+      //we build the url of the like mention notification
+      const url_notification = this.constance.dns.concat('/WazzabyApi/public/api/InsertNotification?users_id=')
+          .concat(this.authService.sessions.id)
+          .concat('&libelle=').concat(message)
+          .concat('&id_type=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id)
+          .concat('&etat=0')
+          .concat('id_recepteur=').concat();
       if (this.checkmention === 1 ) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
               .concat('&id_mention=')

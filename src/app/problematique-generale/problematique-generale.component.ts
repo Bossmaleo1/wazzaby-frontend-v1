@@ -16,7 +16,8 @@ import {Location} from '@angular/common';
 export class ProblematiqueGeneraleComponent implements OnInit {
 
     afficher_spinner = false;
-    libelle_catprob = "";
+    libelle_catprob = '';
+    title_prob: String;
 
   constructor(private  router: Router
               , private authService: AuthService
@@ -31,6 +32,7 @@ export class ProblematiqueGeneraleComponent implements OnInit {
       this.problematiqueitemservice.afficher_spinner_probgen = true;
       this.connexionToServer(url);
       this.problematiqueitemservice.testprobcomponent = 1;
+      this.title_prob = this.problematiqueitemservice.Libelle;
   }
 
   OnBack() {
@@ -42,7 +44,7 @@ export class ProblematiqueGeneraleComponent implements OnInit {
     this.router.navigate(['connexion']);
   }
 
-    connexionToServer(url: string) {
+  connexionToServer(url: string) {
         this.httpClient
             .get(url)
             .subscribe(
@@ -56,17 +58,17 @@ export class ProblematiqueGeneraleComponent implements OnInit {
                     this.problematiqueitemservice.afficher_spinner_probgen = false;
                 }
             );
-    }
+  }
 
-    openSnackBar(message: string, action: string) {
+  openSnackBar(message: string, action: string) {
         this.snackBar.open(message, action, {
             duration: 2000,
         });
-    }
+  }
 
-    onSearchProb(event) {
+  onSearchProb(event) {
       const url = this.constance.dns.concat('/WazzabyApi/public/api/ProbElasticSearchService?libelle_catprob=').concat(this.libelle_catprob);
         this.connexionToServer(url);
-    }
+  }
 
 }
