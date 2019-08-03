@@ -4,8 +4,62 @@
    left:0%;
    right:0%;
    height:10%;
+   z-index: 100;
  }
 
 .example-spacer {
   flex: 1 1 auto;
+}
+
+//shimmer placeholder animation
+.timeline-item {
+  background: #fff;
+  border: 1px solid;
+  border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+  border-radius: 3px;
+  padding: 12px;
+  margin: 0 auto;
+  max-width: 500px;
+  min-height: 100px;
+}
+
+@keyframes placeHolderShimmer{
+  0%{
+    background-position: -468px 0
+  }
+
+  100%{
+    background-position: 468px 0
+  }
+}
+
+.animated-background {
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background: #f6f7f8;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 400px 104px;
+  max-width:50px;
+  height: 50px;
+  border-radius:25px;
+  position: relative;
+}
+
+.animated-background1 {
+  position: relative;
+  display:inline-block;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeHolderShimmer;
+  animation-timing-function: linear;
+  background: #f6f7f8;
+  background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+  background-size: 400px 104px;
+  height: 10px;
+  width:400px;
+  float: right;
 }

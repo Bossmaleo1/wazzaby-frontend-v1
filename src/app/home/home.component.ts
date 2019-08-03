@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     /*la variable qui hidden le badges*/
     badgeshidden = false;
-    badgetaille = 6;
+    badgetaille: any;
     /*le tableau contenant les conversations des utilisateurs*/
     conversationsPublicsHome: any;
     privateusersOnlineHome: any;
@@ -76,6 +76,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     //variable permettant de dynamiser l'affichage de l'info bull sur
     //le mode aanonymous
     info_bulle: string;
+    //variable who permet me to get a badges of notification number
+
 
 
   constructor(private homedesign: HomeDesignService
@@ -130,6 +132,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=')
           .concat(this.authService.getSessions().id_prob)
           .concat('&id_user=').concat(this.authService.getSessions().id);
+      const count_notification_url = this.constance.dns
+          .concat('/WazzabyApi/public/api/CountNotification?id_recepteur=')
+          .concat(this.authService.getSessions().id);
       this.httpClient
           .get(url)
           .subscribe(
@@ -149,6 +154,21 @@ export class HomeComponent implements OnInit, OnDestroy {
                   this.error_message = 'Une erreur serveur vient de se produire';
       });
 
+      this.httpClient
+          .get(count_notification_url)
+          .subscribe(
+              (response1) => {
+                  let countnotificationnumber: any;
+                  countnotificationnumber = response1;
+                  if (countnotificationnumber.count === 0) {
+                      this.badgeshidden = false;
+                  } else {
+                      this.badgetaille = countnotificationnumber.count;
+                  }
+                  return response1;
+              },
+              (error) => {
+              });
   }
 
   initForm() {

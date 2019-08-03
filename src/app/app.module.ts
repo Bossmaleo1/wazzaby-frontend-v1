@@ -53,6 +53,8 @@ import { LyTypographyModule } from '@alyle/ui/typography';
 /** Import theme */
 import { MinimaLight, MinimaDark } from '@alyle/ui/themes/minima';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NotificationItemComponent } from './notification-item/notification-item.component';
+import {NotificationService} from './Services/notification.service';
 
 
 
@@ -96,7 +98,8 @@ const appRoutes: Routes = [
     InscriptFormComponent,
     AddProfilPictureComponent,
     WelcomeToWazzabyComponent,
-    ProblematiqueItemComponent
+    ProblematiqueItemComponent,
+    NotificationItemComponent
   ],
   imports: [
     BrowserModule,
@@ -126,6 +129,7 @@ const appRoutes: Routes = [
       MessagepublicService,
       ProblematiqueItemService,
       AddProfilPictureService,
+      NotificationService,
       {provide: LocationStrategy, useClass: HashLocationStrategy},
       { provide: LY_THEME, useClass: MinimaLight, multi: true },
       { provide: LY_THEME, useClass: MinimaDark, multi: true }
