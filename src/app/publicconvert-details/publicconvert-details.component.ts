@@ -22,7 +22,7 @@ export class PublicconvertDetailsComponent implements OnInit {
   status_photo: string;
   status_text_content: string;
   etat_photo_status: string;
-  comments :any;
+  comments: any;
   libelle_comment = '';
   testevent = 1;
 
@@ -37,7 +37,6 @@ export class PublicconvertDetailsComponent implements OnInit {
               , private publiccomments: PublicCommentsServices) { }
 
   ngOnInit() {
-
       this.id = this.publiccomments.id;
       this.name = this.publiccomments.name;
       this.updated = this.publiccomments.updated;

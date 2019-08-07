@@ -18,7 +18,8 @@
      <div class="item item-2" fxFlex="20%" fxFlexOrder="3"></div>
      <div class="item item-3" fxFlex="60%">
          <br/><br/>
-         <app-notification-item  *ngFor="let notification of this.notificationService.notifications; let i = index"
+         <section *ngIf="!this.notificationService.progressbarnotification">
+            <app-notification-item  *ngFor="let notification of this.notificationService.notifications; let i = index"
                                  [index] = "i"
                                  [nom] = "notification.nom"
                                  [prenom] = "notification.prenom"
@@ -28,9 +29,11 @@
                                  [id_type] = "notification.id_type"
                                  [expediteur_id] = "notification.expediteur_id"
                                  [notification_id]= "notification.notification_id"
-         ></app-notification-item>
-
-         <div class="timeline-wrapper" >
+                                 [id_libelle] = "notification.id_libelle"
+                                 [hide_done_icon]="true"
+            ></app-notification-item>
+         </section>
+         <div class="timeline-wrapper" *ngIf="this.notificationService.progressbarnotification">
              <br/>
              <div class="timeline-item">
                  <div class="animated-background">

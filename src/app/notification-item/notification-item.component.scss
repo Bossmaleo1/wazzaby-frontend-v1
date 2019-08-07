@@ -1,8 +1,13 @@
 .example-card {
   max-width: 500px;
   margin: auto;
+  cursor: pointer;
 }
 
 .example-header-image {
   background-size: cover;
+}
+
+.notification_item {
+  cursor: pointer;
 }

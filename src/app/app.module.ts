@@ -55,6 +55,9 @@ import { MinimaLight, MinimaDark } from '@alyle/ui/themes/minima';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NotificationItemComponent } from './notification-item/notification-item.component';
 import {NotificationService} from './Services/notification.service';
+import {DeleteMessagepublicService} from './Services/delete.messagepublic.service';
+import {UtilService} from './Services/util.service';
+import {UpdateService} from './Services/update.service';
 
 
 
@@ -128,6 +131,9 @@ const appRoutes: Routes = [
       ConstanceService,
       MessagepublicService,
       ProblematiqueItemService,
+      DeleteMessagepublicService,
+      UtilService,
+      UpdateService,
       AddProfilPictureService,
       NotificationService,
       {provide: LocationStrategy, useClass: HashLocationStrategy},

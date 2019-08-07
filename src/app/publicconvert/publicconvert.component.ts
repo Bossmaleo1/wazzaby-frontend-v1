@@ -6,6 +6,8 @@ import {PublicCommentsServices} from '../Services/public.comments.services';
 import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
 import {AuthService} from '../Services/auth.service';
+import {DeleteMessagepublicService} from '../Services/delete.messagepublic.service';
+import {UtilService} from '../Services/util.service';
 
 @Component({
   selector: 'app-publicconvert',
@@ -28,10 +30,13 @@ export class PublicconvertComponent implements OnInit {
     @Input() jaimepas: number;
     @Input() checkmention: number;
     @Input() id_checkmention: number;
+    @Input() visibility: boolean;
+    @Input() user_id: number;
     photo: string;
     booljaime: boolean;
     booljaimepas: boolean;
     temp_id_checkmention: number;
+    test_user_root: boolean;
     response_object: {};
 
     //this.publicconvertservice.conversationsPublics
@@ -40,7 +45,9 @@ export class PublicconvertComponent implements OnInit {
               , private publiccommentsservice: PublicCommentsServices
               , private authService: AuthService
               , public snackBar: MatSnackBar
+              , public deletemessgepublocservice: DeleteMessagepublicService
               , private httpClient: HttpClient
+              , private utilservice: UtilService
               , private  router: Router) {
 
   }
@@ -56,6 +63,13 @@ export class PublicconvertComponent implements OnInit {
       } else if (this.checkmention === 0) {
           this.booljaime = false;
           this.booljaimepas = false;
+      }
+
+      //we test if user can update and delete the message
+      if (this.authService.getSessions().id == this.user_id) {
+            this.test_user_root = true;
+      } else {
+          this.test_user_root = false;
       }
   }
 
@@ -220,5 +234,24 @@ export class PublicconvertComponent implements OnInit {
                 }
             );
     }
+
+    //this function display a delete confirm dialog
+    displaydeleteDialog() {
+      this.deletemessgepublocservice.displaydialog = 'block';
+      this.deletemessgepublocservice.id_message_public = this.publicconvert.conversationsPublics[this.indexOfConvert].id;
+      this.deletemessgepublocservice.indexOf = this.indexOfConvert;
+      this.deletemessgepublocservice.etat_photo_status = this.publicconvert.conversationsPublics[this.indexOfConvert].etat_photo_status;
+      if (this.publicconvert.conversationsPublics[this.indexOfConvert].etat_photo_status === 'block') {
+        this.deletemessgepublocservice.id_photo = this.publicconvert.conversationsPublics[this.indexOfConvert].id_photo;
+        //on met le split car on veux juste recuperer le nom du fichier plus extension
+        this.deletemessgepublocservice.photo_message_public = this.publicconvert.conversationsPublics[this.indexOfConvert].status_photo.split('/')[5];
+      }
+    }
+
+    displayupdateDialog() {
+
+    }
+
+
 
 }

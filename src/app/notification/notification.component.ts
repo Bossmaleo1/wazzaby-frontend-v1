@@ -27,6 +27,7 @@ export class NotificationComponent implements OnInit {
           .subscribe(
               (response) => {
                   this.notificationService.notifications = response;
+                  this.notificationService.progressbarnotification = false;
                   return response;
               },
               (error) => {

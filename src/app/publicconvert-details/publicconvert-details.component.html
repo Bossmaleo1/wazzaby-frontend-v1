@@ -39,7 +39,34 @@
         </mat-card-content>
 
         <mat-divider></mat-divider>
+        <mat-card-actions>
 
+          <div class="container"
+               fxLayout
+               fxLayout.xs="column"
+               fxLayoutAlign="center"
+               fxLayoutGap="10px"
+               fxLayoutGap.xs="0">
+
+            <div class="item item-1" fxFlex="10%">
+              <button mat-button (click)="Onjaime()" matTooltip="J'aime ce contenu">
+                <mat-icon>thumb_up</mat-icon>
+                <span> 0 </span>
+              </button>
+            </div>
+            <div class="item item-2" fxFlex="10%">
+              <button mat-button (click)="Onjaimepas()" matTooltip="Je n'aime pas ce contenu">
+                <mat-icon>thumb_down</mat-icon>
+                <span> 0 </span>
+              </button>
+            </div>
+            <div class="item item-3" fxFlex="80%">
+
+            </div>
+          </div>
+
+        </mat-card-actions>
+        <mat-divider></mat-divider>
 
         <mat-form-field class="example-full-width">
                 <input matInput placeholder="Votre commentaire" type="text" [(ngModel)]="libelle_comment"  autocomplete="off" />

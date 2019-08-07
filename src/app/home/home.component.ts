@@ -13,6 +13,9 @@ import {Subscription} from 'rxjs';
 import {MessagepublicService} from '../Services/messagepublic.service';
 import { speedDialFabAnimations } from './speed-dial-fab.animations';
 import {PublicConvertServices} from '../Services/public.convert.services';
+import {DeleteMessagepublicService} from '../Services/delete.messagepublic.service';
+import {UtilService} from '../Services/util.service';
+import {UpdateService} from '../Services/update.service';
 
 
 
@@ -29,7 +32,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     messagepublic: MessagePublic;
     messagepublicsubscription: Subscription;
-    messagepublicform: FormGroup;
 
     @ViewChild('fileInput') fileInput: ElementRef;
 
@@ -39,6 +41,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     /*la variable qui hidden le badges*/
     badgeshidden = false;
     badgetaille: any;
+    /*les variables pour la gestion des badges pour les messages public*/
+    badgehidden_public_message: false;
+    badgetaille_public_message: any;
     /*le tableau contenant les conversations des utilisateurs*/
     conversationsPublicsHome: any;
     privateusersOnlineHome: any;
@@ -47,8 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     animal: string;
     name: string;
 
-    /*le status du block de la boite de dialogue*/
-    block_boite_de_dialogue: string;
+
 
     afficher_spinner = false;
 
@@ -59,12 +63,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     problematique_libelle: string;
     // attributs pour la gestion du uploading des fichiers
     someUrlFile: any;
-    imageSrc: any;
-
-    disparaitreimage = 'none';
-    disparaitreprogressbar = 'none';
-
-    disparaitrechamp = 'block';
     filevalue: any;
     imagenamefordelete: any;
     id_messagepublic: any;
@@ -76,9 +74,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     //variable permettant de dynamiser l'affichage de l'info bull sur
     //le mode aanonymous
     info_bulle: string;
-    //variable who permet me to get a badges of notification number
-
-
+    //variable pour la gestion de l'affichage d'une barre de progression
+    //lors de la suppression d'un message public
+    visible_delete_progressbar: boolean = true;
+    //le tableau de message public
+    publicmessages: any;
+    //le libelle du message public
 
   constructor(private homedesign: HomeDesignService
               , private  router: Router
@@ -86,10 +87,13 @@ export class HomeComponent implements OnInit, OnDestroy {
               , private privateuseronlineservices: PrivateUseronlineServices
               , private privaterecentconvertservices: PrivateRecentconvertServices
               , private httpClient: HttpClient
+              , private updateservice: UpdateService
               , public snackBar: MatSnackBar
+              , public deletemessgepublocservice: DeleteMessagepublicService
               , private constance: ConstanceService
               , private messagepublicservice: MessagepublicService
               , private publicconvertservice: PublicConvertServices
+              , private utilservice: UtilService
               , private formBuilder: FormBuilder) {
 
 
@@ -125,7 +129,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
       );
       this.messagepublicservice.emitMessage();
-      this.initForm();
       if (typeof this.publicconvertservice.conversationsPublics === 'undefined') {
           this.afficher_spinner_messagepublic = true;
       }
@@ -140,6 +143,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           .subscribe(
               (response1) => {
                   this.publicconvertservice.conversationsPublics = response1;
+                  this.publicmessages = this.publicconvertservice.conversationsPublics;
                   this.afficher_spinner_messagepublic = false;
                   if ((this.publicconvertservice.conversationsPublics).length === 0) {
                       this.empty_message = true;
@@ -169,13 +173,9 @@ export class HomeComponent implements OnInit, OnDestroy {
               },
               (error) => {
               });
-  }
-
-  initForm() {
-      this.messagepublicform = this.formBuilder.group({
-          tenantPhotoId: '',
-          problematique: ['', Validators.required]
-          });
+      //variation des badges de messagepublic
+      this.badgehidden_public_message = false;
+      this.badgetaille_public_message = 10;
   }
 
   getColor(etat: boolean) {
@@ -226,15 +226,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     /*Pour afficher la boite de dialogue*/
     onDialogPublicConvert() {
-       this.block_boite_de_dialogue = 'block';
+       this.updateservice.block_boite_de_dialogue = 'block';
     }
 
 
     /*Methode pour fermer la boite de dialogue*/
     onCloseDialog() {
-        this.block_boite_de_dialogue = 'none';
+        this.updateservice.block_boite_de_dialogue = 'none';
         this.filevalue = null;
-        this.imageSrc = "";
+        this.updateservice.imageSrc = "";
+        this.updateservice.disparaitreimage = 'none';
+        console.log(this.updateservice.photo_value);
     }
 
     openSnackBar(message: string, action: string) {
@@ -244,7 +246,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
 	onChangeFile(event) {
-        this.disparaitreprogressbar = 'block';
+        this.updateservice.disparaitreprogressbar = 'block';
         const taille = event.target.files[0].name.split('.').length;
         const extension = event.target.files[0].name.split('.')[taille - 1].toLowerCase();
         this.imagenamefordelete = extension;
@@ -255,7 +257,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 const file = event.target.files[0];
 
                 const reader = new FileReader();
-                reader.onload = e => this.imageSrc = reader.result;
+                reader.onload = e => this.updateservice.imageSrc = reader.result;
 
                 reader.readAsDataURL(file);
                 this.filevalue = file;
@@ -276,12 +278,12 @@ export class HomeComponent implements OnInit, OnDestroy {
                                 .post(url1, formData)
                                 .subscribe(
                                     (response) => {
-                                        this.disparaitreprogressbar = 'none';
-                                        this.disparaitreimage = 'block';
+                                        this.updateservice.disparaitreprogressbar = 'none';
+                                        this.updateservice.disparaitreimage = 'block';
                                         this.etat = 0;
                                     },
                                     (error) => {
-                                        this.disparaitreprogressbar = 'none';
+                                        this.updateservice.disparaitreprogressbar = 'none';
                                         this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
                                     }
                                 );
@@ -290,7 +292,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                         },
                         (error) => {
                             this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
-                            this.disparaitreprogressbar = 'none';
+                            this.updateservice.disparaitreprogressbar = 'none';
                         }
                     );
 
@@ -313,12 +315,11 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.messagepublicsubscription.unsubscribe();
     }
 
-    onSubmitForm() {
-        this.disparaitrechamp = 'none';
-        this.disparaitreimage = 'none';
-        this.disparaitreprogressbar = 'block';
-        const formvalue = this.messagepublicform.value;
-        const libellemessagepublic = formvalue['problematique'];
+    addMessagePublic() {
+        this.updateservice.disparaitrechamp = 'none';
+        this.updateservice.disparaitreimage = 'none';
+        this.updateservice.disparaitreprogressbar = 'block';
+        const libellemessagepublic = this.updateservice.libellemessagepublic;
 
         if (libellemessagepublic.length > 0 ) {
             const url = this.constance.dns.concat('/WazzabyApi/public/api/SaveMessagePublic?etat=').concat(this.etat).concat('&libelle=').concat(libellemessagepublic).concat('&id_problematique=').concat(this.authService.getSessions().id_prob).concat('&ID=').concat(this.authService.getSessions().id).concat('&id_message_public=').concat(this.id_messagepublic);
@@ -327,30 +328,37 @@ export class HomeComponent implements OnInit, OnDestroy {
                 .subscribe(
                     (response1) => {
                         this.constance.messagepublicobject = response1;
-                        this.disparaitrechamp = 'block';
-                        this.disparaitreimage = 'block';
-                        this.disparaitreprogressbar = 'none';
-                        this.block_boite_de_dialogue = 'none';
+                        this.updateservice.disparaitrechamp = 'block';
+                        this.updateservice.disparaitreimage = 'block';
+                        this.updateservice.disparaitreprogressbar = 'none';
+                        this.updateservice.block_boite_de_dialogue = 'none';
                         const nom_du_user = ''.concat(this.authService.sessions.prenom).concat(' ').concat(this.authService.sessions.nom);
                         let maleosama = new Object();
-                        maleosama['user_photo'] = this.authService.sessions.photo;
-                        maleosama['countcomment'] = '0';
-                        maleosama['name'] = nom_du_user;
+                        maleosama['checkmention'] = 0;
+                        maleosama['countcomment'] = 0;
+                        maleosama['countjaime'] = 0;
+                        maleosama['countjaimepas'] = 0;
+                        maleosama['etat_photo_status'] =  this.constance.messagepublicobject.etat_photo_status;
                         maleosama['id'] = this.constance.messagepublicobject.id;
-                        maleosama['updated'] = "A l'instant";
+                        maleosama['id_checkmention'] = 0;
+                        maleosama['name'] = nom_du_user;
                         maleosama['status_text_content'] = libellemessagepublic;
-                        maleosama['etat_photo_status'] = this.constance.messagepublicobject.etat_photo_status;
-                        maleosama['status_photo'] =  this.constance.messagepublicobject.status_photo;
+                        maleosama['status_photo'] = this.constance.messagepublicobject.status_photo;
+                        maleosama['updated'] = " A l'instant";
+                        maleosama['user_id'] = this.authService.sessions.id;
+                        maleosama['user_photo'] = this.authService.getSessions().photo;
+                        maleosama['visibility'] = true;
+                        this.updateservice.disparaitreimage = 'none';
                         this.publicconvertservice.conversationsPublics.unshift(maleosama);
-
+                        this.publicmessages = this.publicconvertservice.conversationsPublics;
                         this.openSnackBar('Insertion effectuee avec succes !', 'succes');
 
                         return response1;
                     },
                     (error) => {
-                        this.disparaitrechamp = 'block';
-                        this.disparaitreimage = 'block';
-                        this.disparaitreprogressbar = 'none';
+                        this.updateservice.disparaitrechamp = 'block';
+                        this.updateservice.disparaitreimage = 'block';
+                        this.updateservice.disparaitreprogressbar = 'none';
                         this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
                     }
                 );
@@ -362,20 +370,20 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     //methode pour supprimer la photo d'un status
     OnSupprimerPhoto() {
-        this.disparaitreimage = 'none';
-        this.disparaitreprogressbar = 'block';
+        this.updateservice.disparaitreimage = 'none';
+        this.updateservice.disparaitreprogressbar = 'block';
         const urltemp = this.constance.dns.concat('/uploads/removeuploadScript.php?nomdufichier=').concat(this.imagenamefordelete);
         this.httpClient
             .get(urltemp)
             .subscribe(
                 (response) => {
-                    this.disparaitreprogressbar = 'none';
+                    this.updateservice.disparaitreprogressbar = 'none';
                    const urldelete = this.constance.dns.concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=').concat(this.id_messagepublic).concat('&ID_photo=').concat(this.id_photo);
                    this.httpClient
                         .get(urldelete)
                         .subscribe(
                             (response1) => {
-                                this.disparaitreprogressbar = 'none';
+                                this.updateservice.disparaitreprogressbar = 'none';
                                 this.etat = 1;
                                 return response1;
                             },
@@ -385,8 +393,8 @@ export class HomeComponent implements OnInit, OnDestroy {
                     return response;
                 },
                 (error) => {
-                    this.disparaitreprogressbar = 'none';
-                    this.disparaitreimage = 'block';
+                    this.updateservice.disparaitreprogressbar = 'none';
+                    this.updateservice.disparaitreimage = 'block';
                     this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
                 }
             );
@@ -400,6 +408,87 @@ export class HomeComponent implements OnInit, OnDestroy {
         } else {
             this.info_bulle = 'Cliquez ici pour activer le mode anonymous';
             //console.log("Le machin vient d'etre dechecker !!");
+        }
+    }
+
+    //this button is used for close the delete message public dialog
+    deletecloseDialog() {
+        this.deletemessgepublocservice.displaydialog = 'none';
+    }
+
+    //this function delete a message public
+    deletemessagepublic() {
+        //this.deletemessgepublocservice.displaydialog = 'none';
+        this.visible_delete_progressbar = false;
+        if (this.deletemessgepublocservice.etat_photo_status === 'block') {
+            //url for delete phycally the photo
+            const urldeletephoto = this.constance.dns.concat('/uploads/removeuploadScript.php?nomdufichier=')
+                .concat(this.deletemessgepublocservice.photo_message_public);
+            //url for delete message public in the database
+            const urldeletemessagepublic = this.constance.dns
+                .concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=')
+                .concat(String(this.deletemessgepublocservice.id_message_public))
+                .concat('&ID_photo=').concat(String(this.deletemessgepublocservice.id_photo));
+            this.httpClient
+                .get(urldeletephoto)
+                .subscribe(
+                    (response1) => {
+                        this.deletemessgepublocservice.displaydialog = 'none';
+                        this.visible_delete_progressbar = true;
+                        this.publicconvertservice.conversationsPublics[this.deletemessgepublocservice.indexOf].visibility = false;
+                        this.publicmessages = this.publicconvertservice.conversationsPublics;
+                        this.openSnackBar("Suppression effectuee avec succes !!", 'succes');
+                        return response1;
+                    },
+                    (error) => {
+                        this.deletemessgepublocservice.displaydialog = 'none';
+                        this.visible_delete_progressbar = true;
+                        this.openSnackBar("Une erreur vient de survenir", 'erreur');
+                    }
+                );
+
+            this.httpClient
+                .get(urldeletemessagepublic)
+                .subscribe(
+                    (response1) => {
+                        return response1;
+                    },
+                    (error) => {
+                    }
+                );
+
+            this.httpClient
+                .get(urldeletephoto)
+                .subscribe(
+                    (response1) => {
+                        return response1;
+                    },
+                    (error) => {
+                    }
+                );
+
+        } else if (this.deletemessgepublocservice.etat_photo_status === 'none') {
+            const urldeletemessagepublic = this.constance.dns
+                .concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=')
+                .concat(String(this.deletemessgepublocservice.id_message_public));
+            console.log(urldeletemessagepublic);
+            this.httpClient
+                .get(urldeletemessagepublic)
+                .subscribe(
+                    (response1) => {
+                        this.deletemessgepublocservice.displaydialog = 'none';
+                        this.visible_delete_progressbar = true;
+                        this.publicconvertservice.conversationsPublics[this.deletemessgepublocservice.indexOf].visibility = false;
+                        this.publicmessages = this.publicconvertservice.conversationsPublics;
+                        this.openSnackBar('Suppression effectuee avec succes !!', 'succes');
+                        return response1;
+                    },
+                    (error) => {
+                        this.deletemessgepublocservice.displaydialog = 'none';
+                        this.visible_delete_progressbar = true;
+                        this.openSnackBar('Une erreur vient de survenir', 'erreur');
+                    }
+                );
         }
     }
 
