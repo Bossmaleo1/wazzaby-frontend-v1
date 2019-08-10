@@ -79,7 +79,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     visible_delete_progressbar: boolean = true;
     //le tableau de message public
     publicmessages: any;
-    //le libelle du message public
+    //the array who content filelist
+    array_file_list = new Array();
 
   constructor(private homedesign: HomeDesignService
               , private  router: Router
@@ -186,15 +187,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-    ChangeIconOne() {
+  ChangeIconOne() {
       this.IconEtatColorPublicConver = true;
       this.IconEtatColorPrivateConver = false;
-    }
+  }
 
-    ChangeIconTwo() {
+  ChangeIconTwo() {
       this.IconEtatColorPublicConver = false;
       this.IconEtatColorPrivateConver = true;
-    }
+  }
 
     /*La methode qui change la couleur de l'icone suivant l'onglet cliquer*/
     onLinkClick(event: MatTabChangeEvent) {
@@ -232,11 +233,28 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     /*Methode pour fermer la boite de dialogue*/
     onCloseDialog() {
-        this.updateservice.block_boite_de_dialogue = 'none';
-        this.filevalue = null;
-        this.updateservice.imageSrc = "";
-        this.updateservice.disparaitreimage = 'none';
-        console.log(this.updateservice.photo_value);
+        let element: HTMLInputElement = document.getElementById('tenantPhotoId') as HTMLInputElement;
+        if (element.files.length > 0) {
+           if ( (this.array_file_list.length > 0 && this.updateservice.disparaitreimage == 'block')) {
+                this.openSnackBar("Veuillez terminer votre operation","succes !");
+           } else if ( (this.array_file_list.length > 0 && this.updateservice.disparaitreimage == 'none')) {
+               this.updateservice.block_boite_de_dialogue = 'none';
+           }
+        } else if (!(typeof this.updateservice.libellemessagepublic === undefined)) {
+            console.log(this.updateservice.libellemessagepublic);
+            if (this.updateservice.libellemessagepublic.length > 0) {
+                this.openSnackBar("Veuillez terminer votre operation","succes !");
+            }
+        } else if (element.files.length == 0 && (typeof this.updateservice.libellemessagepublic == undefined)){
+            this.updateservice.block_boite_de_dialogue = 'none';
+            this.updateservice.disparaitreimage = 'none';
+        } else {
+            this.updateservice.block_boite_de_dialogue = 'none';
+            this.updateservice.disparaitreimage = 'none';
+        }
+
+        console.log(element.files);
+        console.log(this.updateservice.libellemessagepublic);
     }
 
     openSnackBar(message: string, action: string) {
@@ -261,6 +279,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
                 reader.readAsDataURL(file);
                 this.filevalue = file;
+                this.array_file_list.push(this.filevalue);
                 const urlrecuperefile = this.constance.dns.concat('/WazzabyApi/public/api/photomessagepublic?file_extension=').concat(extension).concat('&id_user=').concat(this.authService.sessions.id).concat('&id_problematique=').concat(this.authService.sessions.id_prob);
                 this.httpClient
                     .get(urlrecuperefile)
@@ -316,12 +335,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     addMessagePublic() {
-        this.updateservice.disparaitrechamp = 'none';
-        this.updateservice.disparaitreimage = 'none';
-        this.updateservice.disparaitreprogressbar = 'block';
         const libellemessagepublic = this.updateservice.libellemessagepublic;
+        //console.log(libellemessagepublic);
+        if ((typeof libellemessagepublic != undefined) && (libellemessagepublic.length > 0)) {
 
-        if (libellemessagepublic.length > 0 ) {
+        }
+        /*if (libellemessagepublic.length > 0 ) {
+            this.updateservice.disparaitrechamp = 'none';
+            this.updateservice.disparaitreimage = 'none';
+            this.updateservice.disparaitreprogressbar = 'block';
             const url = this.constance.dns.concat('/WazzabyApi/public/api/SaveMessagePublic?etat=').concat(this.etat).concat('&libelle=').concat(libellemessagepublic).concat('&id_problematique=').concat(this.authService.getSessions().id_prob).concat('&ID=').concat(this.authService.getSessions().id).concat('&id_message_public=').concat(this.id_messagepublic);
             this.httpClient
                 .get(url)
@@ -329,7 +351,8 @@ export class HomeComponent implements OnInit, OnDestroy {
                     (response1) => {
                         this.constance.messagepublicobject = response1;
                         this.updateservice.disparaitrechamp = 'block';
-                        this.updateservice.disparaitreimage = 'block';
+                        this.updateservice.disparaitreimage = 'none';
+                        this.updateservice.libellemessagepublic = null;
                         this.updateservice.disparaitreprogressbar = 'none';
                         this.updateservice.block_boite_de_dialogue = 'none';
                         const nom_du_user = ''.concat(this.authService.sessions.prenom).concat(' ').concat(this.authService.sessions.nom);
@@ -364,7 +387,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 );
         } else {
             this.openSnackBar('Veuillez inserer un message public', 'erreur');
-        }
+        }*/
 
     }
 
