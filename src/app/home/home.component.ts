@@ -6,7 +6,7 @@ import {AuthService} from '../Services/auth.service';
 import {PrivateUseronlineServices} from '../Services/private.useronline.services';
 import {PrivateRecentconvertServices} from '../Services/private.recentconvert.services';
 import {HttpClient} from '@angular/common/http';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 import {ConstanceService} from '../Services/Constance.service';
 import {MessagePublic} from '../models/MessagePublic.model';
 import {Subscription} from 'rxjs';
@@ -64,8 +64,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     // attributs pour la gestion du uploading des fichiers
     someUrlFile: any;
     filevalue: any;
-    imagenamefordelete: any;
-    id_messagepublic: any;
     id_photo: any;
     etat: any;
     afficher_spinner_messagepublic = false;
@@ -107,6 +105,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.prenom = this.authService.getSessions().prenom;
       this.etat = 1;
       this.info_bulle = 'Cliquez ici pour activer le mode anonymous';
+      this.afficher_spinner_messagepublic = true;
       if (this.constance.test_updatecachephoto === 1) {
         if (this.authService.getSessions().photo === '') {
             this.photo_user = this.constance.dns.concat('/uploads/photo_de_profil/').concat('ic_profile.png');
@@ -227,7 +226,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     /*Pour afficher la boite de dialogue*/
     onDialogPublicConvert() {
+       this.updateservice.libelle_photo = 'PUBLIER';
+       this.updateservice.dialog_update_or_display = true;
        this.updateservice.block_boite_de_dialogue = 'block';
+       this.updateservice.disparaitreimage = 'none';
     }
 
 
@@ -236,25 +238,19 @@ export class HomeComponent implements OnInit, OnDestroy {
         let element: HTMLInputElement = document.getElementById('tenantPhotoId') as HTMLInputElement;
         if (element.files.length > 0) {
            if ( (this.array_file_list.length > 0 && this.updateservice.disparaitreimage == 'block')) {
-                this.openSnackBar("Veuillez terminer votre operation","succes !");
+                this.openSnackBar('Veuillez terminer votre operation','erreur');
            } else if ( (this.array_file_list.length > 0 && this.updateservice.disparaitreimage == 'none')) {
                this.updateservice.block_boite_de_dialogue = 'none';
            }
-        } else if (!(typeof this.updateservice.libellemessagepublic === undefined)) {
-            console.log(this.updateservice.libellemessagepublic);
-            if (this.updateservice.libellemessagepublic.length > 0) {
-                this.openSnackBar("Veuillez terminer votre operation","succes !");
-            }
-        } else if (element.files.length == 0 && (typeof this.updateservice.libellemessagepublic == undefined)){
+        } else if (this.updateservice.libellemessagepublic.length > 0) {
+                this.openSnackBar('Veuillez terminer votre operation','erreur');
+        } else if (element.files.length == 0 ) {
             this.updateservice.block_boite_de_dialogue = 'none';
             this.updateservice.disparaitreimage = 'none';
         } else {
             this.updateservice.block_boite_de_dialogue = 'none';
             this.updateservice.disparaitreimage = 'none';
         }
-
-        console.log(element.files);
-        console.log(this.updateservice.libellemessagepublic);
     }
 
     openSnackBar(message: string, action: string) {
@@ -267,7 +263,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.updateservice.disparaitreprogressbar = 'block';
         const taille = event.target.files[0].name.split('.').length;
         const extension = event.target.files[0].name.split('.')[taille - 1].toLowerCase();
-        this.imagenamefordelete = extension;
+        this.updateservice.imagenamefordelete = extension;
 
         if (extension === 'png' || extension === 'jpg' || extension === 'jpeg' || extension === 'gif') {
 
@@ -290,8 +286,8 @@ export class HomeComponent implements OnInit, OnDestroy {
                             let formData: FormData = new FormData();
                             formData.append('photostatus', this.filevalue);
                             formData.append('name_file', this.constance.name_file.name_file);
-                            this.imagenamefordelete = this.constance.name_file.name_file.concat('.').concat(extension);
-                            this.id_messagepublic = this.constance.name_file.id_messagepublic;
+                            this.updateservice.imagenamefordelete = this.constance.name_file.name_file.concat('.').concat(extension);
+                            this.updateservice.id_message_public = this.constance.name_file.id_messagepublic;
                             this.id_photo = this.constance.name_file.ID_photo;
                             this.httpClient
                                 .post(url1, formData)
@@ -335,16 +331,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     addMessagePublic() {
+        if (this.updateservice.libelle_photo === 'PUBLIER') {
         const libellemessagepublic = this.updateservice.libellemessagepublic;
-        //console.log(libellemessagepublic);
-        if ((typeof libellemessagepublic != undefined) && (libellemessagepublic.length > 0)) {
-
-        }
-        /*if (libellemessagepublic.length > 0 ) {
+        const element: HTMLInputElement = document.getElementById('tenantPhotoId') as HTMLInputElement;
+        if (this.updateservice.libellemessagepublic.length === 0 && element.files.length === 0 ) {
+            this.openSnackBar('Veuillez terminer votre operation','erreur');
+        } else {
             this.updateservice.disparaitrechamp = 'none';
             this.updateservice.disparaitreimage = 'none';
             this.updateservice.disparaitreprogressbar = 'block';
-            const url = this.constance.dns.concat('/WazzabyApi/public/api/SaveMessagePublic?etat=').concat(this.etat).concat('&libelle=').concat(libellemessagepublic).concat('&id_problematique=').concat(this.authService.getSessions().id_prob).concat('&ID=').concat(this.authService.getSessions().id).concat('&id_message_public=').concat(this.id_messagepublic);
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/SaveMessagePublic?etat=').concat(this.etat).concat('&libelle=').concat(libellemessagepublic).concat('&id_problematique=').concat(this.authService.getSessions().id_prob).concat('&ID=').concat(this.authService.getSessions().id).concat('&id_message_public=').concat(String(this.updateservice.id_message_public));
             this.httpClient
                 .get(url)
                 .subscribe(
@@ -357,6 +353,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                         this.updateservice.block_boite_de_dialogue = 'none';
                         const nom_du_user = ''.concat(this.authService.sessions.prenom).concat(' ').concat(this.authService.sessions.nom);
                         let maleosama = new Object();
+                        this.etat = 1;
                         maleosama['checkmention'] = 0;
                         maleosama['countcomment'] = 0;
                         maleosama['countjaime'] = 0;
@@ -367,7 +364,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                         maleosama['name'] = nom_du_user;
                         maleosama['status_text_content'] = libellemessagepublic;
                         maleosama['status_photo'] = this.constance.messagepublicobject.status_photo;
-                        maleosama['updated'] = " A l'instant";
+                        maleosama['updated'] = this.constance.messagepublicobject.updated;
                         maleosama['user_id'] = this.authService.sessions.id;
                         maleosama['user_photo'] = this.authService.getSessions().photo;
                         maleosama['visibility'] = true;
@@ -385,9 +382,54 @@ export class HomeComponent implements OnInit, OnDestroy {
                         this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
                     }
                 );
-        } else {
-            this.openSnackBar('Veuillez inserer un message public', 'erreur');
-        }*/
+        }
+        } else if (this.updateservice.libelle_photo === 'MODIFIER') {
+            const libellemessagepublic = this.updateservice.libellemessagepublic;
+            this.updateservice.disparaitrechamp = 'none';
+            this.updateservice.disparaitreimage = 'none';
+            this.updateservice.disparaitreprogressbar = 'block';
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/UpdateMessagePublic?ID=')
+                .concat(this.authService.getSessions().id)
+                .concat('&id_problematique=').concat(this.authService.getSessions().id_prob)
+                .concat('&id_message_public=').concat(String(this.updateservice.id_message_public))
+                .concat('&photo=2')
+                .concat('&libelle=').concat(libellemessagepublic);
+
+            this.httpClient
+                .get(url)
+                .subscribe(
+                    (response1) => {
+                        this.constance.messagepublicobject = response1;
+                        this.updateservice.disparaitrechamp = 'block';
+                        this.updateservice.disparaitreimage = 'none';
+                        this.updateservice.libellemessagepublic = null;
+                        this.updateservice.disparaitreprogressbar = 'none';
+                        this.updateservice.block_boite_de_dialogue = 'none';
+                        const nom_du_user = ''.concat(this.authService.sessions.prenom).concat(' ').concat(this.authService.sessions.nom);
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].etat_photo_status =  this.constance.messagepublicobject.etat_photo_status;
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].id = this.constance.messagepublicobject.id;
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].name = nom_du_user;
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].status_text_content = libellemessagepublic;
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].status_photo = this.constance.messagepublicobject.status_photo;
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].updated = this.constance.messagepublicobject.updated;
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].user_id = this.authService.sessions.id;
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].user_photo = this.authService.getSessions().photo;
+                        this.publicconvertservice.conversationsPublics[this.updateservice.indexOf].visibility = true;
+                        this.updateservice.disparaitreimage = 'none';
+                        this.publicmessages = this.publicconvertservice.conversationsPublics;
+                        this.openSnackBar("Votre modification s'est effectuee avec succes !!", "succes");
+
+                        return response1;
+                    },
+                    (error) => {
+                        this.updateservice.disparaitrechamp = 'block';
+                        this.updateservice.disparaitreimage = 'block';
+                        this.updateservice.disparaitreprogressbar = 'none';
+                        this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                    }
+                );
+
+        }
 
     }
 
@@ -395,13 +437,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     OnSupprimerPhoto() {
         this.updateservice.disparaitreimage = 'none';
         this.updateservice.disparaitreprogressbar = 'block';
-        const urltemp = this.constance.dns.concat('/uploads/removeuploadScript.php?nomdufichier=').concat(this.imagenamefordelete);
+        const urltemp = this.constance.dns.concat('/uploads/removeuploadScript.php?nomdufichier=').concat(this.updateservice.imagenamefordelete);
+        console.log(urltemp);
         this.httpClient
             .get(urltemp)
             .subscribe(
                 (response) => {
                     this.updateservice.disparaitreprogressbar = 'none';
-                   const urldelete = this.constance.dns.concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=').concat(this.id_messagepublic).concat('&ID_photo=').concat(this.id_photo);
+                   const urldelete = this.constance.dns.concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=').concat(String(this.updateservice.id_message_public)).concat('&ID_photo=').concat(this.updateservice.id_photo);
+                   console.log(urldelete);
                    this.httpClient
                         .get(urldelete)
                         .subscribe(
@@ -451,7 +495,8 @@ export class HomeComponent implements OnInit, OnDestroy {
             const urldeletemessagepublic = this.constance.dns
                 .concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=')
                 .concat(String(this.deletemessgepublocservice.id_message_public))
-                .concat('&ID_photo=').concat(String(this.deletemessgepublocservice.id_photo));
+                .concat('&ID_photo=').concat(String(this.deletemessgepublocservice.id_photo))
+                .concat('&count=').concat(String(this.deletemessgepublocservice.count));
             this.httpClient
                 .get(urldeletephoto)
                 .subscribe(
@@ -493,8 +538,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         } else if (this.deletemessgepublocservice.etat_photo_status === 'none') {
             const urldeletemessagepublic = this.constance.dns
                 .concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=')
-                .concat(String(this.deletemessgepublocservice.id_message_public));
-            console.log(urldeletemessagepublic);
+                .concat(String(this.deletemessgepublocservice.id_message_public))
+                .concat('&count=').concat(String(this.deletemessgepublocservice.count));
             this.httpClient
                 .get(urldeletemessagepublic)
                 .subscribe(
@@ -513,6 +558,11 @@ export class HomeComponent implements OnInit, OnDestroy {
                     }
                 );
         }
+    }
+
+    onCloseUpdateDialog() {
+        this.updateservice.block_boite_de_dialogue = 'none';
+        this.updateservice.libellemessagepublic = '';
     }
 
 }

@@ -8,6 +8,12 @@ export class UpdateService {
     messagepublicform: FormGroup;
     disparaitrechamp: string = 'block';
     imageSrc: any;
-    libellemessagepublic: string;
+    libellemessagepublic: string = '';
     photo_value: any;
+    libelle_photo: string = '';
+    dialog_update_or_display: boolean = false;
+    id_message_public: number;
+    indexOf: number;
+    imagenamefordelete: string;
+    id_photo: any;
 }

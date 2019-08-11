@@ -8,6 +8,7 @@ import {MatSnackBar} from '@angular/material';
 import {AuthService} from '../Services/auth.service';
 import {DeleteMessagepublicService} from '../Services/delete.messagepublic.service';
 import {UtilService} from '../Services/util.service';
+import {UpdateService} from '../Services/update.service';
 
 @Component({
   selector: 'app-publicconvert',
@@ -42,6 +43,7 @@ export class PublicconvertComponent implements OnInit {
     //this.publicconvertservice.conversationsPublics
   constructor(private publicconvert: PublicConvertServices
               , private constance: ConstanceService
+              , private updateservice: UpdateService
               , private publiccommentsservice: PublicCommentsServices
               , private authService: AuthService
               , public snackBar: MatSnackBar
@@ -87,6 +89,11 @@ export class PublicconvertComponent implements OnInit {
         this.publiccommentsservice.status_photo = this.status_photo;
         this.publiccommentsservice.status_text_content = this.status_text_content;
         this.publiccommentsservice.etat_photo_status = this.etat_photo_status;
+        this.publiccommentsservice.indexOfConvert = this.indexOfConvert;
+        this.publiccommentsservice.checkmention = this.checkmention;
+        this.publiccommentsservice.id_checkmention = this.id_checkmention;
+        this.publiccommentsservice.jaime = this.jaime;
+        this.publiccommentsservice.jaimepas = this.jaimepas;
         this.router.navigate(['public-convert-details']);
   }
 
@@ -241,6 +248,7 @@ export class PublicconvertComponent implements OnInit {
       this.deletemessgepublocservice.id_message_public = this.publicconvert.conversationsPublics[this.indexOfConvert].id;
       this.deletemessgepublocservice.indexOf = this.indexOfConvert;
       this.deletemessgepublocservice.etat_photo_status = this.publicconvert.conversationsPublics[this.indexOfConvert].etat_photo_status;
+      this.deletemessgepublocservice.count = this.publicconvert.conversationsPublics[this.indexOfConvert].countcomment;
       if (this.publicconvert.conversationsPublics[this.indexOfConvert].etat_photo_status === 'block') {
         this.deletemessgepublocservice.id_photo = this.publicconvert.conversationsPublics[this.indexOfConvert].id_photo;
         //on met le split car on veux juste recuperer le nom du fichier plus extension
@@ -249,7 +257,18 @@ export class PublicconvertComponent implements OnInit {
     }
 
     displayupdateDialog() {
-
+        this.updateservice.block_boite_de_dialogue = 'block';
+        this.updateservice.dialog_update_or_display = false;
+        this.updateservice.libellemessagepublic = this.publicconvert.conversationsPublics[this.indexOfConvert].status_text_content;
+        this.updateservice.id_message_public = this.publicconvert.conversationsPublics[this.indexOfConvert].id;
+        this.updateservice.indexOf = this.indexOfConvert;
+        if (this.publicconvert.conversationsPublics[this.indexOfConvert].etat_photo_status === 'block') {
+            this.updateservice.disparaitreimage = 'block';
+            this.updateservice.imageSrc = this.publicconvert.conversationsPublics[this.indexOfConvert].status_photo;
+            this.updateservice.id_photo = this.publicconvert.conversationsPublics[this.indexOfConvert].id_photo;
+            this.updateservice.imagenamefordelete = this.publicconvert.conversationsPublics[this.indexOfConvert].status_photo.split('/')[5];
+        }
+        this.updateservice.libelle_photo = 'MODIFIER';
     }
 
 

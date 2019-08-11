@@ -112,8 +112,8 @@
 }
 
 #borderimage {
-  max-width: 75px;
-  max-height: 75px;
+  max-width: 50px;
+  max-height: 50px;
 }
 
 #icon-color {
@@ -182,4 +182,12 @@
 
 .empty-message {
   text-align: center;
+}
+
+.background-message-public-form-block {
+  background-color: rgba(68,138,255,0.1);
+}
+
+.background-message-public-form-input {
+  background-color: rgba(68,138,255,0.3);
 }

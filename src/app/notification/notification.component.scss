@@ -3,7 +3,6 @@
    top:0%;
    left:0%;
    right:0%;
-   height:10%;
    z-index: 100;
  }
 
@@ -62,4 +61,10 @@
   height: 10px;
   width:400px;
   float: right;
+}
+
+.error_message {
+  text-align: center;
+  font-size: 20px;
+  color: black;
 }

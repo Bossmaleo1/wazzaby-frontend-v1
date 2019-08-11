@@ -18,6 +18,7 @@
      <div class="item item-2" fxFlex="20%" fxFlexOrder="3"></div>
      <div class="item item-3" fxFlex="60%">
          <br/><br/>
+         <div class="error_message" *ngIf="display_error_message">{{error_message}}</div>
          <section *ngIf="!this.notificationService.progressbarnotification">
             <app-notification-item  *ngFor="let notification of this.notificationService.notifications; let i = index"
                                  [index] = "i"

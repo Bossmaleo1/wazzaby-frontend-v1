@@ -23,17 +23,17 @@
                  <span>Profil</span>
             </button>
 
-            <button mat-menu-item>
-                <mat-icon id="icon-color">history</mat-icon>
+            <button mat-menu-item disabled [ngStyle]="{'color':'#E0E0E0'}">
+                <mat-icon [ngStyle]="{'color':'#E0E0E0'}">history</mat-icon>
                 <span>Historique Message Publique</span>
             </button>
 
-            <button mat-menu-item>
-                  <mat-icon id="icon-color">settings</mat-icon>
+            <button mat-menu-item disabled [ngStyle]="{'color':'#E0E0E0'}">
+                  <mat-icon [ngStyle]="{'color':'#E0E0E0'}">settings</mat-icon>
                   <span>Parametres</span>
             </button>
-            <button mat-menu-item>
-                  <mat-icon id="icon-color">help</mat-icon>
+            <button mat-menu-item disabled [ngStyle]="{'color':'#E0E0E0'}">
+                  <mat-icon [ngStyle]="{'color':'#E0E0E0'}">help</mat-icon>
                   <span>A propos</span>
             </button>
             <button mat-menu-item  (click)="OnDeconnect()">
@@ -359,8 +359,12 @@
           <mat-icon aria-label="Example icon-button with a heart icon">add_photo_alternate</mat-icon>
         </button>
 
-        <button mat-icon-button class="close-user-button" (click)="onCloseDialog()" >
+        <button mat-icon-button class="close-user-button" (click)="onCloseDialog()" *ngIf="this.updateservice.dialog_update_or_display">
           <mat-icon aria-label="Example icon-button with a heart icon">close</mat-icon>
+        </button>
+
+        <button mat-icon-button class="close-user-button" (click)="onCloseUpdateDialog()" *ngIf="!this.updateservice.dialog_update_or_display">
+              <mat-icon aria-label="Example icon-button with a heart icon">close</mat-icon>
         </button>
 
         <mat-card-content>
@@ -373,16 +377,18 @@
             <img [src]="this.updateservice.imageSrc" alt="photo message publique" id="borderimage" [ngStyle]="{'display':''+this.updateservice.disparaitreimage+''}" />
             <mat-progress-bar mode="indeterminate" [ngStyle]="{'display':''+this.updateservice.disparaitreprogressbar+''}"></mat-progress-bar>
             <!--form [formGroup]="this.updateservice.messagepublicform" (ngSubmit)="onSubmitForm()"-->
-              <input type="file"  (change)="onChangeFile($event)" id="tenantPhotoId" [(ngModel)]="this.updateservice.photo_value"  [ngStyle]="{'display':'none'}" #fileInput/>
+              <div  [ngStyle]="{'display':'none'}" id="blockmaleosama">
+                    <input type="file"  (change)="onChangeFile($event)" id="tenantPhotoId"  #fileInput/>
+              </div>
               <!--mat-form-field class="example-full-width" [ngStyle]="{'display':''+disparaitrechamp+''}">
                 <input matInput placeholder="Votre Problematique" formControlName="problematique" id="problematique" autocomplete="off" />
               </mat-form-field> <br/-->
-              <mat-form-field appearance="fill" class="example-full-width" [ngStyle]="{'display':''+this.updateservice.disparaitrechamp+''}">
-                    <textarea matInput placeholder="Votre Message Public" [(ngModel)]="this.updateservice.libellemessagepublic" id="problematique" autocomplete="off">
+              <mat-form-field appearance="fill" class="example-full-width background-message-public-form-block" [ngStyle]="{'display':''+this.updateservice.disparaitrechamp+''}">
+                    <textarea  matInput placeholder="Votre Message Public" [(ngModel)]="this.updateservice.libellemessagepublic" id="problematique" autocomplete="off" rows="10">
 
                     </textarea>
               </mat-form-field>
-              <button mat-raised-button type='submit' color="primary" [ngStyle]="{'display':''+this.updateservice.disparaitrechamp+''}" (click)="addMessagePublic()" class="example-full-width">PUBLIER</button>
+              <button mat-raised-button type='submit' color="primary" [ngStyle]="{'display':''+this.updateservice.disparaitrechamp+''}" (click)="addMessagePublic()" class="example-full-width">{{this.updateservice.libelle_photo}}</button>
             <!--/form-->
             <br/>
             <mat-divider></mat-divider>

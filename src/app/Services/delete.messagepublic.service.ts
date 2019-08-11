@@ -6,4 +6,5 @@ export class DeleteMessagepublicService {
     id_message_public: number;
     id_photo: number;
     indexOf: number;
+    count: number;
 }

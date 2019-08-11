@@ -12,6 +12,9 @@ import {ConstanceService} from '../Services/Constance.service';
 })
 export class NotificationComponent implements OnInit {
 
+  error_message: string;
+  display_error_message: boolean = true;
+
   constructor(private  router: Router
               , private authService: AuthService
               , private notificationService: NotificationService
@@ -19,6 +22,8 @@ export class NotificationComponent implements OnInit {
               , private httpClient: HttpClient) { }
 
   ngOnInit() {
+
+      this.notificationService.progressbarnotification = true;
       const url = this.constance.dns
           .concat('/WazzabyApi/public/api/displayNotification?id_recepteur=')
           .concat(this.authService.getSessions().id);
@@ -27,10 +32,19 @@ export class NotificationComponent implements OnInit {
           .subscribe(
               (response) => {
                   this.notificationService.notifications = response;
+                  /*console.log(this.notificationService.notifications.length);
+                  console.log(this.notificationService.notifications);*/
                   this.notificationService.progressbarnotification = false;
+                  if (this.notificationService.notifications.length === 0) {
+                     this.error_message = 'Vous avez aucune notification';
+                     this.display_error_message = true;
+                  }
                   return response;
               },
               (error) => {
+                  this.notificationService.progressbarnotification = true;
+                  this.error_message = 'Vous avez une erreur reseau, veuillez revoir votre connexion internet';
+                  this.display_error_message = true;
               });
   }
 

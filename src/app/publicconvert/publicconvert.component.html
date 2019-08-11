@@ -4,7 +4,7 @@
     <mat-card-title>{{name}}</mat-card-title>
     <mat-card-subtitle>{{updated}}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image  src="{{status_photo}}" alt="Photo of a Shiba Inu" [ngStyle]="{'display':''+etat_photo_status+''}">
+  <img mat-card-image  src="{{status_photo}}" alt="Photo of message public" [ngStyle]="{'display':''+etat_photo_status+''}">
   <mat-card-content>
     <p>{{status_text_content}}</p>
   </mat-card-content>
@@ -42,8 +42,8 @@
 
                 <mat-menu #menu="matMenu">
 
-                    <button mat-menu-item *ngIf="test_user_root" (click)="displayupdateDialog()">
-                        <mat-icon id="icon-color">edit</mat-icon>
+                    <button mat-menu-item *ngIf="test_user_root" (click)="displayupdateDialog()" disabled [ngStyle]="{'color':'#E0E0E0'}">
+                        <mat-icon [ngStyle]="{'color':'#E0E0E0'}">edit</mat-icon>
                         <span>Modifier ce poste</span>
                     </button>
 
@@ -52,8 +52,8 @@
                         <span>Supprimer ce poste</span>
                     </button>
 
-                    <button mat-menu-item *ngIf="!test_user_root">
-                        <mat-icon id="icon-color">flag</mat-icon>
+                    <button mat-menu-item *ngIf="!test_user_root" disabled [ngStyle]="{'color':'#E0E0E0'}">
+                        <mat-icon  [ngStyle]="{'color':'#E0E0E0'}">flag</mat-icon>
                         <span>Signaler un probleme</span>
                     </button>
 
