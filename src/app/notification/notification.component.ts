@@ -32,8 +32,7 @@ export class NotificationComponent implements OnInit {
           .subscribe(
               (response) => {
                   this.notificationService.notifications = response;
-                  /*console.log(this.notificationService.notifications.length);
-                  console.log(this.notificationService.notifications);*/
+                  console.log(response);
                   this.notificationService.progressbarnotification = false;
                   if (this.notificationService.notifications.length === 0) {
                      this.error_message = 'Vous avez aucune notification';
@@ -42,7 +41,7 @@ export class NotificationComponent implements OnInit {
                   return response;
               },
               (error) => {
-                  this.notificationService.progressbarnotification = true;
+                  this.notificationService.progressbarnotification = false;
                   this.error_message = 'Vous avez une erreur reseau, veuillez revoir votre connexion internet';
                   this.display_error_message = true;
               });

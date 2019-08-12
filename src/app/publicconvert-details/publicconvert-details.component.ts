@@ -8,6 +8,7 @@ import {HttpClient} from '@angular/common/http';
 import {MatSnackBar} from '@angular/material';
 import {NgForm} from '@angular/forms';
 import {Location} from '@angular/common';
+import {NotificationService} from '../Services/notification.service';
 
 @Component({
     selector: 'app-publicconvert-details',
@@ -35,7 +36,8 @@ export class PublicconvertDetailsComponent implements OnInit {
     booljaimepas: boolean;
     display_progressbar: boolean = false;
     error_message: string;
-    display_error_message: string;
+    display_error_message: boolean;
+    icon: string;
 
 
     constructor(private publicconvert: PublicConvertServices
@@ -46,6 +48,7 @@ export class PublicconvertDetailsComponent implements OnInit {
         , private _location: Location
         , public snackBar: MatSnackBar
         , private constance: ConstanceService
+        , private notificationService: NotificationService
         , private publiccomments: PublicCommentsServices) { }
 
     ngOnInit() {
@@ -72,6 +75,20 @@ export class PublicconvertDetailsComponent implements OnInit {
         } else if (this.checkmention === 0) {
             this.booljaime = false;
             this.booljaimepas = false;
+        }
+        //on marque la notification comme lu
+        if (this.publiccomments.notification_marqueur) {
+             const urlmarquernotification = this.constance.dns.concat('/WazzabyApi/public/api/MarquerNotificationCommeLu?id_notification=')
+                 .concat(this.notificationService.id_notification);
+            this.httpClient
+                .get(urlmarquernotification)
+                .subscribe(
+                    (response) => {
+                        return response;
+                    },
+                    (error) => {
+                    }
+                );
         }
     }
 
@@ -108,6 +125,7 @@ export class PublicconvertDetailsComponent implements OnInit {
                     this.display_progressbar = true;
                     if (this.publiccomments.Comments.length === 0) {
                         this.error_message = "Aucun message public";
+                        this.icon = 'add_comment';
                         this.display_error_message = true;
                     }
                     return response2;
@@ -115,6 +133,7 @@ export class PublicconvertDetailsComponent implements OnInit {
                 (error) => {
                     this.openSnackBar('Une erreur serveur vient de se produire !', 'erreur');
                     this.error_message = "Erreur reseau sur le chargement de message publique";
+                    this.icon = 'block';
                     this.display_error_message = true;
                 }
             );
@@ -136,6 +155,7 @@ export class PublicconvertDetailsComponent implements OnInit {
         maleosama['status_text_content'] = this.libelle_comment;
         this.publiccomments.Comments.unshift(maleosama);
         this.comments = this.publiccomments.Comments;
+        this.display_error_message = false;
         const url = this.constance.dns.concat('/WazzabyApi/public/api/addComment?id_messagepublic=').concat(this.publiccomments.id).concat('&libelle_comment=').concat(this.libelle_comment).concat('&id_user=').concat(this.authService.sessions.id);
         this.libelle_comment = '';
         this.connexionToServer(url);
