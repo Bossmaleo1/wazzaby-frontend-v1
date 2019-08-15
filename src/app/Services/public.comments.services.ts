@@ -16,6 +16,7 @@ export class PublicCommentsServices {
     jaimepas: number;
     checkmention: number;
     id_checkmention: number;
+    id_recepteur: number;
     notification_marqueur: boolean = false;
 
 }

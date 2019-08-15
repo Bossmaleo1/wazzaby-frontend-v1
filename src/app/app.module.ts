@@ -58,6 +58,7 @@ import {NotificationService} from './Services/notification.service';
 import {DeleteMessagepublicService} from './Services/delete.messagepublic.service';
 import {UtilService} from './Services/util.service';
 import {UpdateService} from './Services/update.service';
+import { HistoryComponent } from './history/history.component';
 
 
 
@@ -75,6 +76,7 @@ const appRoutes: Routes = [
     {path: 'inscript', component: InscriptFormComponent},
     {path: 'connexion', component: ConnexionComponent},
     {path: 'welcome', canActivate: [AuthGuardService], component: WelcomeToWazzabyComponent},
+    {path: 'history', canActivate: [AuthGuardService], component: HistoryComponent},
     {path: '', component: ConnexionComponent},
     {path: 'not-found', component: NotFoundComponent},
     {path: '**', redirectTo: '/not-found'}
@@ -102,7 +104,8 @@ const appRoutes: Routes = [
     AddProfilPictureComponent,
     WelcomeToWazzabyComponent,
     ProblematiqueItemComponent,
-    NotificationItemComponent
+    NotificationItemComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

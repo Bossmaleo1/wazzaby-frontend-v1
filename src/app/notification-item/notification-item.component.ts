@@ -16,7 +16,6 @@ export class NotificationItemComponent implements OnInit {
     @Input() photo: string;
     @Input() libelle: string;
     @Input() updated: string;
-    @Input() etat: number;
     @Input() id_type: string;
     @Input() id_libelle: number;
     @Input() notification_id: number;
@@ -50,6 +49,7 @@ export class NotificationItemComponent implements OnInit {
       this.publiccomments.jaime = this.notificationService.notifications[this.index].countjaime;
       this.publiccomments.jaimepas = this.notificationService.notifications[this.index].countjaimepas;
       this.publiccomments.notification_marqueur = true;
+      this.publiccomments.id_recepteur = this.notificationService.notifications[this.index].expediteur_id;
       this.notificationService.id_notification = this.notificationService.notifications[this.index].notification_id;
       this.router.navigate(['public-convert-details']);
   }

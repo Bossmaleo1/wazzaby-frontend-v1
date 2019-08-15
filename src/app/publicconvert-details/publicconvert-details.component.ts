@@ -38,6 +38,7 @@ export class PublicconvertDetailsComponent implements OnInit {
     error_message: string;
     display_error_message: boolean;
     icon: string;
+    temp_id_checkmention: number;
 
 
     constructor(private publicconvert: PublicConvertServices
@@ -52,6 +53,7 @@ export class PublicconvertDetailsComponent implements OnInit {
         , private publiccomments: PublicCommentsServices) { }
 
     ngOnInit() {
+
         this.display_progressbar = false;
         this.display_error_message = false;
         this.booljaime = false;
@@ -65,6 +67,8 @@ export class PublicconvertDetailsComponent implements OnInit {
         this.etat_photo_status = this.publiccomments.etat_photo_status;
         this.jaime = this.publiccomments.jaime;
         this.jaimepas = this.publiccomments.jaimepas;
+        this.checkmention = this.publiccomments.checkmention;
+        this.id_checkmention = this.publiccomments.id_checkmention;
         const url = this.constance.dns.concat('/WazzabyApi/public/api/displayComment?id_messagepublic=').concat(this.publiccomments.id);
         this.connexionToServer2(url);
 
@@ -79,7 +83,7 @@ export class PublicconvertDetailsComponent implements OnInit {
         //on marque la notification comme lu
         if (this.publiccomments.notification_marqueur) {
              const urlmarquernotification = this.constance.dns.concat('/WazzabyApi/public/api/MarquerNotificationCommeLu?id_notification=')
-                 .concat(this.notificationService.id_notification);
+                 .concat(String(this.notificationService.id_notification));
             this.httpClient
                 .get(urlmarquernotification)
                 .subscribe(
@@ -159,14 +163,143 @@ export class PublicconvertDetailsComponent implements OnInit {
         const url = this.constance.dns.concat('/WazzabyApi/public/api/addComment?id_messagepublic=').concat(this.publiccomments.id).concat('&libelle_comment=').concat(this.libelle_comment).concat('&id_user=').concat(this.authService.sessions.id);
         this.libelle_comment = '';
         this.connexionToServer(url);
+
+        if (this.publiccomments.id_recepteur != this.authService.getSessions().id) {
+            let message = "Votre message public vient d'etre commenter par "
+                .concat(this.authService.getSessions().prenom)
+                .concat(' ')
+                .concat(this.authService.getSessions().nom);
+            const url_notification = this.constance.dns.concat('/WazzabyApi/public/api/InsertNotification?users_id=')
+                .concat(this.authService.sessions.id)
+                .concat('&libelle=').concat(message)
+                .concat('&id_type=').concat(this.publiccomments.id)
+                .concat('&etat=0')
+                .concat('&id_recepteur=').concat(String(this.publiccomments.id_recepteur));
+            this.recordNotification(url_notification);
+        }
     }
 
     Onjaime() {
-
+        let message = "Votre message public vient de faire reagir "
+            .concat(this.authService.getSessions().prenom)
+            .concat(' ')
+            .concat(this.authService.getSessions().nom);
+        //we build the url of the like mention notification
+        const url_notification = this.constance.dns.concat('/WazzabyApi/public/api/InsertNotification?users_id=')
+            .concat(this.authService.sessions.id)
+            .concat('&libelle=').concat(message)
+            .concat('&id_type=').concat(this.publiccomments.id)
+            .concat('&etat=0')
+            .concat('&id_recepteur=').concat(String(this.publiccomments.id_recepteur));
+        if (this.checkmention === 1 ) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
+                .concat('&id_mention=')
+                .concat(String(this.publiccomments.id_checkmention));
+            this.connexionToServer(url);
+            this.booljaime = false;
+            this.jaime--;
+            this.publiccomments.checkmention = 0;
+        } else if (this.checkmention === 0 && this.id_checkmention != 0) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=1')
+                .concat('&id_mention=').concat(String(this.id_checkmention));
+            this.connexionToServer(url);
+            this.booljaime = true;
+            this.booljaimepas = false;
+            this.jaime++;
+            this.publiccomments.checkmention = 1;
+            if (this.publiccomments.id_recepteur != this.authService.getSessions().id) {
+                this.recordNotification(url_notification);
+            }
+        }  else if (this.id_checkmention === 0 && this.checkmention === 0) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/Mentions?id_user=')
+                .concat(this.authService.sessions.id).concat('&id_libelle=').concat(String(this.id))
+                .concat('&id_etat=1').concat('&mention=1');
+            this.connexionToServer(url);
+            this.booljaime = true;
+            this.booljaimepas = false;
+            this.jaime++;
+            this.publiccomments.checkmention = 1;
+            this.publiccomments.id_checkmention = this.temp_id_checkmention;
+            if (this.publiccomments.id_recepteur != this.authService.getSessions().id) {
+                this.recordNotification(url_notification);
+            }
+        } else if (this.checkmention === 2) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=1')
+                .concat('&id_mention=')
+                .concat(String(this.publiccomments.id_checkmention));
+            this.connexionToServer(url);
+            this.booljaimepas = false;
+            this.booljaime = true;
+            this.jaime++;
+            this.jaimepas--;
+            this.publiccomments.checkmention = 1;
+            this.publiccomments.id_checkmention = this.temp_id_checkmention;
+            if (this.publiccomments.id_recepteur != this.authService.getSessions().id) {
+                this.recordNotification(url_notification);
+            }
+        }
     }
 
     Onjaimepas() {
-
+        /* console.log(" id_recepteur : "+this.publiccomments.id_recepteur);
+       console.log("user_id : "+this.authService.getSessions().id);*/
+        let message = "Votre message public vient de faire reagir "
+            .concat(this.authService.getSessions().prenom)
+            .concat(' ')
+            .concat(this.authService.getSessions().nom);
+        //we build the url of the like mention notification
+        const url_notification = this.constance.dns.concat('/WazzabyApi/public/api/InsertNotification?users_id=')
+            .concat(this.authService.sessions.id)
+            .concat('&libelle=').concat(message)
+            .concat('&id_type=').concat(this.publiccomments.id)
+            .concat('&etat=0')
+            .concat('id_recepteur=').concat(String(this.publiccomments.id_recepteur));
+        if (this.checkmention === 2) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
+                .concat('&id_mention=').concat(String(this.publiccomments.id_checkmention));
+            this.connexionToServer(url);
+            this.booljaimepas = false;
+            this.jaimepas--;
+            this.publiccomments.checkmention = 0;
+        } else if (this.checkmention === 0 && this.id_checkmention != 0) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=2')
+                .concat('&id_mention=').concat(String(this.id_checkmention));
+            this.connexionToServer(url);
+            this.booljaime = false;
+            this.booljaimepas = true;
+            this.jaimepas++;
+            this.publiccomments.checkmention = 2;
+            if (this.publiccomments.id_recepteur != this.authService.getSessions().id) {
+                this.recordNotification(url_notification);
+            }
+        } else if (this.id_checkmention === 0 && this.checkmention === 0) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/Mentions?id_user=')
+                .concat(this.authService.sessions.id).concat('&id_libelle=').concat(String(this.id))
+                .concat('&id_etat=2').concat('&mention=2');
+            this.connexionToServer(url);
+            this.booljaime = false;
+            this.booljaimepas = true;
+            this.jaimepas++;
+            this.publiccomments.checkmention = 2;
+            this.publiccomments.id_checkmention = this.temp_id_checkmention;
+            if (this.publiccomments.id_recepteur != this.authService.getSessions().id) {
+                this.recordNotification(url_notification);
+            }
+        } else if (this.checkmention === 1) {
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=2')
+                .concat('&id_mention=')
+                .concat(String(this.publiccomments.id_checkmention));
+            this.connexionToServer(url);
+            this.booljaime = false;
+            this.booljaimepas = true;
+            this.jaime--;
+            this.jaimepas++;
+            this.publiccomments.checkmention = 2;
+            this.publiccomments.id_checkmention = this.temp_id_checkmention;
+            if (this.publiccomments.id_recepteur != this.authService.getSessions().id) {
+                this.recordNotification(url_notification);
+            }
+        }
     }
 
     getColor(etat: boolean) {
@@ -176,4 +309,19 @@ export class PublicconvertDetailsComponent implements OnInit {
             return '#757575';
         }
     }
+
+    recordNotification(url: string) {
+        this.httpClient
+            .get(url)
+            .subscribe(
+                (response) => {
+                    return response;
+                },
+                (error) => {
+
+                }
+            );
+    }
+
+
 }

@@ -23,9 +23,9 @@
                  <span>Profil</span>
             </button>
 
-            <button mat-menu-item disabled [ngStyle]="{'color':'#E0E0E0'}">
-                <mat-icon [ngStyle]="{'color':'#E0E0E0'}">history</mat-icon>
-                <span>Historique Message Publique</span>
+            <button mat-menu-item (click)="RootToHistory()">
+                <mat-icon>history</mat-icon>
+                <span>Historique</span>
             </button>
 
             <button mat-menu-item disabled [ngStyle]="{'color':'#E0E0E0'}">
@@ -74,10 +74,18 @@
             </div>
             <div class="item item-3" fxFlex="60%">
             <!--div id='block_spinner1'><mat-spinner *ngIf="afficher_spinner_messagepublic"  class="progressbar"></mat-spinner></div-->
-            <div class="empty-message" *ngIf="empty_message">
+            <!--div class="empty-message" *ngIf="empty_message">
                 <br/>
-                <span>{{error_message}}</span>
+                <span>{{error_message}}</span-->
+            <div class="empty-message" *ngIf="empty_message" (click)="Reactualiser()">
+               <br/>
+               <mat-card class="card-error-message">
+                  <mat-card-content>
+                     <p><mat-icon class="block-error-message">block</mat-icon><span class="block-error-message"> {{this.error_message}}</span></p>
+                  </mat-card-content>
+               </mat-card>
             </div>
+
             <div class="timeline-wrapper" *ngIf="afficher_spinner_messagepublic">
                 <br/>
                 <div class="timeline-item">

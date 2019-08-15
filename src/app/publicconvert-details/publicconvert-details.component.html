@@ -49,15 +49,15 @@
                fxLayoutGap.xs="0">
 
             <div class="item item-1" fxFlex="10%">
-              <button mat-button (click)="Onjaime()" matTooltip="J'aime ce contenu" [ngStyle]="{color:getColor(booljaime)}">
-                <mat-icon>thumb_up</mat-icon>
-                <span [ngStyle]="{color:getColor(booljaime)}"> {{jaime}}</span>
+              <button mat-button (click)="Onjaime()" matTooltip="J'aime ce contenu">
+                <mat-icon [ngStyle]="{color:getColor(booljaime)}">thumb_up</mat-icon>
+                <span [ngStyle]="{color:getColor(booljaime)}"> {{jaime}} </span>
               </button>
             </div>
             <div class="item item-2" fxFlex="10%">
               <button mat-button (click)="Onjaimepas()" matTooltip="Je n'aime pas ce contenu">
                 <mat-icon [ngStyle]="{color:getColor(booljaimepas)}">thumb_down</mat-icon>
-                <span [ngStyle]="{color:getColor(booljaimepas)}"> {{jaimepas}}</span>
+                <span [ngStyle]="{color:getColor(booljaimepas)}"> {{jaimepas}} </span>
               </button>
             </div>
             <div class="item item-3" fxFlex="80%">
@@ -162,7 +162,7 @@
         <br/>
         <mat-card class="card-error-message">
           <mat-card-content>
-            <p><mat-icon class="block-error-message">{{icon}}</mat-icon><span class="block-error-message"> {{this.error_message}}</span></p>
+            <p><mat-icon class="block-error-message">block</mat-icon><span class="block-error-message"> {{this.error_message}}</span></p>
           </mat-card-content>
         </mat-card>
       </div>

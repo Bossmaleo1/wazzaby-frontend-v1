@@ -94,6 +94,7 @@ export class PublicconvertComponent implements OnInit {
         this.publiccommentsservice.id_checkmention = this.id_checkmention;
         this.publiccommentsservice.jaime = this.jaime;
         this.publiccommentsservice.jaimepas = this.jaimepas;
+        this.publiccommentsservice.id_recepteur = this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur;
         this.router.navigate(['public-convert-details']);
   }
 

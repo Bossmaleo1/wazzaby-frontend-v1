@@ -51,9 +51,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     animal: string;
     name: string;
-
-
-
     afficher_spinner = false;
 
     // les coordonnees de l'utilisateurs
@@ -99,6 +96,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+      this.afficher_spinner = false;
+
       this.privateusersOnlineHome = this.privateuseronlineservices.userOnlines;
       this.privaterecentConvertHome = this.privaterecentconvertservices.RecentConverts;
       this.nom = this.authService.getSessions().nom;
@@ -470,11 +469,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     ModeAnonymous(event: MatSlideToggleChange) {
         event.source.color = "warn";
         if (event.checked) {
-            //console.log("Le machin vient d'etre checker !!");
             this.info_bulle = 'Cliquez ici pour désactiver le mode anonymous';
+            this.afficher_spinner = true;
+            //const url_modeanymous = this.constance.dns.concat()
         } else {
             this.info_bulle = 'Cliquez ici pour activer le mode anonymous';
-            //console.log("Le machin vient d'etre dechecker !!");
         }
     }
 
@@ -563,6 +562,55 @@ export class HomeComponent implements OnInit, OnDestroy {
     onCloseUpdateDialog() {
         this.updateservice.block_boite_de_dialogue = 'none';
         this.updateservice.libellemessagepublic = '';
+    }
+
+    RootToHistory() {
+        this.router.navigate(['history']);
+    }
+
+    Reactualiser() {
+        this.empty_message = false;
+        this.afficher_spinner_messagepublic = true;
+        const url = this.constance.dns.concat('/WazzabyApi/public/api/displayPublicMessage?id_problematique=')
+            .concat(this.authService.getSessions().id_prob)
+            .concat('&id_user=').concat(this.authService.getSessions().id);
+        this.httpClient
+            .get(url)
+            .subscribe(
+                (response1) => {
+                    this.publicconvertservice.conversationsPublics = response1;
+                    this.publicmessages = this.publicconvertservice.conversationsPublics;
+                    this.afficher_spinner_messagepublic = false;
+                    if ((this.publicconvertservice.conversationsPublics).length === 0) {
+                        this.empty_message = true;
+                        this.error_message = 'Il y a aucune publication pour cette problematique';
+                    }
+                    return response1;
+                },
+                (error) => {
+                    this.afficher_spinner_messagepublic = false;
+                    this.openSnackBar('Une erreur serveur vient de se produire', 'erreur');
+                    this.empty_message = true;
+                    this.error_message = 'Une erreur serveur vient de se produire';
+                });
+        const count_notification_url = this.constance.dns
+            .concat('/WazzabyApi/public/api/CountNotification?id_recepteur=')
+            .concat(this.authService.getSessions().id);
+        this.httpClient
+            .get(count_notification_url)
+            .subscribe(
+                (response1) => {
+                    let countnotificationnumber: any;
+                    countnotificationnumber = response1;
+                    if (countnotificationnumber.count === 0) {
+                        this.badgeshidden = false;
+                    } else {
+                        this.badgetaille = countnotificationnumber.count;
+                    }
+                    return response1;
+                },
+                (error) => {
+                });
     }
 
 }
