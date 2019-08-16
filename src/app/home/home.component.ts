@@ -76,6 +76,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     publicmessages: any;
     //the array who content filelist
     array_file_list = new Array();
+    progressbaractivationmodeanonymous: string = 'none';
+    /*afficher_spinner_progressbar: string = 'none';
+    afficher_block_homepage: string = 'inline-block';*/
+    checked_active_mode_anonymous: boolean = false;
+    color_anonymous: string = 'white';
 
   constructor(private homedesign: HomeDesignService
               , private  router: Router
@@ -96,8 +101,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.afficher_spinner = false;
-
+      this.progressbaractivationmodeanonymous = 'none';
+      this.checked_active_mode_anonymous = false;
+      if (this.authService.getSessions().etat === '1') {
+          this.checked_active_mode_anonymous = true;
+          this.color_anonymous = 'warn';
+      } else {
+          this.checked_active_mode_anonymous = false;
+          this.color_anonymous = 'white';
+      }
       this.privateusersOnlineHome = this.privateuseronlineservices.userOnlines;
       this.privaterecentConvertHome = this.privaterecentconvertservices.RecentConverts;
       this.nom = this.authService.getSessions().nom;
@@ -263,7 +275,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         const taille = event.target.files[0].name.split('.').length;
         const extension = event.target.files[0].name.split('.')[taille - 1].toLowerCase();
         this.updateservice.imagenamefordelete = extension;
-
+        let anonymous: string;
+        if (this.authService.getSessions().etat === '1') {
+            anonymous = '1';
+        } else {
+            anonymous = '0';
+        }
         if (extension === 'png' || extension === 'jpg' || extension === 'jpeg' || extension === 'gif') {
 
             if (event.target.files && event.target.files[0]) {
@@ -275,7 +292,9 @@ export class HomeComponent implements OnInit, OnDestroy {
                 reader.readAsDataURL(file);
                 this.filevalue = file;
                 this.array_file_list.push(this.filevalue);
-                const urlrecuperefile = this.constance.dns.concat('/WazzabyApi/public/api/photomessagepublic?file_extension=').concat(extension).concat('&id_user=').concat(this.authService.sessions.id).concat('&id_problematique=').concat(this.authService.sessions.id_prob);
+                const urlrecuperefile = this.constance.dns.concat('/WazzabyApi/public/api/photomessagepublic?file_extension=').concat(extension)
+                    .concat('&id_user=').concat(this.authService.sessions.id).concat('&id_problematique=')
+                    .concat(this.authService.sessions.id_prob).concat('&anonymous=').concat(anonymous);
                 this.httpClient
                     .get(urlrecuperefile)
                     .subscribe(
@@ -339,7 +358,17 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.updateservice.disparaitrechamp = 'none';
             this.updateservice.disparaitreimage = 'none';
             this.updateservice.disparaitreprogressbar = 'block';
-            const url = this.constance.dns.concat('/WazzabyApi/public/api/SaveMessagePublic?etat=').concat(this.etat).concat('&libelle=').concat(libellemessagepublic).concat('&id_problematique=').concat(this.authService.getSessions().id_prob).concat('&ID=').concat(this.authService.getSessions().id).concat('&id_message_public=').concat(String(this.updateservice.id_message_public));
+            let anonymous: string;
+            if (this.authService.getSessions().etat === '1') {
+                anonymous = '1';
+            } else {
+                anonymous = '0';
+            }
+            const url = this.constance.dns.concat('/WazzabyApi/public/api/SaveMessagePublic?etat=')
+                .concat(this.etat).concat('&libelle=').concat(libellemessagepublic).concat('&id_problematique=')
+                .concat(this.authService.getSessions().id_prob).concat('&ID=').concat(this.authService.getSessions().id)
+                .concat('&id_message_public=').concat(String(this.updateservice.id_message_public))
+                .concat('&anonymous=').concat(anonymous);
             this.httpClient
                 .get(url)
                 .subscribe(
@@ -393,7 +422,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                 .concat('&id_message_public=').concat(String(this.updateservice.id_message_public))
                 .concat('&photo=2')
                 .concat('&libelle=').concat(libellemessagepublic);
-
             this.httpClient
                 .get(url)
                 .subscribe(
@@ -437,14 +465,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.updateservice.disparaitreimage = 'none';
         this.updateservice.disparaitreprogressbar = 'block';
         const urltemp = this.constance.dns.concat('/uploads/removeuploadScript.php?nomdufichier=').concat(this.updateservice.imagenamefordelete);
-        console.log(urltemp);
         this.httpClient
             .get(urltemp)
             .subscribe(
                 (response) => {
                     this.updateservice.disparaitreprogressbar = 'none';
                    const urldelete = this.constance.dns.concat('/WazzabyApi/public/api/deletephotomessagepublic?ID=').concat(String(this.updateservice.id_message_public)).concat('&ID_photo=').concat(this.updateservice.id_photo);
-                   console.log(urldelete);
                    this.httpClient
                         .get(urldelete)
                         .subscribe(
@@ -467,13 +493,64 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ModeAnonymous(event: MatSlideToggleChange) {
-        event.source.color = "warn";
+        this.checked_active_mode_anonymous = !this.checked_active_mode_anonymous;
+        this.progressbaractivationmodeanonymous = 'block';
+        let dtExpire = new Date();
+        dtExpire.setTime(dtExpire.getTime() + ( 1000 * 2 * 365 * 24 * 60 * 60));
         if (event.checked) {
+            this.color_anonymous = 'warn';
             this.info_bulle = 'Cliquez ici pour désactiver le mode anonymous';
-            this.afficher_spinner = true;
-            //const url_modeanymous = this.constance.dns.concat()
+            const url_modeanymous = this.constance.dns
+                .concat('/WazzabyApi/public/api/AnonymousModeActivation?user_id=')
+                .concat(this.authService.getSessions().id)
+                .concat('&etat=1');
+            this.httpClient
+                .get(url_modeanymous)
+                .subscribe(
+                    (response1) => {
+                        this.info_bulle = 'Cliquez ici pour désactiver le mode anonymous';
+                        this.progressbaractivationmodeanonymous = 'none';
+                        this.openSnackBar('Votre mode anonymous est activer avec succes !','succes');
+                        this.progressbaractivationmodeanonymous = 'none';
+                        this.authService.sessions.etat = 1;
+                        this.authService.setCookie('etat1', this.authService.sessions.etat, dtExpire, '/', null, null );
+                        this.authService.setCookie('nom1', 'Anonyme', dtExpire, '/', null, null );
+                        this.authService.setCookie('prenom1', 'Utilisateur', dtExpire, '/', null, null );
+                        this.authService.setCookie('photo1','ic_profile_anonymous.png', dtExpire, '/', null, null );
+                        return response1;
+                    },
+                    (error) => {
+                        this.progressbaractivationmodeanonymous = 'none';
+                        this.openSnackBar('Une erreur reseau vient de se produire !','erreur');
+                        this.checked_active_mode_anonymous = false;
+                        this.progressbaractivationmodeanonymous = 'none';
+                    }
+                );
         } else {
             this.info_bulle = 'Cliquez ici pour activer le mode anonymous';
+            const url_modeanymous = this.constance.dns
+                .concat('/WazzabyApi/public/api/AnonymousModeActivation?user_id=')
+                .concat(this.authService.getSessions().id)
+                .concat('&etat=0');
+            this.httpClient
+                .get(url_modeanymous)
+                .subscribe(
+                    (response1) => {
+                        this.info_bulle = 'Cliquez ici pour activer le mode anonymous';
+                        this.progressbaractivationmodeanonymous = 'none';
+                        this.openSnackBar('Votre mode anonymous est desactiver avec succes !','succes');
+                        this.progressbaractivationmodeanonymous = 'none';
+                        this.authService.sessions.etat = 0;
+                        this.authService.setCookie('etat1', this.authService.sessions.etat, dtExpire, '/', null, null );
+                        return response1;
+                    },
+                    (error) => {
+                        this.progressbaractivationmodeanonymous = 'none';
+                        this.openSnackBar('Une erreur reseau vient de se produire !','erreur');
+                        this.progressbaractivationmodeanonymous = 'none';
+                        this.checked_active_mode_anonymous = true;
+                    }
+                );
         }
     }
 

@@ -150,6 +150,12 @@ export class PublicconvertDetailsComponent implements OnInit {
     }
 
     addComment() {
+        let anonymous: any;
+        if (this.authService.getSessions().etat === '1') {
+            anonymous = 1;
+        } else {
+            anonymous = 0;
+        }
         const nom_du_user = ''.concat(this.authService.sessions.prenom).concat(' ').concat(this.authService.sessions.nom);
         let maleosama = new Object();
         maleosama['id'] = 1;
@@ -160,26 +166,40 @@ export class PublicconvertDetailsComponent implements OnInit {
         this.publiccomments.Comments.unshift(maleosama);
         this.comments = this.publiccomments.Comments;
         this.display_error_message = false;
-        const url = this.constance.dns.concat('/WazzabyApi/public/api/addComment?id_messagepublic=').concat(this.publiccomments.id).concat('&libelle_comment=').concat(this.libelle_comment).concat('&id_user=').concat(this.authService.sessions.id);
+        const url = this.constance.dns.concat('/WazzabyApi/public/api/addComment?id_messagepublic=').concat(this.publiccomments.id)
+            .concat('&libelle_comment=').concat(this.libelle_comment)
+            .concat('&id_user=').concat(this.authService.sessions.id).concat('&anonymous=').concat(anonymous);
         this.libelle_comment = '';
         this.connexionToServer(url);
 
         if (this.publiccomments.id_recepteur != this.authService.getSessions().id) {
-            let message = "Votre message public vient d'etre commenter par "
-                .concat(this.authService.getSessions().prenom)
-                .concat(' ')
-                .concat(this.authService.getSessions().nom);
+            let message;
+            if (this.authService.getSessions().etat === '1') {
+                message = "Votre message public vient d'etre commenter par un Utilisateur Anonyme";
+            } else {
+                message = "Votre message public vient d'etre commenter par "
+                    .concat(this.authService.getSessions().prenom)
+                    .concat(' ')
+                    .concat(this.authService.getSessions().nom);
+            }
             const url_notification = this.constance.dns.concat('/WazzabyApi/public/api/InsertNotification?users_id=')
                 .concat(this.authService.sessions.id)
                 .concat('&libelle=').concat(message)
                 .concat('&id_type=').concat(this.publiccomments.id)
                 .concat('&etat=0')
-                .concat('&id_recepteur=').concat(String(this.publiccomments.id_recepteur));
+                .concat('&id_recepteur=').concat(String(this.publiccomments.id_recepteur))
+                .concat('&anonymous=').concat(anonymous);
             this.recordNotification(url_notification);
         }
     }
 
     Onjaime() {
+        let anonymous: any;
+        if (this.authService.getSessions().etat === '1') {
+            anonymous = 1;
+        } else {
+            anonymous = 0;
+        }
         let message = "Votre message public vient de faire reagir "
             .concat(this.authService.getSessions().prenom)
             .concat(' ')
@@ -190,7 +210,8 @@ export class PublicconvertDetailsComponent implements OnInit {
             .concat('&libelle=').concat(message)
             .concat('&id_type=').concat(this.publiccomments.id)
             .concat('&etat=0')
-            .concat('&id_recepteur=').concat(String(this.publiccomments.id_recepteur));
+            .concat('&id_recepteur=').concat(String(this.publiccomments.id_recepteur))
+            .concat('&anonymous=').concat(anonymous);
         if (this.checkmention === 1 ) {
             const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
                 .concat('&id_mention=')
@@ -241,8 +262,12 @@ export class PublicconvertDetailsComponent implements OnInit {
     }
 
     Onjaimepas() {
-        /* console.log(" id_recepteur : "+this.publiccomments.id_recepteur);
-       console.log("user_id : "+this.authService.getSessions().id);*/
+        let anonymous: any;
+        if (this.authService.getSessions().etat === '1') {
+            anonymous = 1;
+        } else {
+            anonymous = 0;
+        }
         let message = "Votre message public vient de faire reagir "
             .concat(this.authService.getSessions().prenom)
             .concat(' ')
@@ -253,7 +278,8 @@ export class PublicconvertDetailsComponent implements OnInit {
             .concat('&libelle=').concat(message)
             .concat('&id_type=').concat(this.publiccomments.id)
             .concat('&etat=0')
-            .concat('id_recepteur=').concat(String(this.publiccomments.id_recepteur));
+            .concat('id_recepteur=').concat(String(this.publiccomments.id_recepteur))
+            .concat('&anonymous=').concat(anonymous);
         if (this.checkmention === 2) {
             const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
                 .concat('&id_mention=').concat(String(this.publiccomments.id_checkmention));

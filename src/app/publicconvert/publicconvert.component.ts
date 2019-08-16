@@ -99,6 +99,12 @@ export class PublicconvertComponent implements OnInit {
   }
 
   Onjaime() {
+      let anonymous: any;
+      if (this.authService.getSessions().etat === '1') {
+          anonymous = 1;
+      } else {
+          anonymous = 0;
+      }
       let message = "Votre message public vient de faire reagir "
           .concat(this.authService.getSessions().prenom)
           .concat(' ')
@@ -109,7 +115,8 @@ export class PublicconvertComponent implements OnInit {
           .concat('&libelle=').concat(message)
           .concat('&id_type=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id)
           .concat('&etat=0')
-          .concat('&id_recepteur=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur);
+          .concat('&id_recepteur=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur)
+          .concat('&anonymous=').concat(anonymous);;
       if (this.checkmention === 1 ) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
               .concat('&id_mention=')
@@ -158,13 +165,20 @@ export class PublicconvertComponent implements OnInit {
           .concat(this.authService.getSessions().prenom)
           .concat(' ')
           .concat(this.authService.getSessions().nom);
+      let anonymous: any;
+      if (this.authService.getSessions().etat === '1') {
+          anonymous = 1;
+      } else {
+          anonymous = 0;
+      }
       //we build the url of the like mention notification
       const url_notification = this.constance.dns.concat('/WazzabyApi/public/api/InsertNotification?users_id=')
           .concat(this.authService.sessions.id)
           .concat('&libelle=').concat(message)
           .concat('&id_type=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id)
           .concat('&etat=0')
-          .concat('id_recepteur=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur);
+          .concat('id_recepteur=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur)
+          .concat('&anonymous=').concat(anonymous);
       if (this.checkmention === 2) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
               .concat('&id_mention=').concat(String(this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention));

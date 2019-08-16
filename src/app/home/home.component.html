@@ -53,7 +53,11 @@
                 </button>
             </div>
             <span class="example-spacer"></span>
-            <mat-slide-toggle matTooltip="{{info_bulle}}" (change)="ModeAnonymous($event)"></mat-slide-toggle>
+            <mat-slide-toggle matTooltip="{{info_bulle}}"
+                              (change)="ModeAnonymous($event)"
+                              [checked]="this.checked_active_mode_anonymous"
+                              [color]="this.color_anonymous">
+            </mat-slide-toggle>
     </mat-toolbar>
 
     <mat-tab-group (selectedTabChange)="onLinkClick($event)" class="block-tabs" *ngIf="!afficher_spinner">
@@ -420,7 +424,6 @@
     <!--Le block de la boite de dialogue de suppression-->
     <div class="dialgo-block" [ngStyle]="{'display':''+this.deletemessgepublocservice.displaydialog+''}">
 
-
         <div class="container"
              fxLayout
              fxLayout.xs="column"
@@ -446,7 +449,28 @@
 
             </div>
         </div>
+    </div>
 
+    <!--Le block de la boite de dialogue de suppression-->
+    <div class="dialgo-block" [ngStyle]="{'display':''+this.progressbaractivationmodeanonymous+''}">
+
+        <div class="container"
+             fxLayout
+             fxLayout.xs="column"
+             fxLayoutAlign="center"
+             fxLayoutGap="10px"
+             fxLayoutGap.xs="0">
+            <div class="item item-1" fxFlex="20%"></div>
+            <div class="item item-2" fxFlex="20%" fxFlexOrder="3">
+            </div>
+            <div class="item item-3" fxFlex="60%">
+                <br/><br/><br/>
+                <mat-card class="example-card">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </mat-card>
+
+            </div>
+        </div>
     </div>
 
 

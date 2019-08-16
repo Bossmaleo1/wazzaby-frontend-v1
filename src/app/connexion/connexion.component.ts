@@ -30,8 +30,15 @@ export class ConnexionComponent implements OnInit {
         if (String(this.authService.getCookie('nom1')) != 'null') {
             const maleosama = new Object();
             maleosama['libelle_prob'] = this.authService.getCookie('libelle_prob1');
-            maleosama['nom'] = this.authService.getCookie('nom1');
-            maleosama['prenom'] = this.authService.getCookie('prenom1');
+            if (this.authService.getCookie('etat1') === '1') {
+                maleosama['nom'] = 'Anonyme';
+                maleosama['prenom'] = 'Utilisateur';
+                maleosama['photo'] = 'ic_profile_anonymous.png';
+            } else {
+                maleosama['nom'] = this.authService.getCookie('nom1');
+                maleosama['prenom'] = this.authService.getCookie('prenom1');
+                maleosama['photo'] = this.authService.getCookie('photo1');
+            }
             maleosama['email'] = this.authService.getCookie('email1');
             maleosama['id'] = this.authService.getCookie('id1');
             maleosama['id_prob'] = this.authService.getCookie('id_prob1');
@@ -40,8 +47,8 @@ export class ConnexionComponent implements OnInit {
             maleosama['datenaissance'] = this.authService.getCookie('datenaissance1');
             maleosama['sexe'] = this.authService.getCookie('sexe1');
             maleosama['ville'] = this.authService.getCookie('ville1');
-            maleosama['photo'] = this.authService.getCookie('photo1');
             maleosama['online'] = this.authService.getCookie('online1');
+            maleosama['etat'] = this.authService.getCookie('etat1');
             this.authService.sessions = maleosama;
             this.authService.isAuth = true;
             this.router.navigate(['home']);
@@ -85,8 +92,6 @@ export class ConnexionComponent implements OnInit {
                         }
 
                         this.authService.setCookie('libelle_prob1', this.authService.sessions.libelle_prob, dtExpire, '/', null, null );
-                        this.authService.setCookie('nom1', this.authService.sessions.nom, dtExpire, '/', null, null );
-                        this.authService.setCookie('prenom1', this.authService.sessions.prenom, dtExpire, '/', null, null );
                         this.authService.setCookie('email1', this.authService.sessions.email, dtExpire, '/', null, null );
                         this.authService.setCookie('id1', this.authService.sessions.id, dtExpire, '/', null, null );
                         this.authService.setCookie('id_prob1', this.authService.sessions.id_prob, dtExpire, '/', null, null );
@@ -96,8 +101,20 @@ export class ConnexionComponent implements OnInit {
                         this.authService.setCookie('datenaissance1', (this.authService.sessions.datenaissance).date, dtExpire, '/', null, null );
                         this.authService.setCookie('sexe1', this.authService.sessions.sexe, dtExpire, '/', null, null );
                         this.authService.setCookie('ville1', this.authService.sessions.ville, dtExpire, '/', null, null );
-                        this.authService.setCookie('photo1', this.authService.sessions.photo, dtExpire, '/', null, null );
                         this.authService.setCookie('online1', this.authService.sessions.online, dtExpire, '/', null, null );
+                        this.authService.setCookie('etat1', this.authService.sessions.etat, dtExpire, '/', null, null );
+                        if (this.authService.sessions.etat === '1') {
+                            this.authService.sessions.nom = 'Anonyme';
+                            this.authService.sessions.prenom = 'Utilisateur';
+                            this.authService.sessions.photo = 'ic_profile_anonymous';
+                            this.authService.setCookie('nom1', 'Anonyme', dtExpire, '/', null, null );
+                            this.authService.setCookie('prenom1',  'Utilisateur', dtExpire, '/', null, null );
+                            this.authService.setCookie('photo1','ic_profile_anonymous.png', dtExpire, '/', null, null );
+                        } else {
+                            this.authService.setCookie('nom1', this.authService.sessions.nom, dtExpire, '/', null, null );
+                            this.authService.setCookie('prenom1', this.authService.sessions.prenom, dtExpire, '/', null, null );
+                            this.authService.setCookie('photo1', this.authService.sessions.photo, dtExpire, '/', null, null );
+                        }
                     } else {
                         this.authService.isAuth = false;
                         this.afficher_spinner = false;
