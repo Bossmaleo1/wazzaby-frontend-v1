@@ -116,7 +116,7 @@ export class PublicconvertComponent implements OnInit {
           .concat('&id_type=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id)
           .concat('&etat=0')
           .concat('&id_recepteur=').concat(this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur)
-          .concat('&anonymous=').concat(anonymous);;
+          .concat('&anonymous=').concat(anonymous);
       if (this.checkmention === 1 ) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=0')
               .concat('&id_mention=')
@@ -133,7 +133,9 @@ export class PublicconvertComponent implements OnInit {
           this.booljaimepas = false;
           this.jaime++;
           this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 1;
-          this.recordNotification(url_notification);
+          if (this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur != this.authService.getSessions().id) {
+              this.recordNotification(url_notification);
+          }
       } else if (this.id_checkmention === 0 && this.checkmention === 0) {
          const url = this.constance.dns.concat('/WazzabyApi/public/api/Mentions?id_user=')
                 .concat(this.authService.sessions.id).concat('&id_libelle=').concat(String(this.id))
@@ -144,7 +146,9 @@ export class PublicconvertComponent implements OnInit {
          this.jaime++;
          this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 1;
          this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention = this.temp_id_checkmention;
-         this.recordNotification(url_notification);
+          if (this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur != this.authService.getSessions().id) {
+              this.recordNotification(url_notification);
+          }
       } else if (this.checkmention === 2) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/MentionsUpdate?id_etat=1')
               .concat('&id_mention=')
@@ -156,7 +160,9 @@ export class PublicconvertComponent implements OnInit {
           this.jaimepas--;
           this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 1;
           this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention = this.temp_id_checkmention;
-          this.recordNotification(url_notification);
+          if (this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur != this.authService.getSessions().id) {
+              this.recordNotification(url_notification);
+          }
       }
   }
 
@@ -194,7 +200,9 @@ export class PublicconvertComponent implements OnInit {
           this.booljaimepas = true;
           this.jaimepas++;
           this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 2;
-          this.recordNotification(url_notification);
+          if (this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur != this.authService.getSessions().id) {
+              this.recordNotification(url_notification);
+          }
       } else if (this.id_checkmention === 0 && this.checkmention === 0) {
           const url = this.constance.dns.concat('/WazzabyApi/public/api/Mentions?id_user=')
               .concat(this.authService.sessions.id).concat('&id_libelle=').concat(String(this.id))
@@ -217,7 +225,9 @@ export class PublicconvertComponent implements OnInit {
           this.jaimepas++;
           this.publicconvert.conversationsPublics[this.indexOfConvert].checkmention = 2;
           this.publicconvert.conversationsPublics[this.indexOfConvert].id_checkmention = this.temp_id_checkmention;
-          this.recordNotification(url_notification);
+          if (this.publicconvert.conversationsPublics[this.indexOfConvert].id_recepteur != this.authService.getSessions().id) {
+              this.recordNotification(url_notification);
+          }
       }
   }
 
